@@ -1,0 +1,820 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --card-foreground: #ffffff;
+  --muted: #1a1a1a;
+  --muted-foreground: #888888;
+  --border: #333333;
+  --input: #000000;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --accent: #333333;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --ring: #ffffff;
+}
+
+@theme {
+  /* Base colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
+  
+  /* Black and white theme */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #d4d4d4;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-800: #262626;
+  --color-gray-900: #171717;
+  
+  /* Subtle borders and accents */
+  --color-border-light: #333333;
+  --color-border-lighter: #2a2a2a;
+  --color-hover: #1a1a1a;
+  --color-selected: #2a2a2a;
+  
+  /* Money Green Accent Colors */
+  --color-money: #00ff88;
+  --color-money-dark: #00cc66;
+  --color-money-light: #33ff99;
+  --color-money-glow: rgba(0, 255, 136, 0.3);
+  
+  /* Fonts */
+  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+* {
+  border-color: var(--color-border-light);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-family-sans);
+  line-height: 1.5;
+}
+
+/* Minimalist card styles */
+.minimal-card {
+  background: var(--color-black);
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.minimal-card:hover {
+  border-color: var(--color-gray-600);
+}
+
+/* Subtle button styles */
+.minimal-button {
+  background: transparent;
+  border: 1px solid var(--color-border-light);
+  color: var(--color-white);
+  transition: all 0.2s ease;
+}
+
+.minimal-button:hover {
+  background: var(--color-hover);
+  border-color: var(--color-gray-600);
+}
+
+.minimal-button-primary {
+  background: var(--color-white);
+  color: var(--color-black);
+  border: 1px solid var(--color-white);
+}
+
+.minimal-button-primary:hover {
+  background: var(--color-gray-200);
+}
+
+/* Table styles */
+.minimal-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.minimal-table th,
+.minimal-table td {
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 12px;
+  text-align: left;
+}
+
+.minimal-table th {
+  color: var(--color-gray-400);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.minimal-table tr:hover {
+  background: var(--color-hover);
+}
+
+/* Input styles */
+.minimal-input {
+  background: transparent;
+  border: 1px solid var(--color-border-light);
+  color: var(--color-white);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.minimal-input:focus {
+  outline: none;
+  border-color: var(--color-white);
+  box-shadow: 0 0 0 1px var(--color-white);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-600);
+}
+
+/* Remove default focus rings and add custom ones */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 1px solid var(--color-white);
+  outline-offset: 2px;
+}
+
+/* Money green accent utilities */
+.text-money {
+  color: var(--color-money);
+}
+
+.text-money-dark {
+  color: var(--color-money-dark);
+}
+
+.bg-money {
+  background-color: var(--color-money);
+  color: var(--color-black);
+}
+
+.bg-money-dark {
+  background-color: var(--color-money-dark);
+  color: var(--color-black);
+}
+
+.border-money {
+  border-color: var(--color-money);
+}
+
+.hover-money:hover {
+  color: var(--color-money);
+  transition: color 0.2s ease;
+}
+
+.money-glow {
+  box-shadow: 0 0 20px var(--color-money-glow);
+}
+
+.gradient-money {
+  background: linear-gradient(135deg, var(--color-money-dark), var(--color-money));
+  color: var(--color-black);
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, select, textarea {
+  transition: all 0.2s ease;
+}
+
+/* Additional money green utilities */
+.text-money-light { color: var(--color-money-light); }
+.bg-money-light { background-color: var(--color-money-light); color: var(--color-black); }
+.border-money-light { border-color: var(--color-money-light); }
+
+/* Logo special effects */
+.faktix-logo-pulse {
+  animation: faktix-pulse 2s infinite;
+}
+
+@keyframes faktix-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 5px var(--color-money-glow), 0 0 10px var(--color-money-glow), 0 0 15px var(--color-money-glow);
+  }
+  50% { 
+    box-shadow: 0 0 10px var(--color-money-glow), 0 0 20px var(--color-money-glow), 0 0 30px var(--color-money-glow);
+  }
+}
+
+.faktix-text-glow {
+  text-shadow: 0 0 10px var(--color-money), 0 0 20px var(--color-money), 0 0 30px var(--color-money);
+}
+
+/* Floating animation for brand elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Cloud background animations */
+@keyframes float-cloud {
+  0% { transform: translateX(0) translateY(0) rotate(0deg); }
+  25% { transform: translateX(50px) translateY(-20px) rotate(2deg); }
+  50% { transform: translateX(100px) translateY(0px) rotate(0deg); }
+  75% { transform: translateX(50px) translateY(20px) rotate(-2deg); }
+  100% { transform: translateX(0) translateY(0) rotate(0deg); }
+}
+
+@keyframes drift-slow {
+  0% { transform: translateX(-100px) scale(1); }
+  50% { transform: translateX(50px) scale(1.1); }
+  100% { transform: translateX(-100px) scale(1); }
+}
+
+@keyframes drift-medium {
+  0% { transform: translateX(100px) translateY(-50px) scale(0.8); }
+  33% { transform: translateX(-50px) translateY(0px) scale(1.2); }
+  66% { transform: translateX(50px) translateY(30px) scale(0.9); }
+  100% { transform: translateX(100px) translateY(-50px) scale(0.8); }
+}
+
+@keyframes drift-fast {
+  0% { transform: translateX(-150px) translateY(100px) rotate(0deg); }
+  50% { transform: translateX(150px) translateY(-50px) rotate(180deg); }
+  100% { transform: translateX(-150px) translateY(100px) rotate(360deg); }
+}
+
+@keyframes cloud-morph {
+  0%, 100% { border-radius: 50% 40% 60% 30%; }
+  25% { border-radius: 60% 50% 40% 70%; }
+  50% { border-radius: 40% 60% 50% 40%; }
+  75% { border-radius: 70% 30% 60% 50%; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px var(--color-money-glow), 0 0 40px var(--color-money-glow);
+    opacity: 0.3;
+  }
+  50% { 
+    box-shadow: 0 0 30px var(--color-money-glow), 0 0 60px var(--color-money-glow);
+    opacity: 0.5;
+  }
+}
+
+/* Smooth cloud transitions */
+.cloud-smooth {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Background particle effects */
+.bg-particles {
+  background: 
+    radial-gradient(2px 2px at 20px 30px, var(--color-money), transparent),
+    radial-gradient(2px 2px at 40px 70px, var(--color-white), transparent),
+    radial-gradient(1px 1px at 90px 40px, var(--color-money-light), transparent),
+    radial-gradient(1px 1px at 130px 80px, var(--color-white), transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: bg-particles-move 20s linear infinite;
+}
+
+@keyframes bg-particles-move {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* Simple select dropdown styling */
+select.appearance-none {
+  background-image: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Custom border thickness utilities */
+.border-money-thick {
+  border-width: 2px;
+  border-color: var(--color-money);
+}
+
+.border-orange-thick {
+  border-width: 2px;
+  border-color: #f97316;
+}
+
+.border-red-thick {
+  border-width: 2px;
+  border-color: #ef4444;
+}
+
+.border-blue-thick {
+  border-width: 2px;
+  border-color: #3b82f6;
+}
+
+.border-gray-thick {
+  border-width: 2px;
+  border-color: #6b7280;
+}
+
+/* Color variables for consistent theming */
+:root {
+  --color-green-500: #10b981;
+  --color-orange-500: #f97316;
+  --color-red-500: #ef4444;
+  --color-blue-500: #3b82f6;
+  --color-gray-950: #030712;
+}
+
+/* Print styles for invoice preview */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-page {
+    page-break-after: always;
+  }
+  
+  .print-page:last-child {
+    page-break-after: auto;
+  }
+  
+  /* Hide modal overlay and show only invoice content */
+  .fixed.inset-0 {
+    position: static !important;
+    background: white !important;
+  }
+  
+  .bg-gray-50,
+  .bg-gray-100 {
+    background: white !important;
+  }
+  
+  .shadow-lg,
+  .shadow-2xl {
+    box-shadow: none !important;
+  }
+}
+
+/* Sliding border animation for service cards */
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .cloud-smooth,
+  [style*="animation"] {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+  }
+  
+  .animate-ping,
+  .animate-pulse,
+  .animate-bounce {
+    animation: none !important;
+  }
+  
+  /* Disable slide animation for accessibility */
+  [style*="slide"] {
+    animation: none !important;
+  }
+}
+
+/* --- Стилі для чарівної кнопки --- */
+
+/* Головний контейнер іконки без кола */
+.magic-icon-button {
+  position: relative; /* Потрібно для позиціонування дочірніх елементів */
+  width: 96px;        /* Розмір іконки */
+  height: 96px;       /* Розмір іконки */
+  cursor: pointer;
+  transition: transform 0.2s ease; /* Плавна анімація при натисканні */
+  overflow: hidden;   /* Обрізає краплі за межами іконки */
+  border-radius: 50%; /* Робить контейнер круглим для кращого обрізання */
+}
+
+/* Загальний стиль для всіх кольорових "крапель" всередині іконки */
+.icon-blob {
+  position: absolute; /* Дозволяє нам рухати їх вільно всередині батьківського контейнера */
+  border-radius: 50%;
+  /* Ефект розмиття, який створює м'який градієнт */
+  filter: blur(8px);
+  opacity: 0.9;
+  z-index: 1; /* Краплі під іконкою */
+}
+
+/* Індивідуальні налаштування для кожної краплі: колір, розмір, початкова позиція та анімація */
+.icon-blob1 {
+  background: #ff0080; /* Насичений рожевий */
+  width: 30px;
+  height: 30px;
+  top: 30px;
+  left: 30px;
+  animation: icon-move1 6s infinite alternate;
+}
+
+.icon-blob2 {
+  background: #00ffff; /* Яскравий блакитний (ціан) */
+  width: 35px;
+  height: 35px;
+  top: 25px;
+  right: 30px;
+  animation: icon-move2 7s infinite alternate;
+}
+
+.icon-blob3 {
+  background: #8000ff; /* Насичений фіолетовий */
+  width: 40px;
+  height: 40px;
+  bottom: 30px;
+  left: 25px;
+  animation: icon-move3 5s infinite alternate;
+}
+
+.icon-blob4 {
+  background: #ff4000; /* Насичений помаранчевий */
+  width: 25px;
+  height: 25px;
+  bottom: 35px;
+  right: 35px;
+  animation: icon-move4 8s infinite alternate;
+}
+
+/* Контейнер іконки робота */
+.icon-container {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* Колір іконки */
+  z-index: 10; /* Гарантує, що іконка буде поверх анімації */
+  pointer-events: none;
+}
+
+.magic-icon-button:hover {
+  transform: scale(1.1); /* Трохи збільшується при наведенні */
+}
+
+
+
+
+
+/* --- Ключові кадри для анімації руху крапель всередині іконки --- */
+/* Кожна анімація має свій унікальний шлях руху з більш різкими переходами */
+
+@keyframes icon-move1 {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(3px, 3px) scale(1.1); }
+  50% { transform: translate(4px, 2px) scale(0.9); }
+  75% { transform: translate(3px, 4px) scale(1.2); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes icon-move2 {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-3px, -3px) scale(1.1); }
+  50% { transform: translate(-4px, -4px) scale(0.8); }
+  75% { transform: translate(-3px, -5px) scale(1.0); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes icon-move3 {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(3px, -3px) scale(1.2); }
+  50% { transform: translate(2px, -5px) scale(0.9); }
+  75% { transform: translate(4px, -3px) scale(1.1); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes icon-move4 {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-3px, 3px) scale(1.0); }
+  50% { transform: translate(-2px, 4px) scale(0.9); }
+  75% { transform: translate(-4px, 2px) scale(1.1); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Анімації для робота */
+.robot-icon {
+  animation: robot-float 3s ease-in-out infinite;
+}
+
+/* Анімація плавання робота */
+@keyframes robot-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-2px); }
+}
+
+/* Анімація антени */
+.antenna {
+  animation: antenna-wiggle 4s ease-in-out infinite;
+  transform-origin: 12px 2px;
+}
+
+.antenna-tip {
+  animation: antenna-tip-glow 2s ease-in-out infinite;
+}
+
+@keyframes antenna-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes antenna-tip-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Анімація очей */
+.eye {
+  animation: eye-blink 6s ease-in-out infinite;
+}
+
+@keyframes eye-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+/* Анімація зіниць */
+.pupil {
+  animation: pupil-move 8s ease-in-out infinite;
+}
+
+@keyframes pupil-move {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  25% { transform: translateX(0.5px) translateY(-0.3px); }
+  50% { transform: translateX(-0.3px) translateY(0.2px); }
+  75% { transform: translateX(0.2px) translateY(0.4px); }
+}
+
+/* Анімація рота */
+.mouth {
+  animation: mouth-talk 5s ease-in-out infinite;
+}
+
+@keyframes mouth-talk {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.2); }
+}
+
+/* Анімація рук */
+.arm {
+  animation: arm-wave 7s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.left-arm {
+  animation-delay: 0s;
+}
+
+.right-arm {
+  animation-delay: 1s;
+}
+
+@keyframes arm-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+/* Текст AI під іконкою */
+.ai-label-below {
+  position: absolute;
+  bottom: 5px; /* Піднято ще вище - тепер всередині кнопки робота */
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 12px; /* Зменшено на 40% (з 20px до 12px) */
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  z-index: 15;
+  animation: ai-below-glow 3s ease-in-out infinite;
+  /* Додаємо додаткові стилі для гарантії видимості */
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  /* Гарантуємо, що текст не буде обрізаний */
+  pointer-events: none;
+}
+
+@keyframes ai-below-glow {
+  0%, 100% { 
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+    opacity: 1;
+  }
+  50% { 
+    text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8);
+    opacity: 0.9;
+  }
+}
+
+/* --- Стилі для помічника з хмарою-підказкою --- */
+
+/* 1. Головний контейнер. Він має бути 'relative', щоб хмара позиціонувалася відносно нього. */
+.ai-helper-container {
+  position: relative;
+  width: 96px;  /* Ширина, достатня для кнопки */
+  height: 80px; /* Зменшено висоту, оскільки текст тепер дуже близько */
+}
+
+/* 2. Ваша кнопка з роботом. Вона має бути зверху (вищий z-index). */
+.robot-button {
+  position: relative;
+  z-index: 100; /* Гарантує, що кнопка завжди буде поверх хмари на початку анімації */
+}
+
+/* 3. Стиль мінімалістичного повідомлення */
+.ai-message {
+  position: absolute;
+  bottom: 65%; /* Піднято вище від робота */
+  left: 50%;
+  
+  /* Повідомлення підлаштовується під контент */
+  width: max-content;
+  max-width: 280px; /* Ще менший розмір */
+  padding: 12px 16px; /* Менші відступи */
+  
+  color: #e0e0e0; /* Повертаємо звичайний колір для загального тексту */
+  text-align: left;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px; /* Ще менший шрифт */
+  font-weight: 400;
+  line-height: 1.3;
+  
+  /* Темно-сірий дизайн */
+  background: #2a2a2a; /* Темно-сірий фон */
+  border-radius: 12px 12px 4px 12px; /* Збільшено радіус, хвостик справа внизу */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid #404040; /* Темна рамка */
+  
+  /* Початковий стан для анімації */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-85%) scale(0.7); /* Зміщено ще лівіше */
+  transform-origin: bottom right;
+  transition: all 0.3s ease-out;
+  
+  /* Flexbox для розташування контенту */
+  display: flex;
+  align-items: flex-start;
+}
+
+/* 4. Контент повідомлення */
+.message-content {
+  flex: 1;
+  min-width: 0; /* Дозволяє тексту зжиматися */
+}
+
+/* 4.1. Заголовок AI асистента */
+.ai-title {
+  background: #404040;
+  color: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid #505050;
+}
+
+/* 4.2. Запитання AI асистента */
+.ai-question {
+  color: #e0e0e0;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* 5. Кнопка закриття */
+.close-button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #2a2a2a;
+  border: 1px solid #404040;
+  color: #888;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+  margin: 0;
+  line-height: 1;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.close-button:hover {
+  color: #fff;
+  background: #404040;
+  transform: scale(1.1);
+}
+
+/* 6. Хвостик повідомлення - загострений трикутник */
+.ai-message::after {
+  content: '';
+  position: absolute;
+  bottom: -16px; /* Збільшено відступ */
+  right: 30px; /* Зміщено ближче до центру для точного вказівника на робота */
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent; /* Збільшено кут */
+  border-right: 16px solid transparent; /* Збільшено кут */
+  border-top: 16px solid #2a2a2a; /* Загострений трикутник, що вказує на робота */
+  z-index: -1;
+  /* Додаємо тінь для об'ємності */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* 6. КЛЮЧОВИЙ КЛАС, який запускає анімацію! */
+/* Коли ми додамо цей клас до повідомлення, воно з'явиться */
+.ai-message.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-85%) translateY(-60px) scale(1); /* Піднято вище */
+}
+
+/* 8. Анімація очей робота коли повідомлення з'являється */
+.ai-message.visible ~ .robot-button .icon-container svg {
+  animation: robot-look-left 0.5s ease-out forwards;
+}
+
+@keyframes robot-look-left {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(-2px) translateY(-1px);
+  }
+}
+
+/* Простий зелений заголовок */
+.simple-green-header {
+  background: #1a5f3a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
