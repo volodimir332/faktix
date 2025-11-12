@@ -1,8 +1,10 @@
 import { loadStripe } from '@stripe/stripe-js';
 
-// Тестові ключі Stripe
-export const STRIPE_PUBLISHABLE_KEY = 'pk_test_51RtrJ0Qgyy84dUAst9ld372WUZnvuW6q8uuUHnJw1tUzYiExFb3DYFMXZN5dLkZ6xv3uF5G58CUZX0hhh5fgqB3y007iUDGhKq';
-export const STRIPE_SECRET_KEY = 'sk_test_51RtrJ0Qgyy84dUAsVg751lG48vRohWjLMQ0TMYKURxCjLH1B3owhOqaugQaeWixOQZ5pKAB4v33pLvACI5X1GwhV00lZ4X8BI9';
+// Публічний ключ Stripe (безпечно використовувати на клієнті)
+export const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_51RtrJ0Qgyy84dUAst9ld372WUZnvuW6q8uuUHnJw1tUzYiExFb3DYFMXZN5dLkZ6xv3uF5G58CUZX0hhh5fgqB3y007iUDGhKq';
+
+// ВАЖЛИВО: Секретний ключ НЕ використовуємо на клієнті!
+// Він має бути тільки в API routes (src/app/api/*/route.ts)
 
 // Завантажуємо Stripe
 export const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
