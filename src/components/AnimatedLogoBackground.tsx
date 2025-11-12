@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { FaktixIcon } from './FaktixLogo';
 
 interface FloatingLogo {
@@ -12,7 +12,8 @@ interface FloatingLogo {
   direction: 'clockwise' | 'counterclockwise';
 }
 
-export function AnimatedLogoBackground() {
+// ⚡ ОПТИМІЗАЦІЯ: React.memo для запобігання зайвим ре-рендерам
+export const AnimatedLogoBackground = memo(function AnimatedLogoBackground() {
   const [logos, setLogos] = useState<FloatingLogo[]>([]);
 
   useEffect(() => {
@@ -115,4 +116,4 @@ export function AnimatedLogoBackground() {
       `}</style>
     </div>
   );
-} 
+}); 

@@ -11,7 +11,6 @@ import {
   MapPin
 } from "lucide-react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
 import { FaktixLogo } from "@/components/FaktixLogo";
 import { LanguageGlobe } from "@/components/LanguageGlobe";
@@ -21,35 +20,17 @@ import AnimatedIconBox from "@/components/AnimatedIconBox";
 import { SEOStructuredData } from "@/components/SEOStructuredData";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// ⚡ ОПТИМІЗАЦІЯ: Lazy Loading для важких компонентів
-// Ці компоненти завантажуються тільки коли потрібні
-const CloudBackground = dynamic(() => import("@/components/CloudBackground").then(mod => ({ default: mod.CloudBackground })), {
-  ssr: false, // Не рендерити на сервері (тільки анімації)
-});
+// Імпорт компонентів
+import { CloudBackground } from "@/components/CloudBackground";
+import { AnimatedLogoBackground } from "@/components/AnimatedLogoBackground";
+import { PricingToggle } from "@/components/PricingToggle";
+import InterfaceShowcase from "@/components/InterfaceShowcase";
+import { AnimatedStats } from "@/components/AnimatedStats";
+import { AnimatedCloudStats } from "@/components/AnimatedCloudStats";
+import { ScreenshotShowcase } from "@/components/ScreenshotShowcase";
 
-const AnimatedLogoBackground = dynamic(() => import("@/components/AnimatedLogoBackground").then(mod => ({ default: mod.AnimatedLogoBackground })), {
-  ssr: false,
-});
-
-const PricingToggle = dynamic(() => import("@/components/PricingToggle").then(mod => ({ default: mod.PricingToggle })), {
-  loading: () => <div className="py-20 text-center text-gray-400">Načítání cenových plánů...</div>,
-});
-
-const InterfaceShowcase = dynamic(() => import("@/components/InterfaceShowcase"), {
-  loading: () => <div className="py-20 text-center text-gray-400">Načítání rozhraní...</div>,
-});
-
-const AnimatedStats = dynamic(() => import("@/components/AnimatedStats").then(mod => ({ default: mod.AnimatedStats })), {
-  ssr: false,
-});
-
-const AnimatedCloudStats = dynamic(() => import("@/components/AnimatedCloudStats").then(mod => ({ default: mod.AnimatedCloudStats })), {
-  ssr: false,
-});
-
-const ScreenshotShowcase = dynamic(() => import("@/components/ScreenshotShowcase").then(mod => ({ default: mod.ScreenshotShowcase })), {
-  loading: () => <div className="py-20 text-center text-gray-400">Načítání snímků obrazovky...</div>,
-});
+// Вимикаємо static generation для цієї сторінки
+export const dynamic = 'force-dynamic';
 
 export default function LandingPage() {
   const { t } = useLanguage();

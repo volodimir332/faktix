@@ -1,6 +1,8 @@
 "use client";
+import { memo } from 'react';
 
-export function CloudBackground() {
+// ⚡ ОПТИМІЗАЦІЯ: React.memo для запобігання зайвим ре-рендерам
+export const CloudBackground = memo(function CloudBackground() {
   return (
     <div className="fixed inset-0 w-full h-full min-h-screen overflow-hidden pointer-events-none">
       {/* Base gradient background - covers entire viewport */}
@@ -227,4 +229,4 @@ export function CloudBackground() {
       </div>
     </div>
   );
-} 
+}); 

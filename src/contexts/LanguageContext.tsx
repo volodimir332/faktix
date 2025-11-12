@@ -491,11 +491,13 @@ export function LanguageProvider({ children, defaultLanguage = 'cs' }: LanguageP
     return translations[language]?.[key] || key;
   };
 
-  const value: LanguageContextType = {
+  // ⚡ ОПТИМІЗАЦІЯ: Мемоізація value щоб запобігти зайвим ре-рендерам
+  const value: LanguageContextType = React.useMemo(() => ({
     language: mounted ? language : defaultLanguage,
     setLanguage,
     t,
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [mounted, language, defaultLanguage]);
 
   return (
     <LanguageContext.Provider value={value}>

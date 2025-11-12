@@ -2,14 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { convertToStripeAmount } from '@/lib/stripe-config';
 
-// Stripe secret key має бути тільки на сервері (API routes)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2023-10-16',
-});
+// ⚡ ОПТИМІЗАЦІЯ: Lazy initialization для Stripe (уникнення помилок під час build)
+function getStripe() {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('STRIPE_SECRET_KEY is not configured');
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2023-10-16',
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
     const { amount, currency = 'CZK', invoiceId, customerEmail, description } = await request.json();
+    
+    // Ініціалізуємо Stripe тільки коли потрібно
+    const stripe = getStripe();
 
     if (!amount || amount <= 0) {
       return NextResponse.json(

@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:auto": "npm run build && npx next dev",
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "kb:seed": "curl -X POST http://localhost:3000/api/kb/seed",

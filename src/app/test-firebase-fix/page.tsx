@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { auth } from '@/lib/firebase-test';
+import { auth } from '@/lib/firebase';
 import { createUserWithEmailAndPassword, deleteUser } from 'firebase/auth';
 
 // Firebase конфігурація для тестування

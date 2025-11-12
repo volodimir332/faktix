@@ -212,7 +212,8 @@ export const ClientProvider: React.FC<ClientProviderProps> = ({ children }) => {
     }
   };
 
-  const value: ClientContextType = {
+  // ⚡ ОПТИМІЗАЦІЯ: Мемоізація value щоб запобігти зайвим ре-рендерам
+  const value: ClientContextType = React.useMemo(() => ({
     clients,
     isLoading,
     error,
@@ -222,7 +223,8 @@ export const ClientProvider: React.FC<ClientProviderProps> = ({ children }) => {
     refreshClients,
     batchUpdateClients: batchUpdateClientsHandler,
     batchDeleteClients: batchDeleteClientsHandler
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [clients, isLoading, error]);
 
   return (
     <ClientContext.Provider value={value}>

@@ -199,7 +199,8 @@ export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) =>
     }
   };
 
-  const value: InvoiceContextType = {
+  // ⚡ ОПТИМІЗАЦІЯ: Мемоізація value щоб запобігти зайвим ре-рендерам
+  const value: InvoiceContextType = React.useMemo(() => ({
     invoices,
     isLoading,
     error,
@@ -209,7 +210,8 @@ export const InvoiceProvider: React.FC<InvoiceProviderProps> = ({ children }) =>
     deleteInvoice: deleteInvoiceHandler,
     getInvoiceById: getInvoiceByIdHandler,
     refreshInvoices
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [invoices, isLoading, error]);
 
   return (
     <InvoiceContext.Provider value={value}>
