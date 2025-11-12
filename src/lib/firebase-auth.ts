@@ -6,7 +6,9 @@ import {
   User,
   updateProfile,
   sendPasswordResetEmail,
-  sendEmailVerification
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { auth } from './firebase';
 
@@ -119,6 +121,36 @@ export const loginUser = async (email: string, password: string) => {
     const errorMessage = getErrorMessage(errorCode);
     
     console.log('🚨 Login failed:', { errorCode, errorMessage });
+    
+    return { 
+      success: false, 
+      error: errorCode,
+      message: errorMessage
+    };
+  }
+};
+
+// Вхід через Google
+export const signInWithGoogle = async () => {
+  try {
+    console.log('🔄 Starting Google Sign-In');
+    
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
+    
+    const userCredential = await signInWithPopup(auth, provider);
+    console.log('✅ User signed in with Google:', userCredential.user.uid);
+    
+    return { success: true, user: userCredential.user };
+  } catch (error: unknown) {
+    console.error('❌ Google Sign-In error:', error);
+    const firebaseError = error as { code?: string };
+    const errorCode = firebaseError.code || 'unknown-error';
+    const errorMessage = getErrorMessage(errorCode);
+    
+    console.log('🚨 Google Sign-In failed:', { errorCode, errorMessage });
     
     return { 
       success: false, 

@@ -6,6 +6,7 @@ import {
   logoutUser, 
   registerUser, 
   resetPassword,
+  signInWithGoogle as googleSignIn,
   convertFirebaseUser,
   AuthUser 
 } from '@/lib/firebase-auth';
@@ -72,6 +73,14 @@ export function useAuth() {
     return result;
   };
 
+  const signInWithGoogle = async () => {
+    console.log('🔐 useAuth: Attempting Google Sign-In...');
+    setIsLoading(true);
+    const result = await googleSignIn();
+    setIsLoading(false);
+    return result;
+  };
+
   return {
     user,
     isAuthenticated,
@@ -79,6 +88,7 @@ export function useAuth() {
     login,
     logout,
     register,
-    resetPassword: resetUserPassword
+    resetPassword: resetUserPassword,
+    signInWithGoogle
   };
 } 
