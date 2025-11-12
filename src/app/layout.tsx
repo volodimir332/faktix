@@ -30,14 +30,6 @@ export const metadata: Metadata = {
   publisher: "faktix",
   robots: "index, follow",
   manifest: "/manifest.json",
-  icons: {
-    icon: [
-      { url: '/favicon.svg?v=2', type: 'image/svg+xml' },
-      { url: '/favicon.svg?v=2', sizes: 'any' },
-    ],
-    apple: '/favicon.svg?v=2',
-    shortcut: '/favicon.svg?v=2',
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -74,10 +66,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs" className="dark" suppressHydrationWarning={true}>
-      <head>
-        <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
-        <link rel="shortcut icon" href="/favicon.svg?v=2" />
-      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased min-h-screen bg-background text-foreground`}
         suppressHydrationWarning={true}
