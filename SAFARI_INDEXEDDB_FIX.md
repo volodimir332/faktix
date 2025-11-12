@@ -174,3 +174,4 @@ enableIndexedDbPersistence(db)          // Single-tab
 **Статус:** ✅ Виправлено  
 **Браузери:** Safari, Chrome, Firefox, Edge
 
+

@@ -339,3 +339,4 @@ EMAIL_PASS=qcde xouk sccv nscn  # App Password
 **Тестування:** ✅ Пройдено  
 **Готово до production:** ✅ Так
 
+

@@ -283,3 +283,4 @@ function myCustomFixer(element: HTMLElement) {
 **Версія:** 1.0.0  
 **Автор:** Faktix Development Team
 
+

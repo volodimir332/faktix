@@ -211,3 +211,4 @@ const canvas = await html2canvas(element, {
 **Автор:** Faktix AI Agent  
 **Статус:** ✅ Готово до використання
 
+

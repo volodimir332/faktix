@@ -102,3 +102,4 @@ try {
   console.log('5. Збережіть як: firebase-service-account.json');
 }
 
+

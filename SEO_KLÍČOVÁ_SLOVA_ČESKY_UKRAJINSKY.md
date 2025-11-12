@@ -386,3 +386,4 @@ _Vytvořeno: 12. listopadu 2025_
 _Projekt: faktix.cz_  
 _Jazyk: 76% Čeština, 24% Ukrajinština_
 
+

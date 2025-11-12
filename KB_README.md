@@ -254,3 +254,4 @@ export const EMBEDDING_CONFIG = {
 
 Proprietary - Faktix Platform © 2025
 
+

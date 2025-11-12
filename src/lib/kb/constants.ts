@@ -219,3 +219,4 @@ export const AI_ACCOUNTANT_SYSTEM_PROMPT = `Ти експертний AI-бух�
 ДОКУМЕНТИ З БАЗИ ЗНАНЬ:
 {retrievedContext}`;
 
+

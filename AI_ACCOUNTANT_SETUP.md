@@ -552,3 +552,4 @@ const response = await fetch('/api/ai-accountant', {
 
 _Версія: 1.0.0 | Дата: 12.11.2025_
 
+

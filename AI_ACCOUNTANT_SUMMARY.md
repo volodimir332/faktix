@@ -366,3 +366,4 @@ curl -X POST http://localhost:3000/api/ai-accountant \
 **Автор:** AI Super Engineer для Faktix Platform  
 **Статус:** ✅ Production Ready
 
+

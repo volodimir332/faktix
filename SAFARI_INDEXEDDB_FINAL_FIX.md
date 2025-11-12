@@ -270,3 +270,4 @@ const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 **Версія:** 2.0 (радикальне виправлення)  
 **Тестовано:** Safari 18+, macOS Sonoma
 
+

@@ -326,3 +326,4 @@ npm install @capacitor/network
 
 **Питання?** Звертайтеся до документації Capacitor або пишіть у підтримку!
 
+
