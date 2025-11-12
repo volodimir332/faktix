@@ -9,26 +9,71 @@ import { AuthGuard } from "@/components/AuthGuard";
 import { AuthInitializer } from "@/components/AuthInitializer";
 import { ColorFixer } from "@/components/ColorFixer";
 
+// ⚡ ОПТИМІЗАЦІЯ: Font optimization з preload та fallback
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  preload: true, // Швидше завантаження критичного шрифту
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
+  preload: false, // Не критичний шрифт, завантажиться пізніше
+  fallback: ['Monaco', 'Courier New', 'monospace'],
 });
 
 export const metadata: Metadata = {
-  title: "faktix - Rychlá fakturace pro moderní podnikatele",
-  description: "Vystavte fakturu za 30 sekund. První měsíc zcela zdarma! Moderní fakturační systém pro podnikatele v České republice a na Ukrajině.",
-  keywords: ["faktix", "faktury", "fakturace", "účetnictví", "podnikání", "česká republika", "ukrajina"],
-  authors: [{ name: "faktix Team" }],
+  metadataBase: new URL('https://faktix.cz'),
+  title: {
+    default: "Faktix - Fakturace za 30 sekund | Online systém pro OSVČ a s.r.o.",
+    template: "%s | Faktix"
+  },
+  description: "Vytvořte fakturu online za méně než minutu! Profesionální fakturační systém pro živnostníky, OSVČ a s.r.o. ✓ Zdarma ✓ Kalkulace daní ✓ Paušální daň ✓ Analytiky",
+  keywords: [
+    // Hlavní klíčová slova ČESKY (nejvyšší priorita)
+    "faktury online", "vystavit fakturu", "fakturace zdarma", "vystavení faktury", "faktury online zdarma",
+    "faktury OSVČ", "faktury s.r.o.", "faktury živnostník", "faktura OSVČ vzor", "faktura online bez registrace",
+    
+    // Fakturace a účetnictví ČESKY
+    "fakturační systém", "fakturační program", "online fakturace", "vytvoření faktury", "vytvořit fakturu",
+    "účetnictví online", "živnostenské faktury", "faktury čeština", "faktury pdf", "faktury ke stažení",
+    "fakturace pro živnostníky", "fakturační software", "fakturace pro firmy", "nejlepší fakturační systém",
+    
+    // Kalkulace a daně ČESKY
+    "kalkulace daní", "kalkulace daní OSVČ", "kalkulačka daní", "výpočet daní OSVČ", "daňová kalkulačka",
+    "paušální daň", "paušální daň kalkulačka", "paušální daň 2025", "paušální daň OSVČ", "paušální daň kalkulace",
+    "sociální pojištění OSVČ", "zdravotní pojištění OSVČ", "pojištění OSVČ 2025", "minimální zálohy OSVČ",
+    
+    // Dodatečné ČESKÉ zapytania
+    "CRM pro OSVČ", "správa klientů", "daňové přiznání OSVČ", "jak vystavit fakturu", "jak dělat faktury",
+    "faktury pro živnostníky", "faktury ČR", "české faktury", "fakturace Česká republika", 
+    "kalkulace ceny", "kalkulace nákladů", "cenová kalkulace", "výpočet ceny", "ceník faktury",
+    "nabídky a faktury", "objednávky a faktury", "dodací list a faktura", "proforma faktura",
+    
+    // УКРАЇНСЬКІ ключові слова
+    "рахунки онлайн", "виписати рахунок", "безкоштовні рахунки", "рахунки для ФОП", 
+    "калькулятор податків", "розрахунок податків", "бухгалтерія онлайн", "рахунки Україна",
+    "створити рахунок", "система рахунків", "облік клієнтів", "фінансова аналітика",
+    "рахунки українською", "виставлення рахунків", "програма для рахунків"
+  ],
+  authors: [{ name: "faktix Team", url: "https://faktix.cz" }],
   creator: "faktix",
   publisher: "faktix",
-  robots: "index, follow",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -37,17 +82,42 @@ export const metadata: Metadata = {
   },
   applicationName: "Faktix",
   openGraph: {
-    title: "Faktury - Rychlá fakturace pro moderní podnikatele",
-    description: "Vystavte fakturu za 30 sekund. První měsíc zcela zdarma!",
     type: "website",
     locale: "cs_CZ",
-    alternateLocale: ["uk_UA"],
+    alternateLocale: ["uk_UA", "en_US"],
+    url: "https://faktix.cz",
+    siteName: "Faktix",
+    title: "Faktix - Nejrychlejší fakturace pro OSVČ a firmy",
+    description: "Vytvořte profesionální fakturu za 30 sekund. Zdarma. Bez registrace. S automatickými daňovými kalkulacemi.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Faktix - Moderní fakturační systém",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Faktury - Rychlá fakturace pro moderní podnikatele",
-    description: "Vystavte fakturu za 30 sekund. První měsíc zcela zdarma!",
+    title: "Faktix - Fakturace za 30 sekund",
+    description: "Profesionální faktury pro OSVČ a s.r.o. Zdarma. Kalkulace daní. Paušální daň.",
+    images: ["/og-image.png"],
+    creator: "@faktix",
   },
+  alternates: {
+    canonical: "https://faktix.cz",
+    languages: {
+      'cs-CZ': 'https://faktix.cz',
+      'uk-UA': 'https://faktix.cz?lang=uk',
+      'en-US': 'https://faktix.cz?lang=en',
+    },
+  },
+  verification: {
+    google: 'cp_9GzoaDSowK7Mnl6KJ2oVHJD4v8N29m1Y6Nq5cVH4',
+    yandex: 'your-yandex-verification-code-here',
+  },
+  category: 'business',
 };
 
 // Viewport configuration (Next.js 15+)

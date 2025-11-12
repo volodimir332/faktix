@@ -11,25 +11,56 @@ import {
   MapPin
 } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 import { FaktixLogo } from "@/components/FaktixLogo";
-import { CloudBackground } from "@/components/CloudBackground";
-import { AnimatedLogoBackground } from "@/components/AnimatedLogoBackground";
 import { LanguageGlobe } from "@/components/LanguageGlobe";
-import { PricingToggle } from "@/components/PricingToggle";
 import { StarterPlan } from "@/components/StarterPlan";
 import { ServiceGrid } from "@/components/ServiceGrid";
-import InterfaceShowcase from "@/components/InterfaceShowcase";
 import AnimatedIconBox from "@/components/AnimatedIconBox";
-import { AnimatedStats } from "@/components/AnimatedStats";
-import { AnimatedCloudStats } from "@/components/AnimatedCloudStats";
-import { ScreenshotShowcase } from "@/components/ScreenshotShowcase";
+import { SEOStructuredData } from "@/components/SEOStructuredData";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+// ⚡ ОПТИМІЗАЦІЯ: Lazy Loading для важких компонентів
+// Ці компоненти завантажуються тільки коли потрібні
+const CloudBackground = dynamic(() => import("@/components/CloudBackground").then(mod => ({ default: mod.CloudBackground })), {
+  ssr: false, // Не рендерити на сервері (тільки анімації)
+});
+
+const AnimatedLogoBackground = dynamic(() => import("@/components/AnimatedLogoBackground").then(mod => ({ default: mod.AnimatedLogoBackground })), {
+  ssr: false,
+});
+
+const PricingToggle = dynamic(() => import("@/components/PricingToggle").then(mod => ({ default: mod.PricingToggle })), {
+  loading: () => <div className="py-20 text-center text-gray-400">Načítání cenových plánů...</div>,
+});
+
+const InterfaceShowcase = dynamic(() => import("@/components/InterfaceShowcase"), {
+  loading: () => <div className="py-20 text-center text-gray-400">Načítání rozhraní...</div>,
+});
+
+const AnimatedStats = dynamic(() => import("@/components/AnimatedStats").then(mod => ({ default: mod.AnimatedStats })), {
+  ssr: false,
+});
+
+const AnimatedCloudStats = dynamic(() => import("@/components/AnimatedCloudStats").then(mod => ({ default: mod.AnimatedCloudStats })), {
+  ssr: false,
+});
+
+const ScreenshotShowcase = dynamic(() => import("@/components/ScreenshotShowcase").then(mod => ({ default: mod.ScreenshotShowcase })), {
+  loading: () => <div className="py-20 text-center text-gray-400">Načítání snímků obrazovky...</div>,
+});
 
 export default function LandingPage() {
   const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-black text-white relative">
+      
+      {/* SEO Structured Data - Багаті сніпети в Google */}
+      <SEOStructuredData type="organization" />
+      <SEOStructuredData type="software" />
+      <SEOStructuredData type="webapp" />
+      <SEOStructuredData type="faq" />
       
       {/* Fixed background layer covering full viewport */}
       <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
