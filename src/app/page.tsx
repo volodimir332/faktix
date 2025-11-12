@@ -14,6 +14,7 @@ import Link from "next/link";
 
 import { FaktixLogo } from "@/components/FaktixLogo";
 import { CloudBackground } from "@/components/CloudBackground";
+import { AnimatedLogoBackground } from "@/components/AnimatedLogoBackground";
 import { LanguageGlobe } from "@/components/LanguageGlobe";
 import { PricingToggle } from "@/components/PricingToggle";
 import { StarterPlan } from "@/components/StarterPlan";
@@ -22,19 +23,25 @@ import InterfaceShowcase from "@/components/InterfaceShowcase";
 import AnimatedIconBox from "@/components/AnimatedIconBox";
 import { AnimatedStats } from "@/components/AnimatedStats";
 import { AnimatedCloudStats } from "@/components/AnimatedCloudStats";
+import { ScreenshotShowcase } from "@/components/ScreenshotShowcase";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function LandingPage() {
   const { t } = useLanguage();
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
-
+    <div className="min-h-screen bg-black text-white relative">
       
-      {/* Animated cloud background */}
-      <div className="opacity-40">
-        <CloudBackground />
+      {/* Fixed background layer covering full viewport */}
+      <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
+        <AnimatedLogoBackground />
+        <div className="absolute inset-0 w-full h-full opacity-40">
+          <CloudBackground />
+        </div>
       </div>
-              {/* Header - Fixed */}
+      
+      {/* All content in single z-index layer */}
+      <div className="relative z-10">
+        {/* Header - Fixed */}
         <header className="border-b border-gray-700 fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-md z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -63,10 +70,10 @@ export default function LandingPage() {
               <LanguageGlobe />
               
               {/* Auth Buttons */}
-              <Link href="/prihlaseni" className="hidden sm:block text-gray-300 hover:text-white transition-colors">
+              <Link href="/login" className="hidden sm:block text-gray-300 hover:text-white transition-colors">
                 {t('nav.login')}
               </Link>
-              <Link href="/registrace" className="bg-black text-white border-2 border-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-white hover:text-black transition-all duration-300 text-sm sm:text-base">
+              <Link href="/register" className="bg-black text-white border-2 border-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-white hover:text-black transition-all duration-300 text-sm sm:text-base">
                 <span className="hidden sm:inline">{t('nav.signup')}</span>
                 <span className="sm:hidden">{t('nav.signup').split(' ')[0]}</span>
               </Link>
@@ -76,7 +83,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden z-10 pt-16">
+      <section className="relative overflow-hidden pt-16">
         {/* Green organic blur accent (top, біля хедера) */}
         <div
           className="absolute left-[10%] top-[-20px] -z-10 pointer-events-none"
@@ -140,11 +147,14 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Screenshot Showcase Section */}
+      <ScreenshotShowcase />
+
       {/* Interface Showcase Section */}
       <InterfaceShowcase />
 
       {/* Features Section */}
-      <section className="py-16 relative z-10">
+      <section className="py-16 relative">
         {/* Green organic blur accent (біля функцій) */}
         <div
           className="absolute right-[8%] top-[-80px] -z-10 pointer-events-none"
@@ -204,7 +214,7 @@ export default function LandingPage() {
       <AnimatedStats />
 
       {/* Starter Plan Showcase */}
-      <section className="py-20 relative z-10">
+      <section className="py-20 relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Začněte <span className="text-money">zdarma</span> ještě dnes
@@ -226,7 +236,7 @@ export default function LandingPage() {
       </section>
 
       {/* Social Proof */}
-      <section className="py-28 relative z-10">
+      <section className="py-28 relative">
         {/* Green organic blur accent (залишаю стару, біля відгуків) */}
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"
@@ -311,7 +321,7 @@ export default function LandingPage() {
       <PricingToggle />
 
       {/* CTA Section */}
-      <section className="py-28 relative z-10">
+      <section className="py-28 relative">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-bold mb-8">
             Připraveni začít fakturovat?
@@ -338,7 +348,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer id="kontakt" className="py-20 relative z-10">
+      <footer id="kontakt" className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -394,8 +404,8 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-
+      
+      </div> {/* End of relative z-10 content container */}
     </div>
   );
 }

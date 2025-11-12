@@ -120,64 +120,47 @@ export default function RegisterPage() {
       return;
     }
 
-    console.log('🔄 Starting registration for:', formData.email);
-    
-    const displayName = `${formData.firstName} ${formData.lastName}`.trim();
-    const result = await register(formData.email, formData.password, displayName);
-    
+    console.log('🔄 Attempting registration for:', formData.email);
+
+    const result = await register(formData.email, formData.password, `${formData.firstName} ${formData.lastName}`);
+
     if (result.success) {
-      console.log('✅ Registration successful, saving profile data');
+      console.log('✅ Registration successful, email verification sent');
       
-      // Зберігаємо дані профілю після успішної реєстрації
-      const profileData = {
-        personal: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: "",
-          address: formData.street,
-          city: formData.city,
-          postalCode: formData.postalCode,
-          country: formData.country
-        },
-        company: {
-          name: formData.company,
-          ico: formData.ico,
-          dic: formData.dic,
-          address: formData.street,
-          city: formData.city,
-          postalCode: formData.postalCode,
-          country: formData.country,
-          website: "",
-          businessType: "",
-          typZivnosti: formData.typZivnosti
-        },
-        banking: {
-          accountNumber: "",
-          bankName: "",
-          iban: "",
-          swift: "",
-          currency: "CZK"
-        },
-        preferences: {
-          language: "cs",
-          currency: "CZK",
-          timezone: "Europe/Prague",
-          notifications: true
-        }
-      };
-
-      // Зберігаємо в localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('faktix-profile', JSON.stringify(profileData));
-        console.log('💾 Profile data saved to localStorage');
-      }
-
-      console.log('✅ Registration completed, redirecting to dashboard');
-      router.push("/dashboard");
+      // Показуємо повідомлення про підтвердження email
+      alert(result.message || 'Реєстрація майже завершена! Ми надіслали лист на вашу пошту для підтвердження.');
+      
+      // Перенаправляємо на сторінку підтвердження email
+      router.push("/potvrdit-email");
     } else {
       console.log('❌ Registration failed:', result.message);
-      setError(result.message || "Registrace se nezdařila");
+      
+      // Детальна обробка помилок Firebase
+      let errorMessage = result.message || "Registrace se nezdařila";
+      
+      if (result.error) {
+        switch (result.error) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'Tento email již existuje. Zkuste se přihlásit nebo obnovit heslo.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Neplatný formát emailu.';
+            break;
+          case 'auth/weak-password':
+            errorMessage = 'Heslo je příliš slabé. Musí obsahovat alespoň 6 znaků.';
+            break;
+          case 'auth/network-request-failed':
+            errorMessage = 'Chyba připojení k síti. Zkontrolujte internetové připojení.';
+            break;
+          case 'auth/configuration-not-found':
+            errorMessage = 'Firebase konfigurace nebyla nalezena. Kontaktujte správce.';
+            break;
+          default:
+            errorMessage = `Chyba: ${result.error} - ${result.message}`;
+        }
+      }
+      
+      setError(errorMessage);
     }
   };
 

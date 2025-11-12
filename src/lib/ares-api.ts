@@ -450,3 +450,80 @@ export function determineZivnostType(zivnostData: ZivnostData): string {
   // Правило 3 (Резервний варіант): Якщо не знайдено жодного типу
   return 'Nedefinováno';
 }
+
+/**
+ * Визначає тип підприємства на основі правової форми
+ */
+export function determineBusinessType(pravniForma: string): string {
+  const form = pravniForma.toLowerCase();
+  
+  if (form.includes('živnost') || form.includes('zivnost')) {
+    return 'OSVČ (Živnostník)';
+  } else if (form.includes('s.r.o.') || form.includes('sro')) {
+    return 'Společnost s ručením omezeným (s.r.o.)';
+  } else if (form.includes('a.s.') || form.includes('as')) {
+    return 'Akciová společnost (a.s.)';
+  } else if (form.includes('v.o.s.') || form.includes('vos')) {
+    return 'Veřejná obchodní společnost (v.o.s.)';
+  } else if (form.includes('k.s.') || form.includes('ks')) {
+    return 'Komanditní společnost (k.s.)';
+  } else if (form.includes('družstvo') || form.includes('druzstvo')) {
+    return 'Družstvo';
+  } else if (form.includes('nadace') || form.includes('foundation')) {
+    return 'Nadace';
+  } else if (form.includes('ústav') || form.includes('ustav')) {
+    return 'Ústav';
+  } else {
+    return pravniForma || 'Nedefinováno';
+  }
+}
+
+/**
+ * Отримує повні дані компанії з ARES та RŽP
+ */
+export async function getCompanyData(ico: string): Promise<{
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+  businessType: string;
+  typZivnosti: string;
+} | null> {
+  try {
+    // Отримуємо базові дані з ARES
+    const aresResult = await searchByICO(ico);
+    
+    if (!aresResult.success || !aresResult.data) {
+      console.warn('Nepodařilo se načíst data z ARES:', aresResult.error);
+      return null;
+    }
+
+    const aresData = aresResult.data;
+    
+    // Отримуємо дані живності з RŽP
+    let typZivnosti = 'Nedefinováno';
+    try {
+      const zivnostResult = await getZivnostType(ico);
+      if (zivnostResult.success && zivnostResult.data) {
+        typZivnosti = determineZivnostType(zivnostResult.data);
+      }
+    } catch (error) {
+      console.warn('Nepodařilo se načíst data živnosti:', error);
+    }
+
+    // Визначаємо тип підприємства
+    const businessType = determineBusinessType(aresData.pravniForma);
+
+    return {
+      name: aresData.obchodniJmeno,
+      street: `${aresData.adresa.ulice} ${aresData.adresa.cisloOrientacni || ''}`.trim(),
+      city: aresData.adresa.mesto,
+      postalCode: aresData.adresa.psc || '',
+      businessType,
+      typZivnosti
+    };
+  } catch (error) {
+    console.error('Chyba při načítání dat společnosti:', error);
+    return null;
+  }
+}

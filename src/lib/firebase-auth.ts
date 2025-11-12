@@ -5,7 +5,8 @@ import {
   onAuthStateChanged,
   User,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification
 } from 'firebase/auth';
 import { auth } from './firebase';
 
@@ -14,6 +15,7 @@ export interface AuthUser {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  emailVerified?: boolean;
 }
 
 // Реєстрація нового користувача
@@ -37,8 +39,22 @@ export const registerUser = async (email: string, password: string, displayName?
       await updateProfile(userCredential.user, { displayName: displayName });
       console.log('✅ User profile updated successfully');
     }
+
+    // === НОВИЙ КРОК: НАДСИЛАЄМО ЛИСТ ДЛЯ ПІДТВЕРДЖЕННЯ ===
+    const APP_URL = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+    const actionCodeSettings = {
+      url: `${APP_URL}/prihlaseni?message=verify-email`,
+      handleCodeInApp: false
+    } as const;
+    console.log('📧 Sending email verification...', { redirectUrl: actionCodeSettings.url });
+    await sendEmailVerification(userCredential.user, actionCodeSettings);
+    console.log('✅ Email verification sent successfully');
     
-    return { success: true, user: userCredential.user };
+    return { 
+      success: true, 
+      user: userCredential.user,
+      message: 'Реєстрація майже завершена! Ми надіслали лист на вашу пошту для підтвердження.'
+    };
   } catch (error: unknown) {
     console.error('❌ Registration error:', error);
     
@@ -66,6 +82,24 @@ export const registerUser = async (email: string, password: string, displayName?
       error: errorCode,
       message: errorMessage
     };
+  }
+};
+
+// Повторне надсилання листа підтвердження
+export const resendVerificationEmail = async () => {
+  const user = auth.currentUser;
+  if (!user) return { success: false, message: 'Користувач не авторизований' };
+  try {
+    const APP_URL = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+    const actionCodeSettings = {
+      url: `${APP_URL}/prihlaseni?message=verify-email`,
+      handleCodeInApp: false
+    } as const;
+    await sendEmailVerification(user, actionCodeSettings);
+    return { success: true };
+  } catch (error) {
+    console.error('❌ Resend verification error:', error);
+    return { success: false };
   }
 };
 
@@ -169,7 +203,8 @@ export const convertFirebaseUser = (user: User | null): AuthUser | null => {
     uid: user.uid,
     email: user.email,
     displayName: user.displayName,
-    photoURL: user.photoURL
+    photoURL: user.photoURL,
+    emailVerified: user.emailVerified
   };
 };
 

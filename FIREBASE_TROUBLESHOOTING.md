@@ -158,3 +158,11 @@ if (process.env.NODE_ENV === 'development') {
 1. Скріншот помилки з консолі
 2. Скріншот Firebase Console
 3. Опис кроків, які ви виконали
+
+
+
+
+
+
+
+

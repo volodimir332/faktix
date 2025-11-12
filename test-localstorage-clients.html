@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalStorage Clients Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #2a2a2a; padding: 20px; border-radius: 10px; }
+        button { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 5px; }
+        .status { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #065f46; color: #d1fae5; }
+        .error { background: #7f1d1d; color: #fecaca; }
+        .info { background: #1e3a8a; color: #dbeafe; }
+        .log { background: #1f2937; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💾 LocalStorage Clients Test</h1>
+        <p>Тестування збереження клієнтів в localStorage</p>
+        
+        <button onclick="addTestClient()">Додати тестового клієнта</button>
+        <button onclick="checkClients()">Перевірити клієнтів</button>
+        <button onclick="clearClients()">Очистити клієнтів</button>
+        <button onclick="openFaktix()">Відкрити Faktix</button>
+        
+        <div id="logContainer" class="log">
+            Логи з'являться тут...
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            document.getElementById('status').innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function addLog(message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            logContainer.innerHTML += `[${timestamp}] ${message}\n`;
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function addTestClient() {
+            const testClient = {
+                id: Date.now().toString(),
+                name: "Test Company s.r.o.",
+                email: "test@example.com",
+                street: "Test Street 1",
+                city: "Praha",
+                postalCode: "11000",
+                country: "Česká republika",
+                ico: "12345678",
+                dic: "CZ12345678",
+                typZivnosti: "Řemeslnická živnost (80%)"
+            };
+
+            const existingClients = JSON.parse(localStorage.getItem('faktix-clients') || '[]');
+            const updatedClients = [...existingClients, testClient];
+            
+            localStorage.setItem('faktix-clients', JSON.stringify(updatedClients));
+            
+            addLog(`✅ Додано клієнта: ${testClient.name}`);
+            addLog(`📊 Всього клієнтів: ${updatedClients.length}`);
+            showStatus('✅ Тестового клієнта додано!', 'success');
+        }
+
+        function checkClients() {
+            const clients = JSON.parse(localStorage.getItem('faktix-clients') || '[]');
+            addLog(`📋 Знайдено клієнтів: ${clients.length}`);
+            
+            if (clients.length > 0) {
+                clients.forEach((client, index) => {
+                    addLog(`${index + 1}. ${client.name} (ID: ${client.id})`);
+                });
+            } else {
+                addLog('📭 Клієнтів не знайдено');
+            }
+            
+            showStatus(`📊 Знайдено ${clients.length} клієнтів`, 'info');
+        }
+
+        function clearClients() {
+            localStorage.removeItem('faktix-clients');
+            addLog('🗑️ Всі клієнти видалено');
+            showStatus('🗑️ Клієнти очищено!', 'info');
+        }
+
+        function openFaktix() {
+            window.open('http://localhost:3000', '_blank');
+            addLog('🌐 Faktix відкрито');
+            showStatus('🌐 Faktix відкрито в новій вкладці', 'info');
+        }
+
+        window.onload = function() {
+            addLog('🚀 LocalStorage Clients Test готовий!');
+            showStatus('🚀 Тест готовий!', 'info');
+        };
+    </script>
+</body>
+</html>

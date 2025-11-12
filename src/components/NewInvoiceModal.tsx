@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { X, Plus, Trash2, Calendar, ChevronDown, ArrowLeft, MoreHorizontal } from 'lucide-react';
 import { NewClientModal } from './NewClientModal';
@@ -9,12 +9,13 @@ import { useClients } from '@/contexts/ClientContext';
 import { ClientData } from '@/types';
 import { useInvoices } from '@/contexts/InvoiceContext';
 import { formatDate, calculateDueDate } from '@/lib/invoice-utils';
-import { checkProfileFromStorage } from '@/lib/profile-validator';
+import { checkProfileFromStorage, loadProfileFromStorage } from '@/lib/profile-validator';
 import ProfileWarningModal from './ProfileWarningModal';
 
 interface NewInvoiceModalProps {
   isOpen: boolean;
   onClose: () => void;
+  editInvoiceId?: string; // ID фактури для редагування
 }
 
 interface InvoiceItem {
@@ -25,12 +26,13 @@ interface InvoiceItem {
   pricePerUnit: number;
 }
 
-export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
+export function NewInvoiceModal({ isOpen, onClose, editInvoiceId }: NewInvoiceModalProps) {
   const router = useRouter();
-  const { clients } = useClients();
-  const { generateNewInvoiceNumber, addInvoice } = useInvoices();
+  const { clients, addClient } = useClients();
+  const { addInvoice, updateInvoice, getInvoiceById, invoices } = useInvoices();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState('Faktura');
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState(() => {
     const today = new Date().toISOString().split('T')[0];
     const dueDate = (() => {
@@ -39,9 +41,18 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
       return date.toISOString().split('T')[0];
     })();
     
+    // Генеруємо номер фактури
+    const generateInvoiceNumber = () => {
+      const year = new Date().getFullYear();
+      const month = String(new Date().getMonth() + 1).padStart(2, '0');
+      const day = String(new Date().getDate()).padStart(2, '0');
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      return `INV-${year}${month}${day}-${random}`;
+    };
+    
     return {
       customer: '',
-      invoiceNumber: generateNewInvoiceNumber(),
+      invoiceNumber: generateInvoiceNumber(),
       issueDate: today,
       paymentMethod: 'Převodem',
       dueDate: dueDate,
@@ -57,6 +68,7 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
       constantSymbol: '0308',
       showPaymentInfo: true,
       // Supplier info
+      ownerName: '',
       supplierEmail: 'xperementus@gmail.com',
       supplierAddress: 'Cihelní 2674/91',
       supplierCity: '700 30 Ostrava',
@@ -64,6 +76,12 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
       supplierICO: '21311048',
       supplierTaxStatus: 'Nejsme plátci DPH',
       supplierPhone: '737540605',
+      // Customer details hydrated from chosen client
+      customerAddress: '',
+      customerCity: '',
+      customerCountry: '',
+      customerICO: '',
+      customerDIC: '',
       // Advance payment fields
       advancePaymentType: 'Fakturu zaplacenou',
       advanceAmount: '',
@@ -86,6 +104,103 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
   const [items, setItems] = useState<InvoiceItem[]>([
     { id: '1', quantity: 1, unit: 'ks', description: '', pricePerUnit: 0 }
   ]);
+
+  // Prefill supplier info from saved profile once
+  useEffect(() => {
+    try {
+      const profile = loadProfileFromStorage();
+      if (profile) {
+        const supplierName = profile.company?.name?.trim()
+          ? profile.company.name
+          : `${profile.personal.firstName} ${profile.personal.lastName}`.trim();
+        const supplierAddress = (profile.company?.address || profile.personal.address || '').toString();
+        const supplierCity = `${(profile.company?.postalCode || profile.personal.postalCode || '').toString()} ${(profile.company?.city || profile.personal.city || '').toString()}`.trim();
+        const supplierCountry = (profile.company?.country || profile.personal.country || 'Česká republika').toString();
+        const supplierICO = (profile.company?.ico || profile.company?.registrationNumber || '').toString();
+        const supplierEmail = (profile.personal?.email || '').toString();
+        const supplierPhone = (profile.personal?.phone || '').toString();
+
+        setFormData((prev) => ({
+          ...prev,
+          ownerName: supplierName,
+          supplierAddress: supplierAddress || prev.supplierAddress,
+          supplierCity: supplierCity || prev.supplierCity,
+          supplierCountry: supplierCountry || prev.supplierCountry,
+          supplierICO: supplierICO || prev.supplierICO,
+          supplierEmail: supplierEmail || prev.supplierEmail,
+          supplierPhone: supplierPhone || prev.supplierPhone,
+        }));
+      }
+    } catch (_) {
+      // ignore
+    }
+  }, []);
+
+  // Завантажуємо дані фактури для редагування
+  useEffect(() => {
+    if (editInvoiceId && isOpen) {
+      setIsEditMode(true);
+      // Шукаємо фактуру в списку
+      const invoiceToEdit = invoices.find(inv => inv.id === editInvoiceId || inv.invoiceNumber === editInvoiceId);
+      
+      if (invoiceToEdit) {
+        console.log('📝 Loading invoice for editing:', invoiceToEdit);
+        
+        // Заповнюємо форму даними фактури
+        setFormData({
+          customer: invoiceToEdit.customer,
+          invoiceNumber: invoiceToEdit.invoiceNumber,
+          issueDate: new Date(invoiceToEdit.date).toISOString().split('T')[0],
+          paymentMethod: 'Převodem',
+          dueDate: new Date(invoiceToEdit.dueDate).toISOString().split('T')[0],
+          dueDateType: '14',
+          currency: 'Kč',
+          language: 'Čeština',
+          bankAccount: '4914919003/5500',
+          iban: 'CZ33 5500 0000 0049 1491 9003',
+          swift: 'RZBCCZPP',
+          showIban: 'Automaticky',
+          orderNumber: '',
+          variableSymbol: invoiceToEdit.invoiceNumber.replace(/-/g, ''),
+          constantSymbol: '0308',
+          showPaymentInfo: true,
+          ownerName: (invoiceToEdit as unknown as Record<string, unknown>).ownerName as string || '',
+          supplierEmail: (invoiceToEdit as unknown as Record<string, unknown>).supplierEmail as string || 'xperementus@gmail.com',
+          supplierAddress: (invoiceToEdit as unknown as Record<string, unknown>).supplierAddress as string || 'Cihelní 2674/91',
+          supplierCity: (invoiceToEdit as unknown as Record<string, unknown>).supplierCity as string || '700 30 Ostrava',
+          supplierCountry: (invoiceToEdit as unknown as Record<string, unknown>).supplierCountry as string || 'Česká republika',
+          supplierICO: (invoiceToEdit as unknown as Record<string, unknown>).supplierICO as string || '21311048',
+          supplierTaxStatus: 'Nejsme plátci DPH',
+          supplierPhone: (invoiceToEdit as unknown as Record<string, unknown>).supplierPhone as string || '737540605',
+          customerAddress: (invoiceToEdit as unknown as Record<string, unknown>).customerAddress as string || '',
+          customerCity: (invoiceToEdit as unknown as Record<string, unknown>).customerCity as string || '',
+          customerCountry: (invoiceToEdit as unknown as Record<string, unknown>).customerCountry as string || '',
+          customerICO: (invoiceToEdit as unknown as Record<string, unknown>).customerICO as string || '',
+          customerDIC: (invoiceToEdit as unknown as Record<string, unknown>).customerDIC as string || '',
+          advancePaymentType: 'Fakturu zaplacenou',
+          advanceAmount: '',
+          advancePercentage: '',
+          advanceNote: '',
+          preItemsText: '',
+          footerText: 'Fyzická osoba zapsaná v živnostenském rejstříku.',
+          activeTab: 'Faktura'
+        });
+        
+        // Заповнюємо items
+        if (invoiceToEdit.items && invoiceToEdit.items.length > 0) {
+          setItems(invoiceToEdit.items.map((item, index) => ({
+            id: (index + 1).toString(),
+            quantity: item.quantity,
+            unit: 'ks',
+            description: item.description,
+            pricePerUnit: item.unitPrice
+          })));
+        }
+      }
+    } else {
+      setIsEditMode(false);
+    }
+  }, [editInvoiceId, isOpen, invoices]);
 
   const calculateDueDateLocal = (issueDate: string, days: number = 14) => {
     return calculateDueDate(issueDate, days);
@@ -162,7 +277,7 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Перевіряємо профіль перед створенням фактури
@@ -174,8 +289,9 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
       return;
     }
 
-    // Створюємо нову фактуру
-    const newInvoice = {
+    // Дані фактури
+    const invoiceData = {
+      invoiceNumber: formData.invoiceNumber,
       date: formData.issueDate,
       dueDate: formData.dueDate,
       customer: formData.customer,
@@ -190,22 +306,53 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
       status: 'sent' as const
     };
 
-    // Додаємо фактуру до контексту
-    addInvoice(newInvoice);
-    
-    console.log('✅ Faktura vytvořena:', newInvoice);
-    
-    // Закриваємо модальне вікно
-    onClose();
-    
-    // Перенаправляємо на сторінку деталей фактури
-    router.push(`/faktury/${formData.invoiceNumber}`);
+    if (isEditMode && editInvoiceId) {
+      // Оновлюємо існуючу фактуру
+      console.log('🔄 Updating invoice:', editInvoiceId);
+      const result = await updateInvoice(editInvoiceId, invoiceData);
+      
+      if (result.success) {
+        console.log('✅ Invoice updated successfully');
+        // Закриваємо модальне вікно
+        onClose();
+        // Залишаємось на поточній сторінці (або оновлюємо)
+        router.push(`/faktury/${formData.invoiceNumber}`);
+      } else {
+        console.error('❌ Failed to update invoice:', result.error);
+        alert('Помилка при оновленні фактури');
+      }
+    } else {
+      // Створюємо нову фактуру
+      console.log('➕ Creating new invoice');
+      const result = await addInvoice(invoiceData);
+      
+      if (result.success) {
+        console.log('✅ Invoice created successfully');
+        // Закриваємо модальне вікно
+        onClose();
+        // Перенаправляємо на сторінку деталей фактури
+        router.push(`/faktury/${formData.invoiceNumber}`);
+      } else {
+        console.error('❌ Failed to create invoice:', result.error);
+        alert('Помилка при створенні фактури');
+      }
+    }
   };
 
-  const handleNewClientSave = (clientData: Omit<ClientData, 'id'>) => {
-    console.log('New client saved:', clientData);
-    // Update the customer dropdown with the new client
-    setFormData({...formData, customer: clientData.name});
+  const handleNewClientSave = async (clientData: Omit<ClientData, 'id'>) => {
+    console.log('💾 Saving new client:', clientData);
+    
+    // Зберігаємо клієнта в Firebase
+    const result = await addClient(clientData);
+    
+    if (result.success) {
+      console.log('✅ Client saved successfully with ID:', result.id);
+      // Оновлюємо dropdown з новим клієнтом
+      setFormData({...formData, customer: clientData.name});
+    } else {
+      console.error('❌ Failed to save client:', result.error);
+      alert('Помилка збереження клієнта. Спробуйте ще раз.');
+    }
   };
 
   if (!isOpen) return null;
@@ -269,7 +416,19 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
                     <select 
                       className="w-full bg-gray-800/60 border border-gray-600 rounded-lg px-3 py-2 pr-8 text-white focus:outline-none focus:border-money/50 transition-colors appearance-none text-sm"
                       value={formData.customer}
-                      onChange={(e) => setFormData({...formData, customer: e.target.value})}
+                      onChange={(e) => {
+                        const name = e.target.value;
+                        const selected = clients.find((c) => c.name === name);
+                        setFormData({
+                          ...formData,
+                          customer: name,
+                          customerAddress: selected ? selected.street : '',
+                          customerCity: selected ? `${selected.postalCode} ${selected.city}` : '',
+                          customerCountry: selected ? selected.country : '',
+                          customerICO: selected ? selected.ico : '',
+                          customerDIC: selected ? selected.dic : '',
+                        });
+                      }}
                     >
                       <option value="">Vyberte odběratele...</option>
                       {clients.map((client) => (
@@ -850,7 +1009,7 @@ export function NewInvoiceModal({ isOpen, onClose }: NewInvoiceModalProps) {
               onClick={handleSubmit}
               className="px-6 py-3 bg-money hover:bg-money-light text-black rounded-lg font-semibold transition-colors flex items-center gap-2 shadow-lg"
             >
-              {activeTab === 'Zálohovka' ? 'Vytvořit zálohovku' : 'Vytvořit fakturu'}
+              {isEditMode ? 'Uložit změny' : (activeTab === 'Zálohovka' ? 'Vytvořit zálohovku' : 'Vytvořit fakturu')}
               <MoreHorizontal className="w-4 h-4" />
             </button>
           </div>

@@ -357,7 +357,7 @@ export default function SmartAIAssistant({ apiKey }: AIAssistantProps) {
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="bg-black/20 rounded p-2">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'Příjem' : 'Дохід'}</div>
-              <div className="text-green-400 font-bold">{totalIncome.toLocaleString()} Kč</div>
+              <div className="text-green-400 font-bold">{totalIncome.toLocaleString('cs-CZ')} Kč</div>
             </div>
             <div className="bg-black/20 rounded p-2">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'Paušální výdaje' : 'Паушальні витрати'}</div>
@@ -365,21 +365,21 @@ export default function SmartAIAssistant({ apiKey }: AIAssistantProps) {
             </div>
             <div className="bg-black/20 rounded p-2">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'Daň z příjmů (15%/23%)' : 'Податок з доходу (15%/23%)'}</div>
-              <div className="text-orange-400 font-bold">{incomeTax.toLocaleString()} Kč</div>
+              <div className="text-orange-400 font-bold">{incomeTax.toLocaleString('cs-CZ')} Kč</div>
             </div>
             <div className="bg-black/20 rounded p-2">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'Sociální (29.2%)' : 'Соціальне (29.2%)'}</div>
-              <div className="text-blue-400 font-bold">{finalniSocialni.toLocaleString()} Kč</div>
-              <div className="text-gray-500 text-xs">{language === 'cs' ? `${final_socialni_mesicne.toLocaleString()} Kč/měs` : `${final_socialni_mesicne.toLocaleString()} крон/міс`}</div>
+              <div className="text-blue-400 font-bold">{finalniSocialni.toLocaleString('cs-CZ')} Kč</div>
+              <div className="text-gray-500 text-xs">{language === 'cs' ? `${final_socialni_mesicne.toLocaleString('cs-CZ')} Kč/měs` : `${final_socialni_mesicne.toLocaleString('cs-CZ')} крон/міс`}</div>
             </div>
             <div className="bg-black/20 rounded p-2">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'Zdravotní (13.5%)' : 'Медичне (13.5%)'}</div>
-              <div className="text-purple-400 font-bold">{finalniZdravotni.toLocaleString()} Kč</div>
-              <div className="text-gray-500 text-xs">{language === 'cs' ? `${final_zdravotni_mesicne.toLocaleString()} Kč/měs` : `${final_zdravotni_mesicne.toLocaleString()} крон/міс`}</div>
+              <div className="text-purple-400 font-bold">{finalniZdravotni.toLocaleString('cs-CZ')} Kč</div>
+              <div className="text-gray-500 text-xs">{language === 'cs' ? `${final_zdravotni_mesicne.toLocaleString('cs-CZ')} Kč/měs` : `${final_zdravotni_mesicne.toLocaleString('cs-CZ')} крон/міс`}</div>
             </div>
             <div className="col-span-2 bg-red-900/20 border border-red-500/30 rounded p-2 text-center">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'CELKEM K ZAPLACENÍ' : 'ВСЬОГО ДО СПЛАТИ'}</div>
-              <div className="text-red-400 font-bold text-lg">{totalTaxes.toLocaleString()} Kč</div>
+              <div className="text-red-400 font-bold text-lg">{totalTaxes.toLocaleString('cs-CZ')} Kč</div>
               <div className="text-gray-500 text-xs">({((totalTaxes / totalIncome) * 100).toFixed(1)}% {language === 'cs' ? 'z příjmu' : 'від доходу'})</div>
             </div>
           </div>
@@ -394,12 +394,12 @@ export default function SmartAIAssistant({ apiKey }: AIAssistantProps) {
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="bg-black/20 rounded p-2">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'Sociální měsíčně' : 'Соціальне на місяць'}</div>
-              <div className="text-blue-400 font-bold">{final_socialni_mesicne.toLocaleString()} Kč</div>
+              <div className="text-blue-400 font-bold">{final_socialni_mesicne.toLocaleString('cs-CZ')} Kč</div>
               <div className="text-gray-500 text-xs">{language === 'cs' ? 'splatnost 20.' : 'термін до 20.'}</div>
             </div>
             <div className="bg-black/20 rounded p-2">
               <div className="text-gray-400 text-xs">{language === 'cs' ? 'Zdravotní měsíčně' : 'Медичне на місяць'}</div>
-              <div className="text-purple-400 font-bold">{final_zdravotni_mesicne.toLocaleString()} Kč</div>
+              <div className="text-purple-400 font-bold">{final_zdravotni_mesicne.toLocaleString('cs-CZ')} Kč</div>
               <div className="text-gray-500 text-xs">{language === 'cs' ? 'splatnost 8.' : 'термін до 8.'}</div>
             </div>
           </div>
@@ -433,11 +433,11 @@ export default function SmartAIAssistant({ apiKey }: AIAssistantProps) {
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-black/20 rounded p-2">
                 <div className="text-gray-400 text-xs">{language === 'cs' ? 'Obrat' : 'Оборот'}</div>
-                <div className="text-white font-bold">{totalIncome.toLocaleString()} Kč</div>
+                <div className="text-white font-bold">{totalIncome.toLocaleString('cs-CZ')} Kč</div>
               </div>
               <div className="bg-black/20 rounded p-2">
                 <div className="text-gray-400 text-xs">{language === 'cs' ? 'Náklady (70%)' : 'Витрати (70%)'}</div>
-                <div className="text-orange-400 font-bold">{defaultExpenses.toLocaleString()} Kč</div>
+                <div className="text-orange-400 font-bold">{defaultExpenses.toLocaleString('cs-CZ')} Kč</div>
                 <div className="text-gray-500 text-xs flex items-center mt-1">
                   <span className="mr-1">ℹ️</span>
                   {language === 'cs' ? 'Zadejte reálné náklady' : 'Введіть реальні витрати'}
@@ -445,11 +445,11 @@ export default function SmartAIAssistant({ apiKey }: AIAssistantProps) {
               </div>
               <div className="bg-black/20 rounded p-2">
                 <div className="text-gray-400 text-xs">{language === 'cs' ? 'Zisk před zdaněním' : 'Прибуток до оподаткування'}</div>
-                <div className="text-blue-400 font-bold">{profit.toLocaleString()} Kč</div>
+                <div className="text-blue-400 font-bold">{profit.toLocaleString('cs-CZ')} Kč</div>
               </div>
               <div className="bg-black/20 rounded p-2">
                 <div className="text-gray-400 text-xs">{language === 'cs' ? 'Korporátní daň (21%)' : 'Корпоративний податок (21%)'}</div>
-                <div className="text-green-400 font-bold">{corporateTax.toLocaleString()} Kč</div>
+                <div className="text-green-400 font-bold">{corporateTax.toLocaleString('cs-CZ')} Kč</div>
               </div>
             </div>
             <div className="bg-gray-800/50 rounded p-2 text-xs text-gray-300">
@@ -603,7 +603,7 @@ export default function SmartAIAssistant({ apiKey }: AIAssistantProps) {
     if (language === 'cs') {
       analysis = `Zdravím! Analyzoval jsem váš profil:\n\n`;
       analysis += `📊 Typ podnikání: ${getBusinessTypeName(profile.businessType, 'cs')}\n`;
-      analysis += `💰 Roční obrat: ${profile.currentTurnover.toLocaleString()} Kč\n`;
+      analysis += `💰 Roční obrat: ${profile.currentTurnover.toLocaleString('cs-CZ')} Kč\n`;
       
       if (profile.annualLimit > 0) {
         analysis += `📈 Využití limitu: ${(riskLevel * 100).toFixed(1)}%\n`;
@@ -623,7 +623,7 @@ export default function SmartAIAssistant({ apiKey }: AIAssistantProps) {
     } else {
       analysis = `Привіт! Проаналізував ваш профіль:\n\n`;
       analysis += `📊 Тип підприємництва: ${getBusinessTypeName(profile.businessType, 'uk')}\n`;
-      analysis += `💰 Річний оборот: ${profile.currentTurnover.toLocaleString()} крон\n`;
+      analysis += `💰 Річний оборот: ${profile.currentTurnover.toLocaleString('cs-CZ')} крон\n`;
       
       if (profile.annualLimit > 0) {
         analysis += `📈 Використання ліміту: ${(riskLevel * 100).toFixed(1)}%\n`;
@@ -782,10 +782,10 @@ Používejte emoji pro lepší vizuál.`;
     
     return language === 'cs' 
       ? `💼 SRO - Daňový rozbor (2025):\n\n` +
-        `📊 Celkový obrat: ${totalIncome.toLocaleString()} Kč\n` +
-        `📉 Náklady (odhad 70%): ${expenses.toLocaleString()} Kč\n` +
-        `💰 Zisk před zdaněním: ${profit.toLocaleString()} Kč (${profitMargin}%)\n\n` +
-        `🏢 Daň z příjmů PO (21%): ${corporateTax.toLocaleString()} Kč\n` +
+        `📊 Celkový obrat: ${totalIncome.toLocaleString('cs-CZ')} Kč\n` +
+        `📉 Náklady (odhad 70%): ${expenses.toLocaleString('cs-CZ')} Kč\n` +
+        `💰 Zisk před zdaněním: ${profit.toLocaleString('cs-CZ')} Kč (${profitMargin}%)\n\n` +
+        `🏢 Daň z příjmů PO (21%): ${corporateTax.toLocaleString('cs-CZ')} Kč\n` +
         `📈 Efektivní daňová sazba: ${taxRate}% z obratu\n\n` +
         `ℹ️ POZNÁMKA:\n` +
         `• Sociální pojištění: placeno ze mzdy jednatele/zaměstnanců\n` +
@@ -793,10 +793,10 @@ Používejte emoji pro lepší vizuál.`;
         `• Pro přesnější výpočet zadejte skutečné náklady\n\n` +
         `💡 TIP: Optimalizujte náklady pro snížení daňové povinnosti`
       : `💼 ТОВ - Податковий аналіз (2025):\n\n` +
-        `📊 Загальний оборот: ${totalIncome.toLocaleString()} крон\n` +
-        `📉 Витрати (оцінка 70%): ${expenses.toLocaleString()} крон\n` +
-        `💰 Прибуток до оподаткування: ${profit.toLocaleString()} крон (${profitMargin}%)\n\n` +
-        `🏢 Податок на прибуток підприємств (21%): ${corporateTax.toLocaleString()} крон\n` +
+        `📊 Загальний оборот: ${totalIncome.toLocaleString('cs-CZ')} крон\n` +
+        `📉 Витрати (оцінка 70%): ${expenses.toLocaleString('cs-CZ')} крон\n` +
+        `💰 Прибуток до оподаткування: ${profit.toLocaleString('cs-CZ')} крон (${profitMargin}%)\n\n` +
+        `🏢 Податок на прибуток підприємств (21%): ${corporateTax.toLocaleString('cs-CZ')} крон\n` +
         `📈 Ефективна податкова ставка: ${taxRate}% з обороту\n\n` +
         `ℹ️ ПРИМІТКА:\n` +
         `• Соціальне страхування: сплачується із зарплати директора/співробітників\n` +
@@ -828,68 +828,68 @@ Používejte emoji pro lepší vizuál.`;
     
     if (language === 'cs') {
       let result = `📊 SPRÁVNÝ VÝPOČET DANÍ PRO ŽIVNOST 2025:\n\n` +
-        `💰 Celkový příjem: ${totalIncome.toLocaleString()} Kč\n` +
-        `💼 Paušální výdaje (${(TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE * 100)}%): ${(totalIncome * TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE).toLocaleString()} Kč\n` +
-        `💼 Základ daně: ${taxCalculation.taxBase.toLocaleString()} Kč\n\n` +
+        `💰 Celkový příjem: ${totalIncome.toLocaleString('cs-CZ')} Kč\n` +
+        `💼 Paušální výdaje (${(TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE * 100)}%): ${(totalIncome * TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE).toLocaleString('cs-CZ')} Kč\n` +
+        `💼 Základ daně: ${taxCalculation.taxBase.toLocaleString('cs-CZ')} Kč\n\n` +
         `📋 ROZPIS DANÍ A POJISTNÉHO:\n`;
       
       // Daň z příjmů
-      result += `• 💰 Daň z příjmů (${(TAX_CONFIG_2025.INCOME_TAX_RATE * 100)}%): ${taxCalculation.incomeTax.toLocaleString()} Kč\n`;
-      result += `  💳 Sleva na poplatníka: ${TAX_CONFIG_2025.TAX_DISCOUNT_ANNUAL.toLocaleString()} Kč\n`;
+      result += `• 💰 Daň z příjmů (${(TAX_CONFIG_2025.INCOME_TAX_RATE * 100)}%): ${taxCalculation.incomeTax.toLocaleString('cs-CZ')} Kč\n`;
+      result += `  💳 Sleva na poplatníka: ${TAX_CONFIG_2025.TAX_DISCOUNT_ANNUAL.toLocaleString('cs-CZ')} Kč\n`;
       
       // Sociální pojištění s indikátorem minimální báze
       const socialIndicator = taxCalculation.socialUsesMinBase ? ' ⚠️ Uplatněn minimální vyměřovací základ' : '';
-      result += `• 👥 Sociální pojištění (${(TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE * 100)}%): ${taxCalculation.socialInsurance.toLocaleString()} Kč${socialIndicator}\n` +
-        `  📋 Vyměřovací základ: ${(taxCalculation.socialInsurance / TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE).toLocaleString()} Kč/rok\n` +
-        `  💸 Měsíčně: ${final_socialni_mesicne.toLocaleString()} Kč (min. ${min_socialni_mesicne.toLocaleString()} Kč)\n`;
+      result += `• 👥 Sociální pojištění (${(TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE * 100)}%): ${taxCalculation.socialInsurance.toLocaleString('cs-CZ')} Kč${socialIndicator}\n` +
+        `  📋 Vyměřovací základ: ${(taxCalculation.socialInsurance / TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE).toLocaleString('cs-CZ')} Kč/rok\n` +
+        `  💸 Měsíčně: ${final_socialni_mesicne.toLocaleString('cs-CZ')} Kč (min. ${min_socialni_mesicne.toLocaleString('cs-CZ')} Kč)\n`;
       
       // Zdravotní pojištění s indikátorem minimální báze
       const healthIndicator = taxCalculation.healthUsesMinBase ? ' ⚠️ Uplatněn minimální vyměřovací základ' : '';
-      result += `• 🏥 Zdravotní pojištění (${(TAX_CONFIG_2025.HEALTH_INSURANCE_RATE * 100)}%): ${taxCalculation.healthInsurance.toLocaleString()} Kč${healthIndicator}\n` +
-        `  📋 Vyměřovací základ: ${(taxCalculation.healthInsurance / TAX_CONFIG_2025.HEALTH_INSURANCE_RATE).toLocaleString()} Kč/rok\n` +
-        `  💸 Měsíčně: ${final_zdravotni_mesicne.toLocaleString()} Kč (min. ${min_zdravotni_mesicne.toLocaleString()} Kč)\n\n` +
-        `💸 CELKEM K ZAPLACENÍ: ${taxCalculation.total.toLocaleString()} Kč\n` +
+      result += `• 🏥 Zdravotní pojištění (${(TAX_CONFIG_2025.HEALTH_INSURANCE_RATE * 100)}%): ${taxCalculation.healthInsurance.toLocaleString('cs-CZ')} Kč${healthIndicator}\n` +
+        `  📋 Vyměřovací základ: ${(taxCalculation.healthInsurance / TAX_CONFIG_2025.HEALTH_INSURANCE_RATE).toLocaleString('cs-CZ')} Kč/rok\n` +
+        `  💸 Měsíčně: ${final_zdravotni_mesicne.toLocaleString('cs-CZ')} Kč (min. ${min_zdravotni_mesicne.toLocaleString('cs-CZ')} Kč)\n\n` +
+        `💸 CELKEM K ZAPLACENÍ: ${taxCalculation.total.toLocaleString('cs-CZ')} Kč\n` +
         `📈 Efektivní sazba: ${((taxCalculation.total / totalIncome) * 100).toFixed(1)}% z příjmu\n\n` +
         `💡 SPRÁVNÉ MĚSÍČNÍ ZÁLOHY 2025:\n` +
-        `• Sociální: ${final_socialni_mesicne.toLocaleString()} Kč (splatnost 20.)\n` +
-        `• Zdravotní: ${final_zdravotni_mesicne.toLocaleString()} Kč (splatnost 8.)\n` +
-        `• Daň (záloha): ${(taxCalculation.incomeTax / 12).toLocaleString()} Kč (splatnost 15.)\n\n` +
+        `• Sociální: ${final_socialni_mesicne.toLocaleString('cs-CZ')} Kč (splatnost 20.)\n` +
+        `• Zdravotní: ${final_zdravotni_mesicne.toLocaleString('cs-CZ')} Kč (splatnost 8.)\n` +
+        `• Daň (záloha): ${(taxCalculation.incomeTax / 12).toLocaleString('cs-CZ')} Kč (splatnost 15.)\n\n` +
         `⚠️ MINIMÁLNÍ ZÁLOHY 2025:\n` +
-        `📋 Sociální min.: ${min_socialni_mesicne.toLocaleString()} Kč/měs (${TAX_CONFIG_2025.SOCIAL_INSURANCE_MIN_ANNUAL_BASE.toLocaleString()} Kč/rok)\n` +
-        `📋 Zdravotní min.: ${min_zdravotni_mesicne.toLocaleString()} Kč/měs (${TAX_CONFIG_2025.HEALTH_INSURANCE_MIN_ANNUAL_BASE.toLocaleString()} Kč/rok)`;
+        `📋 Sociální min.: ${min_socialni_mesicne.toLocaleString('cs-CZ')} Kč/měs (${TAX_CONFIG_2025.SOCIAL_INSURANCE_MIN_ANNUAL_BASE.toLocaleString('cs-CZ')} Kč/rok)\n` +
+        `📋 Zdravotní min.: ${min_zdravotni_mesicne.toLocaleString('cs-CZ')} Kč/měs (${TAX_CONFIG_2025.HEALTH_INSURANCE_MIN_ANNUAL_BASE.toLocaleString('cs-CZ')} Kč/rok)`;
       
       return result;
     } else {
       let result = `📊 ПРАВИЛЬНИЙ РОЗРАХУНОК ПОДАТКІВ ДЛЯ ŽIVNOST 2025:\n\n` +
-        `💰 Загальний прибуток: ${totalIncome.toLocaleString()} крон\n` +
-        `💼 Паушальні витрати (${(TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE * 100)}%): ${(totalIncome * TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE).toLocaleString()} крон\n` +
-        `💼 Податкова база: ${taxCalculation.taxBase.toLocaleString()} крон\n\n` +
+        `💰 Загальний прибуток: ${totalIncome.toLocaleString('cs-CZ')} крон\n` +
+        `💼 Паушальні витрати (${(TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE * 100)}%): ${(totalIncome * TAX_CONFIG_2025.LUMP_SUM_EXPENSE_RATE).toLocaleString('cs-CZ')} крон\n` +
+        `💼 Податкова база: ${taxCalculation.taxBase.toLocaleString('cs-CZ')} крон\n\n` +
         `📋 РОЗПИС ПОДАТКІВ ТА СТРАХУВАННЯ:\n`;
       
       // Daň z příjmů
-      result += `• 💰 Податок з доходу (${(TAX_CONFIG_2025.INCOME_TAX_RATE * 100)}%): ${taxCalculation.incomeTax.toLocaleString()} крон\n`;
-      result += `  💳 Знижка на платника: ${TAX_CONFIG_2025.TAX_DISCOUNT_ANNUAL.toLocaleString()} крон\n`;
+      result += `• 💰 Податок з доходу (${(TAX_CONFIG_2025.INCOME_TAX_RATE * 100)}%): ${taxCalculation.incomeTax.toLocaleString('cs-CZ')} крон\n`;
+      result += `  💳 Знижка на платника: ${TAX_CONFIG_2025.TAX_DISCOUNT_ANNUAL.toLocaleString('cs-CZ')} крон\n`;
       
       // Sociální pojištění s indikátorem minimální báze
       const socialIndicator = taxCalculation.socialUsesMinBase ? ' ⚠️ Застосовано мінімальну базу для розрахунку' : '';
-      result += `• 👥 Соціальне страхування (${(TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE * 100)}%): ${taxCalculation.socialInsurance.toLocaleString()} крон${socialIndicator}\n` +
-        `  📋 Основа для нарахування: ${(taxCalculation.socialInsurance / TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE).toLocaleString()} крон/рік\n` +
-        `  💸 Щомісяця: ${final_socialni_mesicne.toLocaleString()} крон (мін. ${min_socialni_mesicne.toLocaleString()} крон)\n`;
+      result += `• 👥 Соціальне страхування (${(TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE * 100)}%): ${taxCalculation.socialInsurance.toLocaleString('cs-CZ')} крон${socialIndicator}\n` +
+        `  📋 Основа для нарахування: ${(taxCalculation.socialInsurance / TAX_CONFIG_2025.SOCIAL_INSURANCE_RATE).toLocaleString('cs-CZ')} крон/рік\n` +
+        `  💸 Щомісяця: ${final_socialni_mesicne.toLocaleString('cs-CZ')} крон (мін. ${min_socialni_mesicne.toLocaleString('cs-CZ')} крон)\n`;
       
       // Zdravotní pojištění s indikátorem minimální báze
       const healthIndicator = taxCalculation.healthUsesMinBase ? ' ⚠️ Застосовано мінімальну базу для розрахунку' : '';
-      result += `• 🏥 Медичне страхування (${(TAX_CONFIG_2025.HEALTH_INSURANCE_RATE * 100)}%): ${taxCalculation.healthInsurance.toLocaleString()} крон${healthIndicator}\n` +
-        `  📋 Основа для нарахування: ${(taxCalculation.healthInsurance / TAX_CONFIG_2025.HEALTH_INSURANCE_RATE).toLocaleString()} крон/рік\n` +
-        `  💸 Щомісяця: ${final_zdravotni_mesicne.toLocaleString()} крон (мін. ${min_zdravotni_mesicne.toLocaleString()} крон)\n\n` +
-        `💸 ВСЬОГО ДО СПЛАТИ: ${taxCalculation.total.toLocaleString()} крон\n` +
+      result += `• 🏥 Медичне страхування (${(TAX_CONFIG_2025.HEALTH_INSURANCE_RATE * 100)}%): ${taxCalculation.healthInsurance.toLocaleString('cs-CZ')} крон${healthIndicator}\n` +
+        `  📋 Основа для нарахування: ${(taxCalculation.healthInsurance / TAX_CONFIG_2025.HEALTH_INSURANCE_RATE).toLocaleString('cs-CZ')} крон/рік\n` +
+        `  💸 Щомісяця: ${final_zdravotni_mesicne.toLocaleString('cs-CZ')} крон (мін. ${min_zdravotni_mesicne.toLocaleString('cs-CZ')} крон)\n\n` +
+        `💸 ВСЬОГО ДО СПЛАТИ: ${taxCalculation.total.toLocaleString('cs-CZ')} крон\n` +
         `📈 Ефективна ставка: ${((taxCalculation.total / totalIncome) * 100).toFixed(1)}% від доходу\n\n` +
         `💡 ПРАВИЛЬНІ МІСЯЧНІ АВАНСИ 2025:\n` +
-        `• Соціальне: ${final_socialni_mesicne.toLocaleString()} крон (термін 20.)\n` +
-        `• Медичне: ${final_zdravotni_mesicne.toLocaleString()} крон (термін 8.)\n` +
-        `• Податок (аванс): ${(taxCalculation.incomeTax / 12).toLocaleString()} крон (термін 15.)\n\n` +
+        `• Соціальне: ${final_socialni_mesicne.toLocaleString('cs-CZ')} крон (термін 20.)\n` +
+        `• Медичне: ${final_zdravotni_mesicne.toLocaleString('cs-CZ')} крон (термін 8.)\n` +
+        `• Податок (аванс): ${(taxCalculation.incomeTax / 12).toLocaleString('cs-CZ')} крон (термін 15.)\n\n` +
         `⚠️ МІНІМАЛЬНІ АВАНСИ 2025:\n` +
-        `📋 Соціальне мін.: ${min_socialni_mesicne.toLocaleString()} крон/міс (${TAX_CONFIG_2025.SOCIAL_INSURANCE_MIN_ANNUAL_BASE.toLocaleString()} крон/рік)\n` +
-        `📋 Медичне мін.: ${min_zdravotni_mesicne.toLocaleString()} крон/міс (${TAX_CONFIG_2025.HEALTH_INSURANCE_MIN_ANNUAL_BASE.toLocaleString()} крон/рік)`;
+        `📋 Соціальне мін.: ${min_socialni_mesicne.toLocaleString('cs-CZ')} крон/міс (${TAX_CONFIG_2025.SOCIAL_INSURANCE_MIN_ANNUAL_BASE.toLocaleString('cs-CZ')} крон/рік)\n` +
+        `📋 Медичне мін.: ${min_zdravotni_mesicne.toLocaleString('cs-CZ')} крон/міс (${TAX_CONFIG_2025.HEALTH_INSURANCE_MIN_ANNUAL_BASE.toLocaleString('cs-CZ')} крон/рік)`;
       
       return result;
     }
@@ -901,8 +901,8 @@ Používejte emoji pro lepší vizuál.`;
     
     if (language === 'cs') {
       let message = `📊 KONTROLA LIMITŮ:\n\n`;
-      message += `📈 Roční obrat: ${userProfile.currentTurnover.toLocaleString()} / ${userProfile.annualLimit.toLocaleString()} Kč (${(riskLevel * 100).toFixed(1)}%)\n`;
-      message += `🎯 DPH limit: ${userProfile.currentTurnover.toLocaleString()} / ${userProfile.vatLimit.toLocaleString()} Kč (${(vatRisk * 100).toFixed(1)}%)\n\n`;
+      message += `📈 Roční obrat: ${userProfile.currentTurnover.toLocaleString('cs-CZ')} / ${userProfile.annualLimit.toLocaleString('cs-CZ')} Kč (${(riskLevel * 100).toFixed(1)}%)\n`;
+      message += `🎯 DPH limit: ${userProfile.currentTurnover.toLocaleString('cs-CZ')} / ${userProfile.vatLimit.toLocaleString('cs-CZ')} Kč (${(vatRisk * 100).toFixed(1)}%)\n\n`;
       
       if (riskLevel > 0.9) {
         message += `🚨 KRITICKÉ: Překročíte roční limit!\n`;
@@ -915,8 +915,8 @@ Používejte emoji pro lepší vizuál.`;
       return message;
     } else {
       let message = `📊 ПЕРЕВІРКА ЛІМІТІВ:\n\n`;
-      message += `📈 Річний оборот: ${userProfile.currentTurnover.toLocaleString()} / ${userProfile.annualLimit.toLocaleString()} крон (${(riskLevel * 100).toFixed(1)}%)\n`;
-      message += `🎯 ПДВ ліміт: ${userProfile.currentTurnover.toLocaleString()} / ${userProfile.vatLimit.toLocaleString()} крон (${(vatRisk * 100).toFixed(1)}%)\n\n`;
+      message += `📈 Річний оборот: ${userProfile.currentTurnover.toLocaleString('cs-CZ')} / ${userProfile.annualLimit.toLocaleString('cs-CZ')} крон (${(riskLevel * 100).toFixed(1)}%)\n`;
+      message += `🎯 ПДВ ліміт: ${userProfile.currentTurnover.toLocaleString('cs-CZ')} / ${userProfile.vatLimit.toLocaleString('cs-CZ')} крон (${(vatRisk * 100).toFixed(1)}%)\n\n`;
       
       if (riskLevel > 0.9) {
         message += `🚨 КРИТИЧНО: Перевищите річний ліміт!\n`;
@@ -1002,8 +1002,8 @@ Používejte emoji pro lepší vizuál.`;
       analysis += `🏆 TOP 3 klienti:\n`;
       topClients.forEach(([name, data], index) => {
         analysis += `${index + 1}. ${name}\n`;
-        analysis += `   💰 ${data.total.toLocaleString()} Kč (${data.count} faktur)\n`;
-        analysis += `   ✅ Zaplaceno: ${data.paid.toLocaleString()} Kč\n\n`;
+        analysis += `   💰 ${data.total.toLocaleString('cs-CZ')} Kč (${data.count} faktur)\n`;
+        analysis += `   ✅ Zaplaceno: ${data.paid.toLocaleString('cs-CZ')} Kč\n\n`;
       });
       return analysis;
     } else {
@@ -1012,8 +1012,8 @@ Používejte emoji pro lepší vizuál.`;
       analysis += `🏆 ТОП 3 клієнти:\n`;
       topClients.forEach(([name, data], index) => {
         analysis += `${index + 1}. ${name}\n`;
-        analysis += `   💰 ${data.total.toLocaleString()} крон (${data.count} рахунків)\n`;
-        analysis += `   ✅ Сплачено: ${data.paid.toLocaleString()} крон\n\n`;
+        analysis += `   💰 ${data.total.toLocaleString('cs-CZ')} крон (${data.count} рахунків)\n`;
+        analysis += `   ✅ Сплачено: ${data.paid.toLocaleString('cs-CZ')} крон\n\n`;
       });
       return analysis;
     }
@@ -1040,14 +1040,14 @@ Používejte emoji pro lepší vizuál.`;
     if (language === 'cs') {
       return `📅 OFICIÁLNÍ MĚSÍČNÍ ZÁLOHY 2025:\n\n` +
         `💼 NOVÉ MINIMÁLNÍ ZÁKLADY (výrazné zvýšení!):\n` +
-        `• Sociální min.: ${monthlyMinSocial.toLocaleString()} Kč/měs (35% prům.mzdy)\n` +
-        `• Zdravotní min.: ${monthlyMinHealth.toLocaleString()} Kč/měs (50% prům.mzdy)\n\n` +
+        `• Sociální min.: ${monthlyMinSocial.toLocaleString('cs-CZ')} Kč/měs (35% prům.mzdy)\n` +
+        `• Zdravotní min.: ${monthlyMinHealth.toLocaleString('cs-CZ')} Kč/měs (50% prům.mzdy)\n\n` +
         `📋 VAŠE AKTUÁLNÍ ZÁLOHY:\n` +
-        `• 👥 Sociální pojištění: ${monthlySocial.toLocaleString()} Kč\n` +
-        `  💼 Základ: ${monthlyBaseSocial.toLocaleString()} Kč/měs (55% příjmu vs min.)\n` +
+        `• 👥 Sociální pojištění: ${monthlySocial.toLocaleString('cs-CZ')} Kč\n` +
+        `  💼 Základ: ${monthlyBaseSocial.toLocaleString('cs-CZ')} Kč/měs (55% příjmu vs min.)\n` +
         `  ⏰ Splatnost: 20. den v měsíci\n\n` +
-        `• 🏥 Zdravotní pojištění: ${monthlyHealth.toLocaleString()} Kč\n` +
-        `  💼 Základ: ${monthlyBaseHealth.toLocaleString()} Kč/měs (50% příjmu vs min.)\n` +
+        `• 🏥 Zdravotní pojištění: ${monthlyHealth.toLocaleString('cs-CZ')} Kč\n` +
+        `  💼 Základ: ${monthlyBaseHealth.toLocaleString('cs-CZ')} Kč/měs (50% příjmu vs min.)\n` +
         `  ⏰ Splatnost: 8. den následujícího měsíce\n\n` +
         `⚠️ DŮLEŽITÉ: Minimální zálohy výrazně vzrostly v 2025!\n` +
         `📋 Oficiální částky: Sociální 4 759 Kč, Zdravotní 3 143 Kč\n` +
@@ -1055,14 +1055,14 @@ Používejte emoji pro lepší vizuál.`;
     } else {
       return `📅 ОФІЦІЙНІ МІСЯЧНІ АВАНСИ 2025:\n\n` +
         `💼 НОВІ МІНІМАЛЬНІ БАЗИ (значне збільшення!):\n` +
-        `• Соціальне мін.: ${monthlyMinSocial.toLocaleString()} крон/міс (35% сер.зарплати)\n` +
-        `• Медичне мін.: ${monthlyMinHealth.toLocaleString()} крон/міс (50% сер.зарплати)\n\n` +
+        `• Соціальне мін.: ${monthlyMinSocial.toLocaleString('cs-CZ')} крон/міс (35% сер.зарплати)\n` +
+        `• Медичне мін.: ${monthlyMinHealth.toLocaleString('cs-CZ')} крон/міс (50% сер.зарплати)\n\n` +
         `📋 ВАШІ ПОТОЧНІ АВАНСИ:\n` +
-        `• 👥 Соціальне страхування: ${monthlySocial.toLocaleString()} крон\n` +
-        `  💼 База: ${monthlyBaseSocial.toLocaleString()} крон/міс (55% доходу vs мін.)\n` +
+        `• 👥 Соціальне страхування: ${monthlySocial.toLocaleString('cs-CZ')} крон\n` +
+        `  💼 База: ${monthlyBaseSocial.toLocaleString('cs-CZ')} крон/міс (55% доходу vs мін.)\n` +
         `  ⏰ Термін: 20 число кожного місяця\n\n` +
-        `• 🏥 Медичне страхування: ${monthlyHealth.toLocaleString()} крон\n` +
-        `  💼 База: ${monthlyBaseHealth.toLocaleString()} крон/міс (50% доходу vs мін.)\n` +
+        `• 🏥 Медичне страхування: ${monthlyHealth.toLocaleString('cs-CZ')} крон\n` +
+        `  💼 База: ${monthlyBaseHealth.toLocaleString('cs-CZ')} крон/міс (50% доходу vs мін.)\n` +
         `  ⏰ Термін: 8 число наступного місяця\n\n` +
         `⚠️ ВАЖЛИВО: Мінімальні аванси значно зросли у 2025!\n` +
         `📋 Офіційні суми: Соціальне 4 759 крон, Медичне 3 143 крон\n` +
@@ -1113,17 +1113,17 @@ Používejte emoji pro lepší vizuál.`;
 
     if (language === 'cs') {
       return `⚖️ OFICIÁLNÍ POROVNÁNÍ 2025 - ŽIVNOST vs s.r.o.:\n\n` +
-        `📊 Pro roční obrat ${totalIncome.toLocaleString()} Kč:\n\n` +
+        `📊 Pro roční obrat ${totalIncome.toLocaleString('cs-CZ')} Kč:\n\n` +
         `👤 ŽIVNOST 2025:\n` +
-        `• Daň z příjmů (15%/23% progrese): ${incomeTaxZiv.toLocaleString()} Kč\n` +
-        `• Sociální pojištění (35% min.): ${socialZiv.toLocaleString()} Kč\n` +
-        `• Zdravotní pojištění (50% min.): ${healthZiv.toLocaleString()} Kč\n` +
-        `💸 CELKEM: ${totalZiv.toLocaleString()} Kč\n\n` +
+        `• Daň z příjmů (15%/23% progrese): ${incomeTaxZiv.toLocaleString('cs-CZ')} Kč\n` +
+        `• Sociální pojištění (35% min.): ${socialZiv.toLocaleString('cs-CZ')} Kč\n` +
+        `• Zdravotní pojištění (50% min.): ${healthZiv.toLocaleString('cs-CZ')} Kč\n` +
+        `💸 CELKEM: ${totalZiv.toLocaleString('cs-CZ')} Kč\n\n` +
         `🏢 s.r.o. 2025:\n` +
-        `• Daň z příjmů PO (21% NOVÁ): ${corporateTax.toLocaleString()} Kč\n` +
-        `• Min. mzda majitele: ${(salaryTax + salarySocial + salaryHealth).toLocaleString()} Kč\n` +
-        `💸 CELKEM: ${totalSro.toLocaleString()} Kč\n\n` +
-        `📈 ROZDÍL: ${Math.abs(totalZiv - totalSro).toLocaleString()} Kč\n` +
+        `• Daň z příjmů PO (21% NOVÁ): ${corporateTax.toLocaleString('cs-CZ')} Kč\n` +
+        `• Min. mzda majitele: ${(salaryTax + salarySocial + salaryHealth).toLocaleString('cs-CZ')} Kč\n` +
+        `💸 CELKEM: ${totalSro.toLocaleString('cs-CZ')} Kč\n\n` +
+        `📈 ROZDÍL: ${Math.abs(totalZiv - totalSro).toLocaleString('cs-CZ')} Kč\n` +
         `${totalSro < totalZiv ? '✅ s.r.o. je výhodnější!' : '❌ ŽIVNOST je výhodnější!'}\n\n` +
         `⚠️ DŮLEŽITÉ ZMĚNY 2025:\n` +
         `• Progresivní daň 23% pro vyšší příjmy\n` +
@@ -1132,17 +1132,17 @@ Používejte emoji pro lepší vizuál.`;
         `• s.r.o. má vyšší administrativu!`;
     } else {
       return `⚖️ ОФІЦІЙНЕ ПОРІВНЯННЯ 2025 - ŽIVNOST vs s.r.o.:\n\n` +
-        `📊 Для річного обороту ${totalIncome.toLocaleString()} крон:\n\n` +
+        `📊 Для річного обороту ${totalIncome.toLocaleString('cs-CZ')} крон:\n\n` +
         `👤 ŽIVNOST 2025:\n` +
-        `• Податок з доходу (15%/23% прогресія): ${incomeTaxZiv.toLocaleString()} крон\n` +
-        `• Соціальне страхування (35% мін.): ${socialZiv.toLocaleString()} крон\n` +
-        `• Медичне страхування (50% мін.): ${healthZiv.toLocaleString()} крон\n` +
-        `💸 ВСЬОГО: ${totalZiv.toLocaleString()} крон\n\n` +
+        `• Податок з доходу (15%/23% прогресія): ${incomeTaxZiv.toLocaleString('cs-CZ')} крон\n` +
+        `• Соціальне страхування (35% мін.): ${socialZiv.toLocaleString('cs-CZ')} крон\n` +
+        `• Медичне страхування (50% мін.): ${healthZiv.toLocaleString('cs-CZ')} крон\n` +
+        `💸 ВСЬОГО: ${totalZiv.toLocaleString('cs-CZ')} крон\n\n` +
         `🏢 s.r.o. 2025:\n` +
-        `• Податок з доходу ЮО (21% НОВА): ${corporateTax.toLocaleString()} крон\n` +
-        `• Мін. зарплата власника: ${(salaryTax + salarySocial + salaryHealth).toLocaleString()} крон\n` +
-        `💸 ВСЬОГО: ${totalSro.toLocaleString()} крон\n\n` +
-        `📈 РІЗНИЦЯ: ${Math.abs(totalZiv - totalSro).toLocaleString()} крон\n` +
+        `• Податок з доходу ЮО (21% НОВА): ${corporateTax.toLocaleString('cs-CZ')} крон\n` +
+        `• Мін. зарплата власника: ${(salaryTax + salarySocial + salaryHealth).toLocaleString('cs-CZ')} крон\n` +
+        `💸 ВСЬОГО: ${totalSro.toLocaleString('cs-CZ')} крон\n\n` +
+        `📈 РІЗНИЦЯ: ${Math.abs(totalZiv - totalSro).toLocaleString('cs-CZ')} крон\n` +
         `${totalSro < totalZiv ? '✅ s.r.o. вигідніше!' : '❌ ŽIVNOST вигідніше!'}\n\n` +
         `⚠️ ВАЖЛИВІ ЗМІНИ 2025:\n` +
         `• Прогресивний податок 23% для високих доходів\n` +
@@ -1202,7 +1202,7 @@ Používejte emoji pro lepší vizuál.`;
     if (language === 'cs') {
       return `🧾 OFICIÁLNÍ PRAVIDLA DPH 2025:\n\n` +
         `📊 Váš současný stav:\n` +
-        `• Obrat: ${currentTurnover.toLocaleString()} Kč\n` +
+        `• Obrat: ${currentTurnover.toLocaleString('cs-CZ')} Kč\n` +
         `• Povinný limit: 2 000 000 Kč (kalendářní rok)\n` +
         `• Využito: ${percentageUsed.toFixed(1)}% limitu\n\n` +
         `📋 NOVÉ SAZBY DPH 2025:\n` +
@@ -1224,7 +1224,7 @@ Používejte emoji pro lepší vizuál.`;
     } else {
       return `🧾 ОФІЦІЙНІ ПРАВИЛА ПДВ 2025:\n\n` +
         `📊 Ваш поточний стан:\n` +
-        `• Оборот: ${currentTurnover.toLocaleString()} крон\n` +
+        `• Оборот: ${currentTurnover.toLocaleString('cs-CZ')} крон\n` +
         `• Обов'язковий ліміт: 2 000 000 крон (календарний рік)\n` +
         `• Використано: ${percentageUsed.toFixed(1)}% ліміту\n\n` +
         `📋 НОВІ СТАВКИ ПДВ 2025:\n` +
@@ -1838,7 +1838,7 @@ Používejte emoji pro lepší vizuál.`;
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-400">{language === 'cs' ? 'Roční obrat:' : 'Річний оборот:'}</span>
-                      <span className="text-white">{userProfile.currentTurnover.toLocaleString()} Kč</span>
+                      <span className="text-white">{userProfile.currentTurnover.toLocaleString('cs-CZ')} Kč</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-400">{language === 'cs' ? 'DPH plátce:' : 'Платник ПДВ:'}</span>
@@ -1866,7 +1866,7 @@ Používejte emoji pro lepší vizuál.`;
                         ></div>
                       </div>
                       <div className="text-xs text-gray-500 mt-1">
-                        {language === 'cs' ? 'Zbývá:' : 'Залишилось:'} {(userProfile.annualLimit - userProfile.currentTurnover).toLocaleString()} Kč
+                        {language === 'cs' ? 'Zbývá:' : 'Залишилось:'} {(userProfile.annualLimit - userProfile.currentTurnover).toLocaleString('cs-CZ')} Kč
                       </div>
                     </div>
                     )}
@@ -1885,7 +1885,7 @@ Používejte emoji pro lepší vizuál.`;
                         ></div>
                       </div>
                       <div className="text-xs text-gray-500 mt-1">
-                        {language === 'cs' ? 'Zbývá:' : 'Залишилось:'} {(userProfile.vatLimit - userProfile.currentTurnover).toLocaleString()} Kč
+                        {language === 'cs' ? 'Zbývá:' : 'Залишилось:'} {(userProfile.vatLimit - userProfile.currentTurnover).toLocaleString('cs-CZ')} Kč
                       </div>
                     </div>
                   </div>

@@ -5,6 +5,7 @@ import { X, Download, Printer, FileText } from 'lucide-react';
 import QRCode from 'qrcode';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import { fixClonedDocument } from '@/lib/color-fix';
 
 // Function to generate QR Platba code for Czech payments
 function generateQRPlatbaCode(invoiceData: InvoicePreviewModalProps['invoiceData']) {
@@ -114,8 +115,9 @@ export function InvoicePreviewModal({ isOpen, onClose, invoiceData }: InvoicePre
     
     try {
       console.log('🔄 Починаємо конвертацію в canvas...');
+      console.log('🎨 Використовуємо onclone callback для виправлення oklab...');
       
-      // Конвертуємо HTML в canvas
+      // Конвертуємо HTML в canvas з onclone callback
       const canvas = await html2canvas(invoiceElement, {
         scale: 2, // Висока якість
         useCORS: true,
@@ -125,7 +127,11 @@ export function InvoicePreviewModal({ isOpen, onClose, invoiceData }: InvoicePre
         height: invoiceElement.offsetHeight,
         scrollX: 0,
         scrollY: 0,
-        logging: true // Включаємо логи для дебагу
+        logging: true, // Включаємо логи для дебагу
+        onclone: (clonedDoc) => {
+          console.log('💉 Виправляємо oklab у клонованому документі...');
+          fixClonedDocument(clonedDoc);
+        }
       });
       
       console.log('✅ Canvas створено!');
@@ -805,26 +811,34 @@ export function InvoicePreviewModal({ isOpen, onClose, invoiceData }: InvoicePre
             <div className="mb-6" style={{ marginLeft: '0mm', marginTop: '4mm' }}>
               {/* Invoice title and supplier info in one row */}
               <div className="flex justify-between items-start mb-3">
-                {/* Left - Customer info - Moved to align with green section */}
+                {/* Left - Supplier info (DODAVATEL) */}
                 <div style={{ width: '48%', marginLeft: '0mm', marginTop: '-5mm' }}>
                   {/* Invoice title - Moved to left side */}
                   <div className="mb-1" style={{ marginTop: '-25px' }}>
                     <h1 className="font-bold text-black" style={{ fontSize: '16pt' }}>Faktura <span className="text-gray-600" style={{ fontSize: '14pt' }}>{invoiceData?.invoiceNumber || '2025-0001'}</span></h1>
                   </div>
                   <div className="border-t border-black mb-2" style={{ marginTop: '10px' }}></div>
-                  <div className="font-bold text-black mb-2" style={{ fontSize: '12pt' }}>ODBĚRATEL</div>
-                  <div className="font-bold text-black mb-1" style={{ fontSize: '11pt' }}>LIVEN s.r.o.</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>Lihovarská 689/40a</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>718 00 Ostrava - Kunčičky</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>IČO: 10754466</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>DIČ: CZ10754466</div>
+                  <div className="font-bold text-black mb-2" style={{ fontSize: '12pt' }}>DODAVATEL</div>
+                  <div className="font-bold text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData?.ownerName || 'Jméno dodavatele'}</div>
+                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData?.supplierAddress || 'Adresa'}</div>
+                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData?.supplierCity || 'Město'}</div>
+                  {invoiceData?.supplierCountry && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData.supplierCountry}</div>}
+                  {invoiceData?.supplierICO && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>IČO: {invoiceData.supplierICO}</div>}
+                  {invoiceData?.supplierTaxStatus && invoiceData.supplierTaxStatus !== 'Nejsme plátci DPH' && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>DIČ: CZ{invoiceData.supplierICO}</div>}
+                  
+                  {/* Contact info */}
+                  <div className="mt-4">
+                    <div className="font-bold text-black mb-2" style={{ fontSize: '11pt' }}>Kontaktní údaje</div>
+                    {invoiceData?.supplierEmail && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>E-mail: {invoiceData.supplierEmail}</div>}
+                    {invoiceData?.supplierPhone && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>Telefon: {invoiceData.supplierPhone}</div>}
+                  </div>
                   
                   {/* Dates - Moved lower with 2 line spacing and bold */}
-                  <div className="text-black mb-1 mt-4" style={{ fontSize: '11pt' }}><strong>Datum vystavení: 01. 08. 2025</strong></div>
-                  <div className="text-black" style={{ fontSize: '11pt' }}><strong>Datum splatnosti: 15. 08. 2025</strong></div>
+                  <div className="text-black mb-1 mt-4" style={{ fontSize: '11pt' }}><strong>Datum vystavení: {invoiceData?.issueDate ? new Date(invoiceData.issueDate).toLocaleDateString('cs-CZ') : 'DD. MM. RRRR'}</strong></div>
+                  <div className="text-black" style={{ fontSize: '11pt' }}><strong>Datum splatnosti: {invoiceData?.dueDate ? new Date(invoiceData.dueDate).toLocaleDateString('cs-CZ') : 'DD. MM. RRRR'}</strong></div>
                 </div>
                 
-                {/* Right - Invoice title and supplier info - Moved to align with green section */}
+                {/* Right - Customer info (ODBĚRATEL) */}
                 <div style={{ width: '48%', marginLeft: '25mm' }}>
                   {/* ISDOC Logo - Moved to right side */}
                   <div className="text-right mb-1" style={{ marginTop: '-35px' }}>
@@ -840,14 +854,15 @@ export function InvoicePreviewModal({ isOpen, onClose, invoiceData }: InvoicePre
                     </div>
                   </div>
                   
-                  {/* Supplier info - Lowered by 2 pixels */}
+                  {/* Customer info */}
                   <div className="border-t border-black mb-2" style={{ marginTop: '10px' }}></div>
-                  <div className="font-bold text-black mb-2" style={{ fontSize: '12pt' }}>DODAVATEL</div>
-                  <div className="font-bold text-black mb-1" style={{ fontSize: '11pt' }}>Roman Korol</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>Technologická 377/8</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>708 00 Ostrava - Poruba</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>IČO: 10754466</div>
-                  <div className="text-black mb-1" style={{ fontSize: '11pt' }}>DIČ: CZ10754466</div>
+                  <div className="font-bold text-black mb-2" style={{ fontSize: '12pt' }}>ODBĚRATEL</div>
+                  <div className="font-bold text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData?.customer || 'Název odběratele'}</div>
+                  {invoiceData?.customerAddress && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData.customerAddress}</div>}
+                  {invoiceData?.customerCity && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData.customerCity}</div>}
+                  {invoiceData?.customerCountry && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>{invoiceData.customerCountry}</div>}
+                  {invoiceData?.customerICO && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>IČO: {invoiceData.customerICO}</div>}
+                  {invoiceData?.customerDIC && <div className="text-black mb-1" style={{ fontSize: '11pt' }}>DIČ: {invoiceData.customerDIC}</div>}
                 </div>
               </div>
             </div>
@@ -907,16 +922,6 @@ export function InvoicePreviewModal({ isOpen, onClose, invoiceData }: InvoicePre
               <div className="font-bold text-black" style={{ fontSize: '12pt' }}>Fakturujeme Vám za dodané zboží či služby:</div>
             </div>
 
-            {/* Services description */}
-            <div className="mb-4" style={{ marginLeft: '0mm' }}>
-              <div className="text-black mb-4" style={{ fontSize: '11pt', lineHeight: '1.2' }}>
-                {invoiceData?.items && invoiceData.items.length > 0 ? 
-                  invoiceData.items[0].description : 
-                  'Fakturace za obj lads cake práce na Technologické 377/8: obklad 386,5m =212520, sokl 149,5 m =19435, penetrace 386,5 m =7345, vtáni der 55= 3850, hzs 6 hod = 1800.'
-                }
-              </div>
-            </div>
-
             {/* Services table */}
             <div className="mb-4" style={{ marginLeft: '0mm' }}>
               <table className="w-full border-collapse" style={{ border: '0.5pt solid #666666' }}>
@@ -933,7 +938,7 @@ export function InvoicePreviewModal({ isOpen, onClose, invoiceData }: InvoicePre
                   {invoiceData?.items && invoiceData.items.length > 0 ? (
                     invoiceData.items.map((item, index: number) => (
                       <tr key={index} style={{ minHeight: '20mm' }}>
-                        <td className="py-3 px-3 text-black border-r border-gray-400 border-b border-gray-400 align-top" style={{ lineHeight: '1.2', fontSize: '10pt' }}>
+                        <td className="py-3 px-3 text-black border-r border-gray-400 border-b border-gray-400 align-top" style={{ lineHeight: '1.2', fontSize: '10pt', whiteSpace: 'pre-wrap' }}>
                           {item.description || 'Popis položky'}
                         </td>
                         <td className="text-center py-3 px-3 text-black border-r border-gray-400 border-b border-gray-400 align-top" style={{ fontSize: '10pt' }}>{item.quantity || '1,00'}</td>
@@ -944,7 +949,7 @@ export function InvoicePreviewModal({ isOpen, onClose, invoiceData }: InvoicePre
                     ))
                   ) : (
                     <tr style={{ height: '20mm' }}>
-                      <td className="py-3 px-3 text-black border-r border-gray-400 border-b border-gray-400 align-top" style={{ lineHeight: '1.2', fontSize: '10pt' }}>
+                      <td className="py-3 px-3 text-black border-r border-gray-400 border-b border-gray-400 align-top" style={{ lineHeight: '1.2', fontSize: '10pt', whiteSpace: 'pre-wrap' }}>
                         Fakturace za obj lads cake práce na Technologické 377/8: obklad 386,5m =212520, sokl 149,5 m =19435, penetrace 386,5 m =7345, vtáni der 55= 3850, hzs 6 hod = 1800.
                       </td>
                       <td className="text-center py-3 px-3 text-black border-r border-gray-400 border-b border-gray-400 align-top" style={{ fontSize: '10pt' }}>1,00</td>

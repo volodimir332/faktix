@@ -1,0 +1,59 @@
+{
+  "name": "Faktix - Rychlá fakturace pro živnostníky",
+  "short_name": "Faktix",
+  "description": "Profesionální fakturační systém pro živnostníky a malé firmy",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00ff88",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "1920x1080",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshot2.png",
+      "sizes": "1920x1080",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshot3.png",
+      "sizes": "1920x1080",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["business", "finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Nová faktura",
+      "short_name": "Nová",
+      "description": "Vytvořit novou fakturu",
+      "url": "/faktury?action=new",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Klienti",
+      "short_name": "Klienti",
+      "description": "Zobrazit seznam klientů",
+      "url": "/klienti",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
+

@@ -20,11 +20,16 @@ import {
   Plus,
   ChevronDown,
   Newspaper,
-  Calculator
+  Calculator,
+  LogOut,
+  AlertTriangle,
+  CreditCard
 } from 'lucide-react';
 import { FaktixIcon } from './FaktixLogo';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { NewInvoiceModal } from './NewInvoiceModal';
+import { useAuth } from '@/hooks/useAuth';
+import { redirectToPortal } from '@/lib/subscription-service';
 
 export default function Sidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -32,9 +37,11 @@ export default function Sidebar() {
   const [mounted, setMounted] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { language, setLanguage, t } = useLanguage();
+  const { logout, user } = useAuth();
 
   // Ensure client-side rendering and handle responsive design
   useEffect(() => {
@@ -59,11 +66,11 @@ export default function Sidebar() {
   const navigationItems = [
     { href: '/dashboard', icon: BarChart3, label: t('nav.dashboard'), page: 'dashboard' },
     { href: '/faktury', icon: FileText, label: t('nav.invoices'), page: 'faktury' },
+    { href: '/kalkulace', icon: Calculator, label: 'Kalkulace a nabídky', page: 'kalkulace' },
     { href: '#', icon: Users, label: t('nav.clients'), page: 'klienti' },
     { href: '#', icon: Euro, label: t('nav.finance'), page: 'finance' },
     { href: '/profil', icon: User, label: t('nav.profile'), page: 'profil' },
-    { href: '/analytiky', icon: Activity, label: t('nav.analytics'), page: 'analytiky' },
-    { href: '#', icon: Tags, label: t('nav.quotes'), page: 'nabidky' },
+    { href: '/ucetnictvi', icon: Activity, label: 'Účetnictví', page: 'ucetnictvi' },
     { href: '#', icon: Settings, label: t('nav.settings'), page: 'nastaveni' },
   ];
 
@@ -77,57 +84,104 @@ export default function Sidebar() {
     setLanguage(language === 'cs' ? 'uk' : 'cs');
   };
 
+  const handleLogout = async () => {
+    try {
+      const result = await logout();
+      if (result.success) {
+        setIsLogoutModalOpen(false);
+        router.push('/');
+      } else {
+        console.error('Помилка виходу:', result.message);
+      }
+    } catch (error) {
+      console.error('Помилка виходу:', error);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    try {
+      await redirectToPortal({
+        returnUrl: `${window.location.origin}/dashboard`
+      });
+    } catch (error) {
+      console.error('Error redirecting to portal:', error);
+      alert('Помилка при відкритті порталу підписки');
+    }
+  };
+
   return (
     <>
+      {/* Приховуємо scrollbar */}
+      <style jsx global>{`
+        .sidebar-container::-webkit-scrollbar {
+          display: none;
+        }
+        .sidebar-container {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .sidebar-container {
+          transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-container:hover {
+          width: 14rem !important; /* 56 = 224px = w-56 */
+        }
+        @media (min-width: 1024px) {
+          .sidebar-container {
+            width: 4rem; /* 16 = 64px = w-16 */
+          }
+        }
+        @media (max-width: 1023px) {
+          .sidebar-container {
+            width: 4rem !important;
+          }
+          .sidebar-container:hover {
+            width: 4rem !important;
+          }
+        }
+      `}</style>
 
       {/* Sidebar */}
-      <div className={`fixed lg:relative inset-y-0 left-0 z-40 ${isCompactMode ? 'w-16' : 'w-56'} border-r border-gray-700/50 bg-black/60 backdrop-blur-sm flex flex-col transition-all duration-300 ease-in-out translate-x-0`}>
+      <div className={`sidebar-container fixed inset-y-0 left-0 z-40 ${isCompactMode ? 'w-16' : 'w-56'} border-r border-gray-700/50 bg-black/60 backdrop-blur-sm flex flex-col translate-x-0 overflow-y-auto group`}>
         {/* Header */}
-        <div className={`${isCompactMode ? 'p-3' : 'p-6'} border-b border-gray-700/50`}>
-          <div className={`flex items-center ${isCompactMode ? 'justify-center' : 'space-x-3'}`}>
-            <FaktixIcon size={isCompactMode ? "sm" : "md"} />
-            {!isCompactMode && (
-              <div>
-                <div className="font-medium text-white">faktix</div>
-                <div className="text-sm text-gray-400">
-                  {getCurrentPageLabel()}
-                </div>
+        <div className="p-2 border-b border-gray-700/50">
+          <div className="flex items-center justify-center lg:group-hover:justify-start lg:group-hover:space-x-2 transition-all duration-300">
+            <FaktixIcon size="sm" />
+            <div className="hidden lg:group-hover:block opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
+              <div className="font-medium text-white whitespace-nowrap text-sm">faktix</div>
+              <div className="text-xs text-gray-400 whitespace-nowrap">
+                {getCurrentPageLabel()}
               </div>
-            )}
+            </div>
           </div>
-
         </div>
 
         {/* Navigation */}
-        <div className={`flex-1 ${isCompactMode ? 'p-2' : 'p-4'}`}>
+        <div className="flex-1 p-2">
           {/* New Button */}
-          <div className={`relative mb-4 ${isCompactMode ? 'flex justify-center' : ''}`}>
-            <div className="relative group">
+          <div className="relative mb-3">
+            <div className="relative">
               <button 
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`bg-money text-black ${isCompactMode ? 'px-2 py-3 justify-center' : 'px-3 py-2'} text-sm flex items-center rounded-lg font-medium hover:bg-money-dark transition-colors money-glow w-full`}
+                className="bg-money text-black px-3 py-2 text-sm flex items-center justify-center lg:group-hover:justify-start rounded-lg font-medium hover:bg-money-dark money-glow w-full"
               >
-                <Plus className={`w-4 h-4 ${isCompactMode ? '' : 'mr-2'}`} />
-                {!isCompactMode && (
-                  <>
-                    {t('dropdown.new')}
-                    <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                  </>
-                )}
+                <Plus className="w-4 h-4 flex-shrink-0" />
+                <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
+                  {t('dropdown.new')}
+                </span>
+                <ChevronDown className={`w-3 h-3 ml-2 transition-transform hidden lg:group-hover:inline opacity-0 lg:group-hover:opacity-100 ${isDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {/* Tooltip for compact mode */}
-              {isCompactMode && (
-                <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap top-1/2 transform -translate-y-1/2">
-                  {t('dropdown.new')}
-                  <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-900"></div>
-                </div>
-              )}
+              <div className="lg:group-hover:hidden absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap top-1/2 transform -translate-y-1/2">
+                {t('dropdown.new')}
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-900"></div>
+              </div>
             </div>
             
             {/* Dropdown Menu */}
             {isDropdownOpen && (
-              <div className={`absolute ${isCompactMode ? 'left-full ml-2 top-0' : 'top-full mt-2 left-0'} w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50`}>
+              <div className="absolute left-full lg:group-hover:left-0 ml-2 lg:group-hover:ml-0 top-0 lg:group-hover:top-full lg:group-hover:mt-2 w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50">
                 <div className="py-2">
                   <button
                     onClick={() => {
@@ -203,34 +257,25 @@ export default function Sidebar() {
           </div>
           
           {/* Main Section */}
-          <div className="mb-6">
+          <div className="mb-4">
             <nav className="space-y-1">
               {navigationItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = mounted && pathname === item.href;
                 
                 return (
-                  <div key={item.page} className="relative group">
+                  <div key={item.page} className="relative">
                     <Link
                       href={item.href}
-                      className={`flex items-center ${isCompactMode ? 'px-2 py-3 justify-center' : 'px-3 py-2'} text-sm rounded-lg transition-colors ${
+                      className={`flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg ${
                         isActive 
                           ? 'text-money' 
                           : 'text-gray-300 hover:bg-money/10 hover:text-money'
                       }`}
-
                     >
-                      <Icon className={`w-4 h-4 ${isCompactMode ? '' : 'mr-3'}`} />
-                      {!isCompactMode && item.label}
+                      <Icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">{item.label}</span>
                     </Link>
-                    
-                    {/* Tooltip for compact mode */}
-                    {isCompactMode && (
-                      <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap top-1/2 transform -translate-y-1/2">
-                        {item.label}
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-900"></div>
-                      </div>
-                    )}
                   </div>
                 );
               })}
@@ -238,64 +283,69 @@ export default function Sidebar() {
           </div>
 
           {/* Secondary Section */}
-          <div className="border-t border-gray-700/50 pt-4">
+          <div className="border-t border-gray-700/50 pt-2">
             <nav className="space-y-1">
-              <div className="relative group">
-                <a href="#" className={`flex items-center ${isCompactMode ? 'px-2 py-3 justify-center' : 'px-3 py-2'} text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money transition-colors`}>
-                  <Bell className={`w-4 h-4 ${isCompactMode ? '' : 'mr-3'}`} />
-                  {!isCompactMode && 'Notifikace'}
+              <div className="relative">
+                <a href="#" className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money">
+                  <Bell className="w-5 h-5 flex-shrink-0" />
+                  <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Notifikace</span>
                 </a>
-                
-                {/* Tooltip for compact mode */}
-                {isCompactMode && (
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap top-1/2 transform -translate-y-1/2">
-                    Notifikace
-                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-900"></div>
-                  </div>
-                )}
               </div>
             </nav>
           </div>
         </div>
 
         {/* Bottom Section - Home Button */}
-        <div className={`${isCompactMode ? 'p-2' : 'p-4'} border-t border-gray-700/50`}>
-          <div className="relative group">
+        <div className="p-2 border-t border-gray-700/50">
+          <div className="relative">
             <Link
               href="/"
-              className={`flex items-center ${isCompactMode ? 'px-2 py-3 justify-center' : 'px-3 py-2'} text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money transition-colors`}
-
+              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money"
             >
-              <Home className={`w-4 h-4 ${isCompactMode ? '' : 'mr-3'}`} />
-              {!isCompactMode && t('nav.home')}
+              <Home className="w-5 h-5 flex-shrink-0" />
+              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">{t('nav.home')}</span>
             </Link>
-            
-            {/* Tooltip for compact mode */}
-            {isCompactMode && (
-              <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap top-1/2 transform -translate-y-1/2">
-                {t('nav.home')}
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-900"></div>
-              </div>
-            )}
+          </div>
+          
+          {/* Settings Button */}
+          <div className="relative mt-1">
+            <button className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money w-full">
+              <Settings className="w-5 h-5 flex-shrink-0" />
+              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Nastavení</span>
+            </button>
           </div>
           
           {/* Language Switcher */}
-          <div className="relative group">
+          <div className="relative mt-1">
             <button
               onClick={toggleLanguage}
-              className={`flex items-center ${isCompactMode ? 'px-2 py-3 justify-center' : 'px-3 py-2'} text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money transition-colors w-full mt-2`}
+              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money w-full"
             >
-              <Globe className={`w-4 h-4 ${isCompactMode ? '' : 'mr-3'}`} />
-              {!isCompactMode && <span>{language === 'cs' ? 'CS' : 'UA'}</span>}
+              <Globe className="w-5 h-5 flex-shrink-0" />
+              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">{language === 'cs' ? 'CS' : 'UA'}</span>
             </button>
-            
-            {/* Tooltip for compact mode */}
-            {isCompactMode && (
-              <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap top-1/2 transform -translate-y-1/2">
-                {language === 'cs' ? 'Čeština' : 'Українська'}
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-900"></div>
-              </div>
-            )}
+          </div>
+
+          {/* Logout Button */}
+          <div className="relative mt-1">
+            <button
+              onClick={() => setIsLogoutModalOpen(true)}
+              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full"
+            >
+              <LogOut className="w-5 h-5 flex-shrink-0" />
+              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Вийти</span>
+            </button>
+          </div>
+
+          {/* Manage Subscription Button */}
+          <div className="relative mt-1">
+            <button
+              onClick={handleManageSubscription}
+              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-money hover:bg-money/10 hover:text-money-light w-full"
+            >
+              <CreditCard className="w-5 h-5 flex-shrink-0" />
+              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Підписка</span>
+            </button>
           </div>
         </div>
       </div>
@@ -305,6 +355,48 @@ export default function Sidebar() {
         isOpen={isInvoiceModalOpen}
         onClose={() => setIsInvoiceModalOpen(false)}
       />
+
+      {/* Logout Confirmation Modal */}
+      {isLogoutModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setIsLogoutModalOpen(false)}
+        >
+          <div 
+            className="bg-gray-900 border border-gray-700 rounded-lg p-6 max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-red-500/10 rounded-full flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">Підтвердження виходу</h3>
+                <p className="text-sm text-gray-400">Ви дійсно хочете вийти з облікового запису?</p>
+              </div>
+            </div>
+            
+            <div className="text-sm text-gray-300 mb-6">
+              <p>Після виходу вам потрібно буде знову увійти в систему для доступу до ваших даних.</p>
+            </div>
+            
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setIsLogoutModalOpen(false)}
+                className="flex-1 px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                Скасувати
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+              >
+                Вийти
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 } 

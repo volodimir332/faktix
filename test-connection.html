@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Connection - Faktix Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            background: rgba(0, 255, 0, 0.2);
+        }
+        .link {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Faktix Platform</h1>
+        <div class="status">
+            ✅ Сервер працює! Підключення успішне!
+        </div>
+        <p>Якщо ви бачите це повідомлення, сервер працює правильно.</p>
+        <p>Тепер можете відкрити основний сайт:</p>
+        <a href="http://localhost:3000" class="link">🌐 Відкрити Faktix Platform</a>
+        <br><br>
+        <p><small>Час: <span id="time"></span></small></p>
+    </div>
+
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString('cs-CZ');
+        
+        // Тестуємо підключення до основного сайту
+        fetch('http://localhost:3000')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Підключення до основного сайту успішне');
+                }
+            })
+            .catch(error => {
+                console.log('❌ Помилка підключення:', error);
+            });
+    </script>
+</body>
+</html>

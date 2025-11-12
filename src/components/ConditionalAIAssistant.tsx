@@ -2,15 +2,35 @@
 
 import { usePathname } from 'next/navigation';
 import SmartAIAssistant from './SmartAIAssistant';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function ConditionalAIAssistant() {
   const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
   
   // Список сторінок, де НЕ показувати AI асистента
-  const excludedPaths = ['/', '/prihlaseni', '/registrace'];
-  
-  // Показувати AI асистента тільки якщо поточна сторінка НЕ в списку виключень
-  const shouldShowAI = pathname ? !excludedPaths.includes(pathname) : true;
+  const excludedExact: string[] = [
+    '/',
+    '/login',
+    '/register',
+    '/prihlaseni',
+    '/registrace',
+    '/pricing',
+    '/potvrdit-email',
+    '/email-verification',
+    '/payment-success'
+  ];
+
+  const excludedPrefixes: string[] = ['/test'];
+
+  const isExcludedPath = (p: string | null): boolean => {
+    if (!p) return true;
+    if (excludedExact.includes(p)) return true;
+    return excludedPrefixes.some((prefix) => p.startsWith(prefix));
+  };
+
+  // Показувати тільки для авторизованих користувачів і не на екранах лендингу/логіну/реєстрації
+  const shouldShowAI = isAuthenticated && !isExcludedPath(pathname);
   
   if (!shouldShowAI) {
     return null;

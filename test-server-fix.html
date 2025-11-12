@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Fix Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #2a2a2a; padding: 20px; border-radius: 10px; }
+        button { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 5px; }
+        .status { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #065f46; color: #d1fae5; }
+        .error { background: #7f1d1d; color: #fecaca; }
+        .info { background: #1e3a8a; color: #dbeafe; }
+        .warning { background: #92400e; color: #fef3c7; }
+        .log { background: #1f2937; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Server Fix Test</h1>
+        <p>Тестування виправлення помилки postalCode.trim()</p>
+        
+        <div class="status success">
+            <strong>✅ Виправлено:</strong>
+            <ul>
+                <li>Помилка postalCode.trim() is not a function</li>
+                <li>Додано перевірку на undefined/null</li>
+                <li>Сервер запущений на порту 3000</li>
+            </ul>
+        </div>
+        
+        <div class="status info">
+            <strong>ℹ️ Що було виправлено:</strong>
+            <ul>
+                <li>ares-api.ts: postalCode: aresData.adresa.psc || ''</li>
+                <li>profil/page.tsx: postalCode: companyData.adresa.psc || ""</li>
+                <li>registrace/page.tsx: postalCode: companyData.adresa.psc || ""</li>
+            </ul>
+        </div>
+        
+        <button onclick="testServer()">🌐 Тестувати сервер</button>
+        <button onclick="openRegistration()">📝 Відкрити реєстрацію</button>
+        <button onclick="openProfile()">👤 Відкрити профіль</button>
+        <button onclick="openEmailVerification()">📧 Відкрити підтвердження email</button>
+        <button onclick="clearLogs()">🧹 Очистити логи</button>
+        
+        <div class="status warning">
+            <strong>⚠️ Тестування:</strong>
+            <ul>
+                <li>Спробуйте зареєструватися з IČO</li>
+                <li>Перевірте, чи не виникає помилка postalCode.trim()</li>
+                <li>Тестуйте автоматичне заповнення даних компанії</li>
+            </ul>
+        </div>
+        
+        <div id="logContainer" class="log">
+            Логи з'являться тут...
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            document.getElementById('status').innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function addLog(message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            logContainer.innerHTML += `[${timestamp}] ${message}\n`;
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLogs() {
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = 'Логи очищено...\n';
+        }
+
+        async function testServer() {
+            try {
+                const response = await fetch('http://localhost:3000');
+                if (response.ok) {
+                    addLog('✅ Сервер працює на порту 3000');
+                    showStatus('✅ Сервер працює!', 'success');
+                } else {
+                    addLog(`❌ Сервер повернув статус: ${response.status}`);
+                    showStatus('❌ Помилка сервера', 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Помилка підключення: ${error.message}`);
+                showStatus('❌ Не вдалося підключитися', 'error');
+            }
+        }
+
+        function openRegistration() {
+            window.open('http://localhost:3000/register', '_blank');
+            addLog('📝 Відкрито реєстраційну форму');
+            showStatus('📝 Реєстраційна форма відкрита!', 'info');
+        }
+
+        function openProfile() {
+            window.open('http://localhost:3000/profil', '_blank');
+            addLog('👤 Відкрито сторінку профілю');
+            showStatus('👤 Сторінка профілю відкрита!', 'info');
+        }
+
+        function openEmailVerification() {
+            window.open('http://localhost:3000/email-verification?email=test@example.com', '_blank');
+            addLog('📧 Відкрито сторінку підтвердження email');
+            showStatus('📧 Сторінка підтвердження email відкрита!', 'info');
+        }
+
+        window.onload = function() {
+            addLog('🚀 Server Fix Test готовий!');
+            addLog('🔧 Помилка postalCode.trim() виправлена');
+            addLog('🌐 Сервер запущений на http://localhost:3000');
+            showStatus('🚀 Тест готовий!', 'success');
+        };
+    </script>
+</body>
+</html>

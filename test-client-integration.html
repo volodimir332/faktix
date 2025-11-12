@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Integration Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #059669;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #065f46;
+            color: #d1fae5;
+        }
+        .error {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+        .info {
+            background: #1e3a8a;
+            color: #dbeafe;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #374151;
+            border-radius: 8px;
+        }
+        .step {
+            background: #374151;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Client Integration Test</h1>
+        <p>Цей файл тестує інтеграцію додавання клієнтів у Faktix.</p>
+        
+        <div class="test-section">
+            <h3>📋 Тестовий сценарій</h3>
+            <p>Перевірка автоматичного додавання клієнтів до списку:</p>
+            
+            <div class="step">
+                <strong>Крок 1:</strong> Відкрийте Faktix і створіть тестовий профіль
+            </div>
+            
+            <div class="step">
+                <strong>Крок 2:</strong> Відкрийте модальне вікно створення фактури
+            </div>
+            
+            <div class="step">
+                <strong>Крок 3:</strong> Натисніть "Nový odběratel" і додайте нового клієнта
+            </div>
+            
+            <div class="step">
+                <strong>Крок 4:</strong> Перевірте, чи новий клієнт з'явився в списку і автоматично вибрався
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Швидкі дії</h3>
+            <button onclick="createTestProfile()">Створити тестовий профіль</button>
+            <button onclick="openFaktix()">Відкрити Faktix</button>
+            <button onclick="openInvoiceModal()">Відкрити створення фактури</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Тестові дані клієнтів</h3>
+            <p>Приклади клієнтів для тестування:</p>
+            <ul>
+                <li><strong>IČO:</strong> 25596641 (Apple Czech Republic s.r.o.)</li>
+                <li><strong>IČO:</strong> 26457481 (Google Czech Republic s.r.o.)</li>
+                <li><strong>IČO:</strong> 26799401 (Microsoft s.r.o.)</li>
+                <li><strong>IČO:</strong> 25123836 (Česká spořitelna, a.s.)</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ Очікуваний результат</h3>
+            <p>Після додавання нового клієнта:</p>
+            <ul>
+                <li>✅ Клієнт зберігається в базі даних</li>
+                <li>✅ Клієнт з'являється в списку "Odběratel"</li>
+                <li>✅ Клієнт автоматично вибирається</li>
+                <li>✅ Показується повідомлення про успіх</li>
+                <li>✅ Модальне вікно закривається</li>
+            </ul>
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function createTestProfile() {
+            const testProfile = {
+                personal: {
+                    firstName: "Jan",
+                    lastName: "Novák",
+                    email: "jan.novak@example.com",
+                    phone: "+420123456789",
+                    address: "Václavská 1",
+                    city: "Praha",
+                    postalCode: "11000",
+                    country: "Česká republika"
+                },
+                company: {
+                    name: "Test Company s.r.o.",
+                    vatNumber: "CZ12345678",
+                    ico: "12345678",
+                    address: "Václavská 1",
+                    city: "Praha",
+                    postalCode: "11000",
+                    country: "Česká republika",
+                    website: "https://example.com",
+                    businessType: "Společnost s ručením omezeným (s.r.o.)",
+                    typZivnosti: "Řemeslnická živnost (80%)"
+                },
+                banking: {
+                    accountNumber: "123456789/0100",
+                    bankName: "Komerční banka",
+                    iban: "CZ6508000000192000145399",
+                    swift: "KOMBCZPP",
+                    currency: "CZK"
+                },
+                preferences: {
+                    language: "cs",
+                    currency: "CZK",
+                    timezone: "Europe/Prague",
+                    notifications: true
+                }
+            };
+
+            localStorage.setItem('faktix-profile', JSON.stringify(testProfile));
+            showStatus('✅ Тестовий профіль створено!', 'success');
+        }
+
+        function openFaktix() {
+            window.open('http://localhost:3000', '_blank');
+        }
+
+        function openInvoiceModal() {
+            // Відкриваємо Faktix і намагаємося відкрити модальне вікно фактури
+            const faktixWindow = window.open('http://localhost:3000', '_blank');
+            
+            // Після завантаження сторінки намагаємося знайти кнопку створення фактури
+            setTimeout(() => {
+                showStatus('🌐 Faktix відкрито. Тепер натисніть "Vytvořit fakturu" для тестування.', 'info');
+            }, 2000);
+        }
+
+        // Автоматично створюємо тестовий профіль при завантаженні
+        window.onload = function() {
+            showStatus('🚀 Client Integration Test готовий! Створіть тестовий профіль і відкрийте Faktix.', 'info');
+        };
+    </script>
+</body>
+</html>

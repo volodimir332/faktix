@@ -4,8 +4,10 @@ import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ClientProvider } from "@/contexts/ClientContext";
 import { InvoiceProvider } from "@/contexts/InvoiceContext";
+import { CalculationProvider } from "@/contexts/CalculationContext";
 import { AuthGuard } from "@/components/AuthGuard";
-import ConditionalAIAssistant from "@/components/ConditionalAIAssistant";
+import { AuthInitializer } from "@/components/AuthInitializer";
+import { ColorFixer } from "@/components/ColorFixer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,6 +29,13 @@ export const metadata: Metadata = {
   creator: "faktix",
   publisher: "faktix",
   robots: "index, follow",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Faktix",
+  },
+  applicationName: "Faktix",
   openGraph: {
     title: "Faktury - Rychlá fakturace pro moderní podnikatele",
     description: "Vystavte fakturu za 30 sekund. První měsíc zcela zdarma!",
@@ -39,6 +48,15 @@ export const metadata: Metadata = {
     title: "Faktury - Rychlá fakturace pro moderní podnikatele",
     description: "Vystavte fakturu za 30 sekund. První měsíc zcela zdarma!",
   },
+};
+
+// Viewport configuration (Next.js 15+)
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#00ff88",
 };
 
 export default function RootLayout({
@@ -55,12 +73,18 @@ export default function RootLayout({
         <LanguageProvider>
           <ClientProvider>
             <InvoiceProvider>
-              {/* Temporarily disabled AuthGuard for testing */}
-              {/* <AuthGuard> */}
-              {children}
-              {/* AI Assistant - appears only on internal platform pages */}
-              <ConditionalAIAssistant />
-              {/* </AuthGuard> */}
+              <CalculationProvider>
+                {/* Initialize global auth state listener */}
+                <AuthInitializer />
+                
+                {/* Auto-fix oklab/oklch color issues for PDF generation and older browsers */}
+                <ColorFixer fallbackColor="#ffffff" />
+                
+                {/* Temporarily disabled AuthGuard for testing */}
+                {/* <AuthGuard> */}
+                {children}
+                {/* </AuthGuard> */}
+              </CalculationProvider>
             </InvoiceProvider>
           </ClientProvider>
         </LanguageProvider>

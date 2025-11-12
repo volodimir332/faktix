@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { 
-  onAuthStateChange, 
   loginUser, 
   logoutUser, 
   registerUser, 
@@ -10,6 +9,7 @@ import {
   convertFirebaseUser,
   AuthUser 
 } from '@/lib/firebase-auth';
+import { subscribeToAuthState } from '@/lib/auth-state-listener';
 
 export function useAuth() {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -17,17 +17,31 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChange((firebaseUser) => {
+    console.log('🔐 useAuth: Setting up auth state subscription...');
+    
+    // Підписуємося на зміни стану автентифікації
+    const unsubscribe = subscribeToAuthState((firebaseUser, authenticated, emailVerified) => {
+      console.log('🔐 useAuth: Auth state updated:', {
+        user: firebaseUser?.email,
+        authenticated,
+        emailVerified
+      });
+      
       const authUser = convertFirebaseUser(firebaseUser);
       setUser(authUser);
-      setIsAuthenticated(!!authUser);
+      setIsAuthenticated(authenticated);
       setIsLoading(false);
     });
 
-    return () => unsubscribe();
+    // Очищення при розмонтуванні
+    return () => {
+      console.log('🔐 useAuth: Cleaning up auth state subscription...');
+      unsubscribe();
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
+    console.log('🔐 useAuth: Attempting login...');
     setIsLoading(true);
     const result = await loginUser(email, password);
     setIsLoading(false);
@@ -35,6 +49,7 @@ export function useAuth() {
   };
 
   const logout = async () => {
+    console.log('🔐 useAuth: Attempting logout...');
     setIsLoading(true);
     const result = await logoutUser();
     setIsLoading(false);
@@ -42,6 +57,7 @@ export function useAuth() {
   };
 
   const register = async (email: string, password: string, displayName?: string) => {
+    console.log('🔐 useAuth: Attempting registration...');
     setIsLoading(true);
     const result = await registerUser(email, password, displayName);
     setIsLoading(false);
@@ -49,6 +65,7 @@ export function useAuth() {
   };
 
   const resetUserPassword = async (email: string) => {
+    console.log('🔐 useAuth: Attempting password reset...');
     setIsLoading(true);
     const result = await resetPassword(email);
     setIsLoading(false);

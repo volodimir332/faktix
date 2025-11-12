@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestore Resilience Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #2a2a2a; padding: 20px; border-radius: 10px; }
+        button { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 5px; }
+        .status { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #065f46; color: #d1fae5; }
+        .error { background: #7f1d1d; color: #fecaca; }
+        .info { background: #1e3a8a; color: #dbeafe; }
+        .warning { background: #92400e; color: #fef3c7; }
+        .log { background: #1f2937; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Firestore Resilience Test</h1>
+        <p>Тестування стійкості до помилок Firestore під час створення індексів</p>
+        
+        <div class="status info">
+            <strong>ℹ️ Інструкції:</strong>
+            <ol>
+                <li>Відкрийте Developer Tools (F12) і перейдіть на вкладку Console</li>
+                <li>Створіть тестовий профіль</li>
+                <li>Відкрийте Faktix</li>
+                <li>Спробуйте додати клієнта</li>
+                <li>Перевірте, чи додаток не падає при помилках Firestore</li>
+            </ol>
+        </div>
+        
+        <button onclick="createTestProfile()">Створити тестовий профіль</button>
+        <button onclick="openFaktix()">Відкрити Faktix</button>
+        <button onclick="testLocalStorage()">Тестувати localStorage</button>
+        <button onclick="clearLogs()">Очистити логи</button>
+        
+        <div class="status warning">
+            <strong>⚠️ Важливо:</strong> Під час створення індексів у Firebase Console можуть виникати помилки. 
+            Додаток повинен продовжувати працювати, використовуючи localStorage як fallback.
+        </div>
+        
+        <div id="logContainer" class="log">
+            Логи з'являться тут...
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            document.getElementById('status').innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function addLog(message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            logContainer.innerHTML += `[${timestamp}] ${message}\n`;
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLogs() {
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = 'Логи очищено...\n';
+        }
+
+        function createTestProfile() {
+            const testProfile = {
+                personal: {
+                    firstName: "Jan",
+                    lastName: "Novák",
+                    email: "test@example.com",
+                    phone: "+420123456789",
+                    address: "Václavská 1",
+                    city: "Praha",
+                    postalCode: "11000",
+                    country: "Česká republika"
+                },
+                company: {
+                    name: "Test Company s.r.o.",
+                    vatNumber: "CZ12345678",
+                    ico: "12345678",
+                    address: "Václavská 1",
+                    city: "Praha",
+                    postalCode: "11000",
+                    country: "Česká republika",
+                    website: "https://example.com",
+                    businessType: "Společnost s ručením omezeným (s.r.o.)",
+                    typZivnosti: "Řemeslnická živnost (80%)"
+                },
+                banking: {
+                    accountNumber: "123456789/0100",
+                    bankName: "Komerční banka",
+                    iban: "CZ6508000000192000145399",
+                    swift: "KOMBCZPP",
+                    currency: "CZK"
+                },
+                preferences: {
+                    language: "cs",
+                    currency: "CZK",
+                    timezone: "Europe/Prague",
+                    notifications: true
+                }
+            };
+
+            localStorage.setItem('faktix-profile', JSON.stringify(testProfile));
+            addLog('✅ Тестовий профіль створено в localStorage');
+            showStatus('✅ Тестовий профіль створено!', 'success');
+        }
+
+        function openFaktix() {
+            window.open('http://localhost:3000', '_blank');
+            addLog('🌐 Faktix відкрито в новій вкладці');
+            showStatus('🌐 Faktix відкрито!', 'info');
+        }
+
+        function testLocalStorage() {
+            try {
+                const profile = localStorage.getItem('faktix-profile');
+                const clients = localStorage.getItem('faktix-clients');
+                
+                addLog('📊 localStorage статус:');
+                addLog(`   Профіль: ${profile ? '✅ Знайдено' : '❌ Не знайдено'}`);
+                addLog(`   Клієнти: ${clients ? '✅ Знайдено' : '❌ Не знайдено'}`);
+                
+                if (clients) {
+                    const clientsData = JSON.parse(clients);
+                    addLog(`   Кількість клієнтів: ${clientsData.length}`);
+                }
+                
+                showStatus('✅ localStorage тест завершено', 'success');
+            } catch (error) {
+                addLog(`❌ Помилка тесту localStorage: ${error.message}`);
+                showStatus('❌ Помилка тесту localStorage', 'error');
+            }
+        }
+
+        window.onload = function() {
+            addLog('🚀 Firestore Resilience Test готовий!');
+            addLog('📋 Очікувані логи при помилках Firestore:');
+            addLog('   ❌ Error in clients subscription');
+            addLog('   ⚠️ User not authenticated, using localStorage fallback');
+            addLog('   🔄 Falling back to localStorage...');
+            showStatus('🚀 Тест готовий! Перевірте консоль браузера.', 'info');
+        };
+    </script>
+</body>
+</html>

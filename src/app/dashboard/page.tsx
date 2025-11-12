@@ -23,12 +23,15 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import WelcomeModal from "@/components/WelcomeModal";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useInvoices } from "@/contexts/InvoiceContext";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [activePeriod, setActivePeriod] = useState('month');
+  const [activePeriod, setActivePeriod] = useState('year');
   const [mounted, setMounted] = useState(false);
+  const { invoices, isLoading } = useInvoices();
 
   const { t } = useLanguage();
   
@@ -37,7 +40,32 @@ export default function DashboardPage() {
     setMounted(true);
   }, []);
   
-  // Data for different periods
+  // Compute live metrics from invoices
+  const totalInvoices = invoices.length;
+  const unpaidInvoices = invoices.filter(inv => inv.status !== 'paid').length;
+  const unpaidAmount = invoices
+    .filter(inv => inv.status !== 'paid')
+    .reduce((sum, inv) => sum + (Number(inv.total) || 0), 0)
+    .toLocaleString('cs-CZ') + ' Kč';
+  // Čekající na úhradu: odeslané faktury před datem splatnosti
+  const pendingInvoices = invoices.filter(inv => {
+    const isSent = inv.status === 'sent';
+    const due = new Date(inv.dueDate).getTime();
+    const now = new Date();
+    now.setHours(0,0,0,0);
+    return isSent && due >= now.getTime();
+  }).length;
+  const monthlyIncomeNumber = invoices
+    .filter(inv => inv.status === 'paid')
+    .filter(inv => {
+      const d = new Date(inv.date);
+      const now = new Date();
+      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    })
+    .reduce((sum, inv) => sum + (Number(inv.total) || 0), 0);
+  const monthlyIncome = monthlyIncomeNumber.toLocaleString('cs-CZ') + ' Kč';
+
+  // Data for different periods (fallbacks use live metrics where relevant)
   const periodData: Record<string, {
     income: string;
     incomeChange: string;
@@ -55,13 +83,13 @@ export default function DashboardPage() {
     }>;
   }> = {
     week: {
-      income: '25,500 Kč',
+      income: monthlyIncome,
       incomeChange: '+8% od minulého týdne',
-      totalInvoices: 1247,
-      unpaidInvoices: 15,
+      totalInvoices: totalInvoices,
+      unpaidInvoices: unpaidInvoices,
       newInvoices: 8,
       newInvoicesPeriod: 'Tento týden',
-      unpaidAmount: '45,000 Kč',
+      unpaidAmount: unpaidAmount,
       chartData: [
         { day: 'Po', income: 3500, unpaid: 1200, new: 2, total: 4700 },
         { day: 'Út', income: 4200, unpaid: 1100, new: 3, total: 5300 },
@@ -73,13 +101,13 @@ export default function DashboardPage() {
       ]
     },
     month: {
-      income: '125,500 Kč',
+      income: monthlyIncome,
       incomeChange: '+12% od minulého měsíce',
-      totalInvoices: 1247,
-      unpaidInvoices: 15,
+      totalInvoices: totalInvoices,
+      unpaidInvoices: unpaidInvoices,
       newInvoices: 45,
       newInvoicesPeriod: 'Tento měsíc',
-      unpaidAmount: '45,000 Kč',
+      unpaidAmount: unpaidAmount,
       chartData: [
         { day: '1', income: 3500, unpaid: 1200, new: 2, total: 4700 },
         { day: '2', income: 4200, unpaid: 1100, new: 3, total: 5300 },
@@ -114,13 +142,13 @@ export default function DashboardPage() {
       ]
     },
     quarter: {
-      income: '380,500 Kč',
+      income: monthlyIncome,
       incomeChange: '+15% od minulého kvartálu',
-      totalInvoices: 1247,
-      unpaidInvoices: 15,
+      totalInvoices: totalInvoices,
+      unpaidInvoices: unpaidInvoices,
       newInvoices: 180,
       newInvoicesPeriod: 'Tento kvartál',
-      unpaidAmount: '45,000 Kč',
+      unpaidAmount: unpaidAmount,
       chartData: [
         { day: 'Led', income: 125500, unpaid: 45000, new: 45, total: 170500 },
         { day: 'Úno', income: 132000, unpaid: 42000, new: 52, total: 174000 },
@@ -128,13 +156,13 @@ export default function DashboardPage() {
       ]
     },
     year: {
-      income: '1,250,500 Kč',
+      income: monthlyIncome,
       incomeChange: '+22% od minulého roku',
-      totalInvoices: 1247,
-      unpaidInvoices: 15,
+      totalInvoices: totalInvoices,
+      unpaidInvoices: unpaidInvoices,
       newInvoices: 720,
       newInvoicesPeriod: 'Tento rok',
-      unpaidAmount: '45,000 Kč',
+      unpaidAmount: unpaidAmount,
       chartData: [
         { day: 'Led', income: 125500, unpaid: 45000, new: 45, total: 170500 },
         { day: 'Úno', income: 132000, unpaid: 42000, new: 52, total: 174000 },
@@ -175,14 +203,36 @@ export default function DashboardPage() {
   };
   
   // Format total invoices consistently
-  const formattedTotalInvoices = mounted ? currentData.totalInvoices.toLocaleString() : '1,247';
+  const formattedTotalInvoices = mounted ? currentData.totalInvoices.toLocaleString() : '0';
+  
+  // Build yearly monthly chart from real invoices (paid) for current year
+  const monthLabels = ['Led','Úno','Bře','Dub','Kvě','Čvn','Čvc','Srp','Zář','Říj','Lis','Pro'];
+  const currentYear = new Date().getFullYear();
+  const monthly = Array.from({ length: 12 }, (_, i) => ({
+    label: monthLabels[i],
+    income: 0,
+    count: 0,
+    lastDate: '' as string
+  }));
+  invoices
+    .filter(inv => inv.status === 'paid')
+    .forEach(inv => {
+      const d = new Date(inv.date);
+      if (d.getFullYear() === currentYear) {
+        const m = d.getMonth();
+        monthly[m].income += Number(inv.total) || 0;
+        monthly[m].count += 1;
+        monthly[m].lastDate = d.toLocaleDateString('cs-CZ');
+      }
+    });
+  const maxIncome = Math.max(1, ...monthly.map(m => m.income));
   
   // Don't render until mounted to prevent hydration mismatch
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-black text-white flex">
+      <div className="min-h-screen bg-black text-white">
         <Sidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="ml-16 flex flex-col min-h-screen">
           <div className="border-b border-gray-700 p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -200,26 +250,28 @@ export default function DashboardPage() {
   }
   
     return (
-    <div className="min-h-screen bg-black text-white flex">
+    <div className="min-h-screen bg-black text-white">
               <Sidebar />
+              <WelcomeModal />
+              <div className="ml-0 md:ml-16">
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
-        <div className="border-b border-gray-700 p-6">
-          <div className="flex items-center justify-between">
+        <div className="border-b border-gray-700 p-3 md:p-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0">
             <div>
-              <h1 className="text-2xl font-semibold">{t('dashboard.title')}</h1>
-              <p className="text-sm text-gray-400 mt-1">{t('dashboard.subtitle')}</p>
+              <h1 className="text-xl md:text-2xl font-semibold">{t('dashboard.title')}</h1>
+              <p className="text-xs md:text-sm text-gray-400 mt-1">{t('dashboard.subtitle')}</p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4 w-full md:w-auto">
               
               {/* Search */}
-              <div className="relative">
+              <div className="relative flex-1 md:flex-initial">
                 <input
                   type="text"
                   placeholder={t('dashboard.search')}
-                  className="minimal-input pl-10 pr-4 py-2 w-64"
+                  className="minimal-input pl-10 pr-4 py-2 w-full md:w-64"
                 />
                 <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
               </div>
@@ -233,18 +285,19 @@ export default function DashboardPage() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-3 md:p-6">
           {/* Period Toggle Buttons */}
-          <div className="flex items-center space-x-3 mb-6">
+          <div className="flex items-center space-x-2 md:space-x-3 mb-4 md:mb-6 overflow-x-auto">
             <button
               onClick={() => setActivePeriod('week')}
               style={{
-                padding: '8px 16px',
+                padding: '6px 12px',
                 borderRadius: '8px',
                 border: activePeriod === 'week' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
                 color: activePeriod === 'week' ? '#4ade80' : 'white',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontSize: '14px'
               }}
             >
               {t('period.week')}
@@ -252,12 +305,13 @@ export default function DashboardPage() {
             <button
               onClick={() => setActivePeriod('month')}
               style={{
-                padding: '8px 16px',
+                padding: '6px 12px',
                 borderRadius: '8px',
                 border: activePeriod === 'month' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
                 color: activePeriod === 'month' ? '#4ade80' : 'white',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontSize: '14px'
               }}
             >
               {t('period.month')}
@@ -265,12 +319,13 @@ export default function DashboardPage() {
             <button
               onClick={() => setActivePeriod('quarter')}
               style={{
-                padding: '8px 16px',
+                padding: '6px 12px',
                 borderRadius: '8px',
                 border: activePeriod === 'quarter' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
                 color: activePeriod === 'quarter' ? '#4ade80' : 'white',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontSize: '14px'
               }}
             >
               {t('period.quarter')}
@@ -278,12 +333,13 @@ export default function DashboardPage() {
             <button
               onClick={() => setActivePeriod('year')}
               style={{
-                padding: '8px 16px',
+                padding: '6px 12px',
                 borderRadius: '8px',
                 border: activePeriod === 'year' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
                 color: activePeriod === 'year' ? '#4ade80' : 'white',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontSize: '14px'
               }}
             >
               {t('period.year')}
@@ -291,48 +347,52 @@ export default function DashboardPage() {
           </div>
 
           {/* Summary Cards */}
-          <div className="grid grid-cols-4 gap-6 mb-8">
-            <div className="bg-gradient-to-br from-pink-300/30 to-rose-200/20 backdrop-blur-sm border border-pink-300 rounded-xl p-6 hover:border-pink-200 transition-all">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+            {/* Move GREEN card to the first position */}
+            <div className="bg-gradient-to-br from-money/20 to-money/10 backdrop-blur-sm border-money-thick rounded-xl p-4 md:p-6">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-xl text-white">{t('dashboard.unpaidAmount')}</div>
-                <FileText className={`${currentData.unpaidInvoices.toString().length > 2 ? 'w-6 h-6' : 'w-8 h-8'} text-pink-300 transition-all duration-200`} style={{ strokeWidth: 1 }} />
+                <div className="text-base md:text-xl text-white">{t('dashboard.monthlyIncome')}</div>
+                <DollarSign className="w-6 h-6 md:w-8 md:h-8 text-money transition-all duration-200" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-4xl font-bold text-white">{currentData.unpaidInvoices}</div>
-              <div className="text-sm text-gray-300 mt-1 font-medium">{t('dashboard.total')} {currentData.unpaidAmount}</div>
+              <div className="text-2xl md:text-4xl font-bold text-white">{currentData.income}</div>
+              <div className="text-xs md:text-sm text-money mt-1 font-medium">{currentData.incomeChange}</div>
             </div>
 
-            <div className="bg-gradient-to-br from-sky-300/30 to-sky-200/20 backdrop-blur-sm rounded-xl p-6 transition-all">
+            {/* Unpaid invoices card now second */}
+            <div className="bg-gradient-to-br from-pink-300/30 to-rose-200/20 backdrop-blur-sm border border-pink-300 rounded-xl p-4 md:p-6 hover:border-pink-200 transition-all">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-xl text-white">{t('dashboard.newInvoices')}</div>
-                <Calendar className={`${currentData.newInvoices.toString().length > 1 ? 'w-6 h-6' : 'w-8 h-8'} text-sky-300 transition-all duration-200`} style={{ strokeWidth: 1 }} />
+                <div className="text-base md:text-xl text-white">{t('dashboard.unpaidAmount')}</div>
+                <FileText className="w-6 h-6 md:w-8 md:h-8 text-pink-300 transition-all duration-200" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-4xl font-bold text-white">{currentData.newInvoices}</div>
-              <div className="text-sm text-gray-300 mt-1 font-medium">{currentData.newInvoicesPeriod}</div>
+              <div className="text-2xl md:text-4xl font-bold text-white">{currentData.unpaidInvoices}</div>
+              <div className="text-xs md:text-sm text-gray-300 mt-1 font-medium">{t('dashboard.total')} {currentData.unpaidAmount}</div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-400/20 to-blue-400/10 backdrop-blur-sm border border-blue-400 rounded-xl p-6 hover:border-blue-300 transition-all">
+            {/* Pending invoices (before due date) */}
+            <div className="bg-gradient-to-br from-sky-300/30 to-sky-200/20 backdrop-blur-sm rounded-xl p-4 md:p-6 transition-all">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-xl text-white">{t('dashboard.totalInvoicesNumber')}</div>
-                <FileText className={`${currentData.totalInvoices.toString().length > 4 ? 'w-6 h-6' : 'w-8 h-8'} text-blue-400 transition-all duration-200`} style={{ strokeWidth: 1 }} />
+                <div className="text-base md:text-xl text-white">Čekající na úhradu</div>
+                <Clock className="w-6 h-6 md:w-8 md:h-8 text-sky-300 transition-all duration-200" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-4xl font-bold text-white">{formattedTotalInvoices}</div>
-              <div className="text-sm text-gray-300 mt-1 font-medium">{t('dashboard.allTime')}</div>
+              <div className="text-2xl md:text-4xl font-bold text-white">{pendingInvoices}</div>
+              <div className="text-xs md:text-sm text-gray-300 mt-1 font-medium">Před splatností</div>
             </div>
 
-            <div className="bg-gradient-to-br from-money/20 to-money/10 backdrop-blur-sm border-money-thick rounded-xl p-6">
+            {/* Total invoices */}
+            <div className="bg-gradient-to-br from-blue-400/20 to-blue-400/10 backdrop-blur-sm border border-blue-400 rounded-xl p-4 md:p-6 hover:border-blue-300 transition-all">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-xl text-white">{t('dashboard.monthlyIncome')}</div>
-                <DollarSign className={`${currentData.income.toString().length > 5 ? 'w-6 h-6' : 'w-8 h-8'} text-money transition-all duration-200`} style={{ strokeWidth: 1 }} />
+                <div className="text-base md:text-xl text-white">{t('dashboard.totalInvoicesNumber')}</div>
+                <FileText className="w-6 h-6 md:w-8 md:h-8 text-blue-400 transition-all duration-200" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-4xl font-bold text-white">{currentData.income}</div>
-              <div className="text-sm text-money mt-1 font-medium">{t('dashboard.fromLastMonth')}</div>
+              <div className="text-2xl md:text-4xl font-bold text-white">{formattedTotalInvoices}</div>
+              <div className="text-xs md:text-sm text-gray-300 mt-1 font-medium">{t('dashboard.allTime')}</div>
             </div>
           </div>
 
           {/* Sales Dynamic Chart */}
-          <div className="grid grid-cols-4 gap-6 mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-6 mt-6 md:mt-8">
             {/* Chart Section */}
-            <div className="col-span-3 bg-gray-900/60 backdrop-blur-sm rounded-xl p-6">
+            <div className="col-span-1 lg:col-span-3 bg-gray-900/60 backdrop-blur-sm rounded-xl p-4 md:p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-lg font-semibold text-white">{t('dashboard.businessAnalytics')}</h3>
@@ -350,7 +410,7 @@ export default function DashboardPage() {
                 {/* Grid Lines */}
                 <div className="absolute inset-0 flex flex-col justify-between">
                   {(() => {
-                    const steps = [chartValues.maxValue, Math.round(chartValues.maxValue * 0.75), Math.round(chartValues.maxValue * 0.5), Math.round(chartValues.maxValue * 0.25), 0];
+                    const steps = [maxIncome, Math.round(maxIncome * 0.75), Math.round(maxIncome * 0.5), Math.round(maxIncome * 0.25), 0];
                     return steps.map((value, index) => (
                       <div key={index} className="flex items-center">
                         <span className="text-xs text-gray-500 w-12">{value}K</span>
@@ -360,30 +420,17 @@ export default function DashboardPage() {
                   })()}
                 </div>
 
-                {/* Chart Lines */}
-                <div className="absolute inset-0 flex items-end justify-between pl-16 pr-4">
-                  {currentData.chartData.map((item, index) => (
-                    <div key={index} className="flex flex-col items-center relative group">
-                      {/* Enhanced Hover Tooltip */}
-                      <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 whitespace-nowrap shadow-xl">
-                        <div className="text-xs text-white font-medium mb-1">{item.day}</div>
-                        <div className="text-xs text-money">Income: {item.income}K</div>
-                        <div className="text-xs text-orange-400">Unpaid: {item.unpaid}</div>
-                        <div className="text-xs text-green-400">New: {item.new}</div>
-                        <div className="text-xs text-blue-400">Total: {item.total}</div>
-                      </div>
-                      
-                      <div className="text-xs text-gray-400 mt-4 font-medium">{item.day}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Simple Line Chart with Green Shadow */}
+                {/* Simple Line Chart with Green Shadow - with single month labels */}
                 <div className="absolute inset-0 flex items-end justify-between pl-16 pr-4 pb-8">
-                  {currentData.chartData.map((item, index) => (
+                  {monthly.map((m, index) => (
                     <div key={index} className="flex flex-col items-center relative group">
-                      {/* Month Label */}
-                      <div className="text-xs text-gray-400 mt-4 font-medium">{item.day}</div>
+                      <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 whitespace-nowrap shadow-xl">
+                        <div className="text-xs text-white font-medium mb-1">{m.label}</div>
+                        <div className="text-xs text-money">Příjem: {m.income.toLocaleString('cs-CZ')} Kč</div>
+                        <div className="text-xs text-blue-300">Faktur: {m.count}</div>
+                        {m.lastDate && <div className="text-xs text-gray-400">Poslední: {m.lastDate}</div>}
+                      </div>
+                      <div className="text-xs text-gray-400 mt-4 font-medium">{m.label}</div>
                     </div>
                   ))}
                 </div>
@@ -401,9 +448,9 @@ export default function DashboardPage() {
                   {/* Line Path */}
                   <path
                     d={(() => {
-                      const points = currentData.chartData.map((item, index) => {
+                      const points = monthly.map((m, index) => {
                         const x = 64 + (index * 96);
-                        const y = 200 - (item.income / chartValues.maxIncome) * 150;
+                        const y = 200 - (m.income / maxIncome) * 150;
                         return `${x} ${y}`;
                       });
                       return `M ${points.join(' L ')}`;
@@ -418,9 +465,9 @@ export default function DashboardPage() {
                   {/* Shadow Area */}
                   <path
                     d={(() => {
-                      const points = currentData.chartData.map((item, index) => {
+                      const points = monthly.map((m, index) => {
                         const x = 64 + (index * 96);
-                        const y = 200 - (item.income / chartValues.maxIncome) * 150;
+                        const y = 200 - (m.income / maxIncome) * 150;
                         return `${x} ${y}`;
                       });
                       const lastPoint = points[points.length - 1];
@@ -431,9 +478,9 @@ export default function DashboardPage() {
                   />
                   
                   {/* Simple Data Points (Dots) */}
-                  {currentData.chartData.map((item, index) => {
+                  {monthly.map((m, index) => {
                     const x = 64 + (index * 96);
-                    const y = 200 - (item.income / chartValues.maxIncome) * 150;
+                    const y = 200 - (m.income / maxIncome) * 150;
                     return (
                       <circle
                         key={index}
@@ -476,37 +523,37 @@ export default function DashboardPage() {
             </div>
 
             {/* Quick Actions Buttons - Compact Side Panel */}
-            <div className="col-span-1 flex flex-col space-y-4 h-[420px]">
-              <div className="relative flex-1">
-                <button className="relative w-full bg-black border border-green-300 p-5 rounded-xl overflow-hidden flex items-center space-x-4 shadow-lg hover:shadow-xl h-full group">
-                  <svg className="w-7 h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="col-span-1 grid grid-cols-2 lg:flex lg:flex-col gap-3 md:gap-4 lg:h-[420px]">
+              <div className="relative lg:flex-1">
+                <button className="relative w-full bg-black border border-green-300 p-3 md:p-5 rounded-xl overflow-hidden flex items-center space-x-3 md:space-x-4 shadow-lg hover:shadow-xl h-full group">
+                  <svg className="w-5 h-5 md:w-7 md:h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
-                  <span className="text-lg font-semibold text-white relative z-10">Nová faktura</span>
+                  <span className="text-sm md:text-lg font-semibold text-white relative z-10">Nová faktura</span>
                 </button>
               </div>
-              <div className="relative flex-1">
-                <button className="relative w-full bg-black border border-green-300 p-5 rounded-xl overflow-hidden flex items-center space-x-4 shadow-lg hover:shadow-xl h-full group">
-                  <svg className="w-7 h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="relative lg:flex-1">
+                <button className="relative w-full bg-black border border-green-300 p-3 md:p-5 rounded-xl overflow-hidden flex items-center space-x-3 md:space-x-4 shadow-lg hover:shadow-xl h-full group">
+                  <svg className="w-5 h-5 md:w-7 md:h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
-                  <span className="text-lg font-semibold text-white relative z-10">Kalkulačka</span>
+                  <span className="text-sm md:text-lg font-semibold text-white relative z-10">Kalkulačka</span>
                 </button>
               </div>
-              <div className="relative flex-1">
-                <button className="relative w-full bg-black border border-green-300 p-5 rounded-xl overflow-hidden flex items-center space-x-4 shadow-lg hover:shadow-xl h-full group">
-                  <svg className="w-7 h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="relative lg:flex-1">
+                <button className="relative w-full bg-black border border-green-300 p-3 md:p-5 rounded-xl overflow-hidden flex items-center space-x-3 md:space-x-4 shadow-lg hover:shadow-xl h-full group">
+                  <svg className="w-5 h-5 md:w-7 md:h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  <span className="text-lg font-semibold text-white relative z-10">Cenová nabídka</span>
+                  <span className="text-sm md:text-lg font-semibold text-white relative z-10">Cenová nabídka</span>
                 </button>
               </div>
-              <div className="relative flex-1">
-                <button className="relative w-full bg-black border border-green-300 p-5 rounded-xl overflow-hidden flex items-center space-x-4 shadow-lg hover:shadow-xl h-full group">
-                  <svg className="w-7 h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="relative lg:flex-1">
+                <button className="relative w-full bg-black border border-green-300 p-3 md:p-5 rounded-xl overflow-hidden flex items-center space-x-3 md:space-x-4 shadow-lg hover:shadow-xl h-full group">
+                  <svg className="w-5 h-5 md:w-7 md:h-7 text-money relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
-                  <span className="text-lg font-semibold text-white relative z-10">Nový klient</span>
+                  <span className="text-sm md:text-lg font-semibold text-white relative z-10">Nový klient</span>
                 </button>
               </div>
             </div>
@@ -521,7 +568,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Bottom Section */}
-          <div className="grid grid-cols-2 gap-6 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6 md:mt-8">
             {/* Invoice Statistics */}
             <div className="bg-black/80 backdrop-blur-sm border border-gray-600 rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
@@ -604,6 +651,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+      </div>
       </div>
       
     </div>

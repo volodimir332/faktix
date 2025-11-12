@@ -3,62 +3,97 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import EmailVerificationGuard from './EmailVerificationGuard';
 
 interface AuthGuardProps {
   children: React.ReactNode;
 }
 
 export function AuthGuard({ children }: AuthGuardProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
     if (isLoading) return; // Чекаємо завершення завантаження
 
-    console.log('AuthGuard: Checking authentication for pathname:', pathname);
-    console.log('AuthGuard: isAuthenticated:', isAuthenticated);
+    console.log('🔐 AuthGuard: Checking authentication for pathname:', pathname);
+    console.log('🔐 AuthGuard: isAuthenticated:', isAuthenticated);
+    console.log('🔐 AuthGuard: user:', user);
 
     // Публічні сторінки (доступні без авторизації)
-    const publicRoutes = ['/', '/prihlaseni', '/registrace', '/test'];
+    const publicRoutes = ['/', '/prihlaseni', '/registrace', '/test', '/potvrdit-email'];
     const isPublicRoute = pathname ? publicRoutes.includes(pathname) : false;
 
     // Приватні сторінки (потребують авторизації)  
     const privateRoutes = ['/dashboard', '/faktury', '/analytiky', '/profil', '/nastaveni', '/klienti'];
     const isPrivateRoute = pathname ? privateRoutes.some(route => pathname.startsWith(route)) : false;
 
-    console.log('AuthGuard Debug:', {
+    console.log('🔐 AuthGuard Debug:', {
       pathname,
       isAuthenticated,
       isPublicRoute,
       isPrivateRoute,
-      isLoading
+      isLoading,
+      userEmail: user?.email,
+      emailVerified: user?.emailVerified
     });
 
-    // Швидка перевірка для публічних сторінок
-    if (isPublicRoute) {
-      console.log('AuthGuard: Public route, showing content immediately');
+    // Користувач авторизований ТА його email підтверджений
+    if (isAuthenticated && user && user.emailVerified) {
+      console.log('✅ AuthGuard: User authenticated and email verified');
+      
+      // Якщо він на публічній сторінці (лендінг, логін, реєстрація), перенаправляємо на дашборд
+      if (isPublicRoute) {
+        console.log('🔄 AuthGuard: Redirecting authenticated user from public route to dashboard');
+        router.replace('/dashboard');
+        return;
+      }
+      
+      // Якщо він на приватній сторінці - дозволяємо доступ
+      if (isPrivateRoute) {
+        console.log('✅ AuthGuard: User has access to private route');
+        return;
+      }
+    }
+    
+    // Користувач авторизований, але email НЕ підтверджений
+    else if (isAuthenticated && user && !user.emailVerified) {
+      console.log('⚠️ AuthGuard: User authenticated but email not verified');
+      
+      // Якщо він не на сторінці підтвердження email, перенаправляємо туди
+      if (pathname !== '/potvrdit-email') {
+        console.log('🔄 AuthGuard: Redirecting unverified user to email verification page');
+        router.replace('/potvrdit-email');
+        return;
+      }
+      
+      // Якщо він на сторінці підтвердження - дозволяємо доступ
       return;
     }
-
-    // Перевірка для приватних сторінок
-    if (isPrivateRoute && !isAuthenticated) {
-      console.log('AuthGuard: Private route without auth, redirecting to home');
-      router.replace('/');
-      return;
-    }
-
-    // Якщо авторизований на публічній сторінці
-    if (isAuthenticated && isPublicRoute) {
-      console.log('AuthGuard: Logged in on public route, redirecting to dashboard');
-      router.replace('/dashboard');
-      return;
+    
+    // Користувач НЕ авторизований
+    else {
+      console.log('❌ AuthGuard: User not authenticated');
+      
+      // Якщо він намагається зайти на приватну сторінку, перенаправляємо на лендінг
+      if (isPrivateRoute) {
+        console.log('🔄 AuthGuard: Redirecting unauthenticated user from private route to landing');
+        router.replace('/');
+        return;
+      }
+      
+      // Якщо він на публічній сторінці - дозволяємо доступ
+      if (isPublicRoute) {
+        console.log('✅ AuthGuard: User has access to public route');
+        return;
+      }
     }
 
     // Всі інші випадки - показуємо контент
-    console.log('AuthGuard: Showing content');
+    console.log('✅ AuthGuard: Showing content');
 
-  }, [pathname, isAuthenticated, isLoading, router]);
+  }, [pathname, isAuthenticated, isLoading, router, user]);
 
   // Показуємо loader під час перевірки
   if (isLoading) {
@@ -80,6 +115,18 @@ export function AuthGuard({ children }: AuthGuardProps) {
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Для приватних сторінок використовуємо EmailVerificationGuard
+  const privateRoutes = ['/dashboard', '/faktury', '/analytiky', '/profil', '/nastaveni', '/klienti'];
+  const isPrivateRoute = pathname ? privateRoutes.some(route => pathname.startsWith(route)) : false;
+
+  if (isPrivateRoute && isAuthenticated) {
+    return (
+      <EmailVerificationGuard>
+        {children}
+      </EmailVerificationGuard>
     );
   }
 

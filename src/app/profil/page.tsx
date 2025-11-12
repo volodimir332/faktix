@@ -32,7 +32,7 @@ import {
 import Sidebar from "@/components/Sidebar";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/hooks/useAuth";
-import { searchByICO, getZivnostType, determineZivnostType } from "@/lib/ares-api";
+import { searchByICO, getZivnostType, determineZivnostType, determineBusinessType } from "@/lib/ares-api";
 
 interface ProfileData {
   personal: {
@@ -118,6 +118,44 @@ export default function ProfilPage() {
       notifications: true
     }
   });
+
+  // Rozšířený seznam živností pro ruční výběr (skupiny + příklady)
+  const ZIVNOST_OPTIONS: { group: string; options: string[] }[] = [
+    { group: 'Hlavní kategorie', options: [
+      'Živnost volná',
+      'Řemeslná živnost',
+      'Vázaná živnost',
+      'Koncesovaná živnost'
+    ] },
+    { group: 'Řemeslné (příklady)', options: [
+      'Zednictví',
+      'Tesařství',
+      'Truhlářství',
+      'Malířství a natěračství',
+      'Instalatérství a topenářství',
+      'Holičství a kadeřnictví',
+      'Pekařství a cukrářství'
+    ] },
+    { group: 'Vázané (příklady)', options: [
+      'Projektová činnost ve výstavbě',
+      'Geologické práce',
+      'Masérské, rekondiční a regenerační služby',
+      'Poskytování tělovýchovných a sportovních služeb',
+      'Oční optika'
+    ] },
+    { group: 'Koncesované (příklady)', options: [
+      'Silniční motorová doprava',
+      'Ostraha majetku a osob',
+      'Zprostředkování zaměstnání',
+      'Výroba a prodej zbraní a střeliva',
+      'Provádění pyrotechnického průzkumu'
+    ] }
+  ];
+
+  const isZivnostCompany = (value?: string) => {
+    const s = (value || '').toLowerCase();
+    return s.includes('živnost') || s.includes('osvč') || s.includes('fyzická');
+  };
 
   // Завантажуємо дані профілю при ініціалізації
   useEffect(() => {
@@ -206,7 +244,10 @@ export default function ProfilPage() {
             address: `${companyData.adresa.ulice} ${companyData.adresa.cisloOrientacni || companyData.adresa.cisloEvidencni || ""}`.trim(),
             city: companyData.adresa.mesto,
             postalCode: companyData.adresa.psc,
-            typZivnosti: companyData.typZivnosti || "Nedefinováno"
+            // Автоматично визначимо тип підприємства (чи це ОСВЧ)
+            businessType: determineBusinessType(companyData.pravniForma),
+            // Тип живності користувач обере вручну (за замовчуванням порожньо)
+            typZivnosti: prev.company.typZivnosti || ""
           }
         }));
 
@@ -230,7 +271,8 @@ export default function ProfilPage() {
     field: string,
     label: string,
     value: string,
-    type: string = "text"
+    type: string = "text",
+    placeholder?: string
   ) => (
     <div key={field} className="space-y-2">
       <label className="block text-sm font-medium text-gray-300">
@@ -242,7 +284,7 @@ export default function ProfilPage() {
           value={value}
           onChange={(e) => updateData(section, field, e.target.value)}
           className="minimal-input w-full px-3 py-2"
-          placeholder={label}
+          placeholder={placeholder || label}
         />
       ) : (
         <div className="minimal-input w-full px-3 py-2 bg-gray-800/50 text-gray-300">
@@ -256,7 +298,7 @@ export default function ProfilPage() {
     section: keyof ProfileData,
     title: string,
     icon: React.ReactNode,
-    fields: { key: string; label: string; type?: string }[]
+    fields: { key: string; label: string; type?: string; placeholder?: string }[]
   ) => (
     <div key={section} className="bg-gray-900/50 rounded-lg p-6 border border-gray-700/50">
       <div className="flex items-center justify-between mb-6">
@@ -296,16 +338,10 @@ export default function ProfilPage() {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {fields.map(({ key, label, type }) =>
-          renderField(section, key, label, profileData[section][key as keyof typeof profileData[typeof section]], type)
-        )}
-      </div>
-
-      {/* Спеціальний блок для компанії з ARES пошуком */}
+      {/* Спеціальний блок для компанії з ARES пошуком – ПЕРЕНЕСЕНО ВГОРУ і ЗМЕНШЕНО В ШИРИНУ */}
       {section === 'company' && (
-        <div className="mt-6 p-4 bg-gray-800/30 rounded-lg border border-gray-600/50">
-          <h4 className="text-sm font-medium text-gray-300 mb-3 flex items-center">
+        <div className="mt-2 p-3 bg-gray-800/30 rounded-lg border border-gray-600/50 md:w-1/2">
+          <h4 className="text-sm font-medium text-gray-300 mb-2 flex items-center">
             <Search className="w-4 h-4 mr-2" />
             Automatické vyplnění z ARES
           </h4>
@@ -315,13 +351,13 @@ export default function ProfilPage() {
               value={icoInput}
               onChange={(e) => setIcoInput(e.target.value)}
               placeholder="Zadejte IČ firmy"
-              className="minimal-input flex-1 px-3 py-2"
+              className="minimal-input flex-1 px-3 py-2 text-sm"
               disabled={isLoadingCompany}
             />
             <button
               onClick={handleAutoFillCompany}
               disabled={!icoInput || isLoadingCompany}
-              className="px-4 py-2 bg-money hover:bg-money/80 text-black font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+              className="px-3 py-2 text-sm bg-money hover:bg-money/80 text-black font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
             >
               {isLoadingCompany ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -332,10 +368,53 @@ export default function ProfilPage() {
             </button>
           </div>
           {loadingStep && (
-            <p className="text-sm text-gray-400 mt-2">{loadingStep}</p>
+            <p className="text-xs text-gray-400 mt-2">{loadingStep}</p>
           )}
         </div>
       )}
+
+      {/* Pole "Typ živnosti" bylo na žádost uživatele odstraněno z UI */}
+      {/* Vlastní spodní řádek pro firemní typy: vlevo "Typ podnikání", vpravo
+          (jen pro OSVČ) výběr "Typ živnosti". */}
+      {section === 'company' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          {/* Typ podnikání */}
+          {renderField('company', 'businessType', 'Typ podnikání', profileData.company.businessType)}
+
+          {/* Typ živnosti jen pro OSVČ/Živnostník */}
+          {isZivnostCompany(profileData.company.businessType) && (
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">Typ živnosti</label>
+              {isEditing === 'company' ? (
+                <select
+                  value={profileData.company.typZivnosti}
+                  onChange={(e) => updateData('company', 'typZivnosti', e.target.value)}
+                  className="minimal-input w-full px-3 py-2 bg-black text-white"
+                >
+                  <option value="">Vyberte typ…</option>
+                  {ZIVNOST_OPTIONS.map(group => (
+                    <optgroup key={group.group} label={group.group}>
+                      {group.options.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              ) : (
+                <div className="minimal-input w-full px-3 py-2 bg-gray-800/50 text-gray-300">
+                  {profileData.company.typZivnosti || 'Nedefinováno'}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        {fields.map(({ key, label, type, placeholder }) =>
+          renderField(section, key, label, profileData[section][key as keyof typeof profileData[typeof section]], type, placeholder)
+        )}
+      </div>
     </div>
   );
 
@@ -343,7 +422,7 @@ export default function ProfilPage() {
     <div className="min-h-screen bg-black text-white">
       <Sidebar />
       
-      <div className="ml-64 p-8">
+      <div className="ml-16 pt-40 px-8 pb-8 pull-up-500">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
@@ -376,7 +455,7 @@ export default function ProfilPage() {
               { key: 'lastName', label: 'Příjmení' },
               { key: 'email', label: 'E-mail', type: 'email' },
               { key: 'phone', label: 'Telefon', type: 'tel' },
-              { key: 'address', label: 'Adresa' },
+              { key: 'address', label: 'Ulice a číslo popisné', placeholder: 'Cihelní 2674/91' },
               { key: 'city', label: 'Město' },
               { key: 'postalCode', label: 'PSČ' },
               { key: 'country', label: 'Země' }
@@ -384,7 +463,7 @@ export default function ProfilPage() {
           )}
 
           {/* Company Information */}
-          {renderSection(
+           {renderSection(
             'company',
             'Firemní údaje',
             <Building className="w-5 h-5 text-money" />,
@@ -392,13 +471,11 @@ export default function ProfilPage() {
               { key: 'name', label: 'Název firmy' },
               { key: 'ico', label: 'IČ' },
               { key: 'dic', label: 'DIČ' },
-              { key: 'address', label: 'Adresa' },
+              { key: 'address', label: 'Ulice a číslo popisné', placeholder: 'Technologická 377/8' },
               { key: 'city', label: 'Město' },
               { key: 'postalCode', label: 'PSČ' },
               { key: 'country', label: 'Země' },
-              { key: 'website', label: 'Webové stránky', type: 'url' },
-              { key: 'businessType', label: 'Typ podnikání' },
-              { key: 'typZivnosti', label: 'Typ živnosti' }
+               { key: 'website', label: 'Webové stránky', type: 'url' }
             ]
           )}
 

@@ -174,7 +174,7 @@ export default function AnalytikyPage() {
                     </label>
                     <div className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white font-semibold">
                       {typeof taxCalculation.incomeTax === 'number' 
-                        ? `${taxCalculation.incomeTax.toLocaleString()} Kč`
+                        ? `${taxCalculation.incomeTax.toLocaleString('cs-CZ')} Kč`
                         : taxCalculation.incomeTax
                       }
                     </div>
@@ -186,7 +186,7 @@ export default function AnalytikyPage() {
                     </label>
                     <div className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white font-semibold">
                       {typeof taxCalculation.social === 'number' 
-                        ? `${taxCalculation.social.toLocaleString()} Kč`
+                        ? `${taxCalculation.social.toLocaleString('cs-CZ')} Kč`
                         : taxCalculation.social
                       }
                     </div>
@@ -198,7 +198,7 @@ export default function AnalytikyPage() {
                     </label>
                     <div className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white font-semibold">
                       {typeof taxCalculation.health === 'number' 
-                        ? `${taxCalculation.health.toLocaleString()} Kč`
+                        ? `${taxCalculation.health.toLocaleString('cs-CZ')} Kč`
                         : taxCalculation.health
                       }
                     </div>
@@ -210,7 +210,7 @@ export default function AnalytikyPage() {
                     </label>
                     <div className="bg-money/20 border border-money/30 rounded-lg px-3 py-2 text-money font-bold text-lg">
                       {typeof taxCalculation.total === 'number' 
-                        ? `${taxCalculation.total.toLocaleString()} Kč`
+                        ? `${taxCalculation.total.toLocaleString('cs-CZ')} Kč`
                         : taxCalculation.total
                       }
                     </div>
@@ -236,7 +236,7 @@ export default function AnalytikyPage() {
                     Sociální pojištění (měsíčně)
                   </label>
                   <div className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white font-semibold">
-                    {taxCalculation.monthlyPayments.social.toLocaleString()} Kč
+                    {taxCalculation.monthlyPayments.social.toLocaleString('cs-CZ')} Kč
                   </div>
                 </div>
 
@@ -245,7 +245,7 @@ export default function AnalytikyPage() {
                     Zdravotní pojištění (měsíčně)
                   </label>
                   <div className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white font-semibold">
-                    {taxCalculation.monthlyPayments.health.toLocaleString()} Kč
+                    {taxCalculation.monthlyPayments.health.toLocaleString('cs-CZ')} Kč
                   </div>
                 </div>
               </div>

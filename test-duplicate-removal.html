@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duplicate Removal Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #2a2a2a; padding: 20px; border-radius: 10px; }
+        button { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 5px; }
+        .status { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #065f46; color: #d1fae5; }
+        .error { background: #7f1d1d; color: #fecaca; }
+        .info { background: #1e3a8a; color: #dbeafe; }
+        .warning { background: #92400e; color: #fef3c7; }
+        .log { background: #1f2937; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Duplicate Removal Test</h1>
+        <p>Тестування видалення дублікатів клієнтів</p>
+        
+        <div class="status info">
+            <strong>ℹ️ Функціональність:</strong>
+            <ul>
+                <li>✅ Перевірка на дублікати при додаванні клієнтів</li>
+                <li>✅ Автоматичне видалення дублікатів при завантаженні</li>
+                <li>✅ Повідомлення про дублікати</li>
+                <li>✅ Збереження унікальних клієнтів</li>
+            </ul>
+        </div>
+        
+        <button onclick="createDuplicateClients()">Створити дублікати</button>
+        <button onclick="checkClients()">Перевірити клієнтів</button>
+        <button onclick="openFaktix()">Відкрити Faktix</button>
+        <button onclick="clearLogs()">Очистити логи</button>
+        
+        <div class="status warning">
+            <strong>⚠️ Тест:</strong> Створіть дублікати, потім відкрийте Faktix і перевірте, чи вони автоматично видаляються.
+        </div>
+        
+        <div id="logContainer" class="log">
+            Логи з'являться тут...
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            document.getElementById('status').innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function addLog(message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            logContainer.innerHTML += `[${timestamp}] ${message}\n`;
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLogs() {
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = 'Логи очищено...\n';
+        }
+
+        function createDuplicateClients() {
+            const duplicateClients = [
+                {
+                    id: '1',
+                    name: 'Elektro MAR a.s.',
+                    email: 'info@elektromar.cz',
+                    street: 'Václavská 1',
+                    city: 'Praha',
+                    postalCode: '11000',
+                    country: 'Česká republika',
+                    ico: '12345678',
+                    dic: 'CZ12345678',
+                    typZivnosti: 'Řemeslnická živnost (80%)'
+                },
+                {
+                    id: '2',
+                    name: 'Elektro MAR a.s.',
+                    email: 'info@elektromar.cz',
+                    street: 'Václavská 1',
+                    city: 'Praha',
+                    postalCode: '11000',
+                    country: 'Česká republika',
+                    ico: '12345678',
+                    dic: 'CZ12345678',
+                    typZivnosti: 'Řemeslnická živnost (80%)'
+                },
+                {
+                    id: '3',
+                    name: 'Elektro MAR a.s.',
+                    email: 'info@elektromar.cz',
+                    street: 'Václavská 1',
+                    city: 'Praha',
+                    postalCode: '11000',
+                    country: 'Česká republika',
+                    ico: '12345678',
+                    dic: 'CZ12345678',
+                    typZivnosti: 'Řemeslnická živnost (80%)'
+                },
+                {
+                    id: '4',
+                    name: 'Volodymyr Krytskyi',
+                    email: 'volodymyr@example.com',
+                    street: 'Test Street 1',
+                    city: 'Praha',
+                    postalCode: '11000',
+                    country: 'Česká republika',
+                    ico: '87654321',
+                    dic: 'CZ87654321',
+                    typZivnosti: 'Volná živnost (60%)'
+                }
+            ];
+
+            localStorage.setItem('faktix-clients', JSON.stringify(duplicateClients));
+            
+            addLog(`✅ Створено ${duplicateClients.length} клієнтів (з дублікатами)`);
+            addLog(`📋 Клієнти: ${duplicateClients.map(c => c.name).join(', ')}`);
+            showStatus('✅ Дублікати створено!', 'success');
+        }
+
+        function checkClients() {
+            try {
+                const clients = JSON.parse(localStorage.getItem('faktix-clients') || '[]');
+                addLog(`📊 Знайдено клієнтів: ${clients.length}`);
+                
+                if (clients.length > 0) {
+                    clients.forEach((client, index) => {
+                        addLog(`${index + 1}. ${client.name} (ID: ${client.id})`);
+                    });
+                } else {
+                    addLog('📭 Клієнтів не знайдено');
+                }
+                
+                showStatus(`📊 Знайдено ${clients.length} клієнтів`, 'info');
+            } catch (error) {
+                addLog(`❌ Помилка перевірки: ${error.message}`);
+                showStatus('❌ Помилка перевірки', 'error');
+            }
+        }
+
+        function openFaktix() {
+            window.open('http://localhost:3000', '_blank');
+            addLog('🌐 Faktix відкрито');
+            showStatus('🌐 Faktix відкрито!', 'info');
+        }
+
+        window.onload = function() {
+            addLog('🚀 Duplicate Removal Test готовий!');
+            addLog('📋 Очікувані логи:');
+            addLog('   ⚠️ Duplicate client detected');
+            addLog('   🧹 Removed X duplicate clients');
+            addLog('   ✅ No duplicate clients found');
+            showStatus('🚀 Тест готовий!', 'info');
+        };
+    </script>
+</body>
+</html>

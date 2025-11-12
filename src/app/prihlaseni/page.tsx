@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Eye, EyeOff, ArrowLeft, CheckCircle } from "lucide-react";
 import { FaktixLogo } from "@/components/FaktixLogo";
 import { CloudBackground } from "@/components/CloudBackground";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,10 +11,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login, isLoading } = useAuth();
   
   const [formData, setFormData] = useState({
@@ -22,6 +24,14 @@ export default function LoginPage() {
     password: "",
     rememberMe: false,
   });
+
+  // Перевіряємо, чи є повідомлення про підтвердження email
+  useEffect(() => {
+    const message = searchParams?.get('message');
+    if (message === 'verify-email') {
+      setSuccessMessage('Реєстрація майже завершена! Перевірте вашу поштову скриньку та підтвердіть email для завершення реєстрації.');
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,8 +55,13 @@ export default function LoginPage() {
     const result = await login(formData.email, formData.password);
     
     if (result.success) {
-      console.log('✅ Login successful, redirecting to dashboard');
-      router.push("/dashboard");
+      console.log('✅ Login successful');
+      try {
+        const hasProfile = typeof window !== 'undefined' && !!localStorage.getItem('faktix-profile');
+        router.push(hasProfile ? "/dashboard" : "/onboarding");
+      } catch {
+        router.push("/dashboard");
+      }
     } else {
       console.log('❌ Login failed:', result.message);
       setError(result.message || "Přihlášení se nezdařilo");
@@ -111,6 +126,16 @@ export default function LoginPage() {
               {error && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
                   <p className="text-red-400 text-sm">{error}</p>
+                </div>
+              )}
+
+              {/* Success Message */}
+              {successMessage && (
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                    <p className="text-green-400 text-sm">{successMessage}</p>
+                  </div>
                 </div>
               )}
 
@@ -240,5 +265,13 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPageContent />
+    </Suspense>
   );
 } 

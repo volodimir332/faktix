@@ -1,34 +1,127 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, CheckCircle, Send } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Send, Loader2 } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
+import { useInvoices } from '@/contexts/InvoiceContext';
 
 export default function OdeslatFakturu() {
   const router = useRouter();
   const params = useParams();
   const invoiceId = params?.id as string;
+  const { invoices, updateInvoice } = useInvoices();
+  
+  const invoice = invoices.find(inv => inv.id === invoiceId);
+  const [userProfile, setUserProfile] = useState<{firstName?: string; lastName?: string; companyName?: string; businessName?: string; email?: string} | null>(null);
   
   const [subject, setSubject] = useState(`Faktura č. ${invoiceId}`);
   const [recipientEmail, setRecipientEmail] = useState('');
   const [ccEmail, setCcEmail] = useState('');
-  const [message, setMessage] = useState(`Hezký den,
+  const [message, setMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [sendStatus, setSendStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    // Завантажити профіль користувача
+    if (typeof window !== 'undefined') {
+      const profile = localStorage.getItem('userProfile');
+      if (profile) {
+        const parsedProfile = JSON.parse(profile);
+        setUserProfile(parsedProfile);
+        
+        // Встановити початкове повідомлення
+        setMessage(`Hezký den,
 
 vystavil jsem pro Vás fakturu ${invoiceId}.
 
-Díky!
-Roman Korol`);
+S pozdravem,
+${parsedProfile.firstName || ''} ${parsedProfile.lastName || ''}`);
+      }
+    }
 
-  const handleMarkAsSent = () => {
-    // Логіка для позначення фактури як відправленої
+    // Встановити email клієнта з фактури
+    if (invoice && 'client' in invoice) {
+      const invoiceWithClient = invoice as { client?: { email?: string } };
+      if (invoiceWithClient.client?.email) {
+        setRecipientEmail(invoiceWithClient.client.email);
+      }
+    }
+  }, [invoice, invoiceId]);
+
+  const handleMarkAsSent = async () => {
+    if (invoice) {
+      await updateInvoice(invoiceId, { ...invoice, status: 'sent' });
+    }
     router.back();
   };
 
-  const handleSendEmail = () => {
-    // Логіка для відправки email
-    console.log('Sending email:', { subject, recipientEmail, ccEmail, message });
-    router.back();
+  const handleSendEmail = async () => {
+    if (!recipientEmail || !recipientEmail.includes('@')) {
+      setErrorMessage('Zadejte prosím platný email');
+      setSendStatus('error');
+      return;
+    }
+
+    setIsSending(true);
+    setSendStatus('idle');
+    setErrorMessage('');
+
+    try {
+      // Використовуємо професійний email шаблон
+      const { getInvoiceEmailTemplate } = await import('@/lib/email-templates');
+      
+      const invoiceWithClient = invoice && 'client' in invoice ? invoice as { client?: { name?: string } } : null;
+      
+      const emailTemplate = getInvoiceEmailTemplate({
+        userName: `${userProfile?.firstName || ''} ${userProfile?.lastName || ''}`.trim() || 'Faktix',
+        userCompany: userProfile?.companyName || userProfile?.businessName,
+        userEmail: userProfile?.email || '',
+        recipientName: invoiceWithClient?.client?.name,
+        invoiceNumber: invoiceId,
+        amount: invoice?.total ? `${invoice.total.toLocaleString('cs-CZ')} Kč` : '0 Kč',
+        dueDate: invoice?.dueDate || '',
+        message: message || undefined
+      });
+
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: recipientEmail,
+          subject: emailTemplate.subject,
+          html: emailTemplate.html,
+          userName: `${userProfile?.firstName || ''} ${userProfile?.lastName || ''}`.trim() || 'Faktix',
+          userEmail: userProfile?.email || '',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSendStatus('success');
+        
+        // Оновити статус фактури
+        if (invoice) {
+          await updateInvoice(invoiceId, { ...invoice, status: 'sent' });
+        }
+
+        // Повернутися назад через 2 секунди
+        setTimeout(() => {
+          router.back();
+        }, 2000);
+      } else {
+        throw new Error(data.error || 'Chyba při odesílání');
+      }
+    } catch (error: unknown) {
+      const err = error as Error;
+      console.error('❌ Chyba při odesílání:', err);
+      setErrorMessage(err.message || 'Nepodařilo se odeslat email');
+      setSendStatus('error');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleBack = () => {
@@ -36,11 +129,11 @@ Roman Korol`);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex">
-              <Sidebar />
+    <div className="min-h-screen bg-black text-white">
+      <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col bg-gradient-to-b from-gray-900/20 to-black/40">
+      <div className="ml-16 min-h-screen flex flex-col bg-gradient-to-b from-gray-900/20 to-black/40">
         {/* Header */}
         <div className="border-b border-gray-700 bg-black/30 backdrop-blur-sm px-6 py-4">
           <div className="flex items-center justify-between">
@@ -142,11 +235,38 @@ Roman Korol`);
               <div className="pt-4">
                 <button
                   onClick={handleSendEmail}
-                  className="w-full flex items-center justify-center space-x-3 px-6 py-4 bg-money text-black rounded-lg hover:bg-money-light transition-colors font-medium"
+                  disabled={isSending || !recipientEmail}
+                  className="w-full flex items-center justify-center space-x-3 px-6 py-4 bg-money text-black rounded-lg hover:bg-money-light transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send className="w-5 h-5" />
-                  <span>Odeslat fakturu</span>
+                  {isSending ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Odesílání...</span>
+                    </>
+                  ) : sendStatus === 'success' ? (
+                    <>
+                      <CheckCircle className="w-5 h-5" />
+                      <span>Odesláno!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      <span>Odeslat fakturu</span>
+                    </>
+                  )}
                 </button>
+                
+                {sendStatus === 'success' && (
+                  <div className="mt-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <p className="text-green-400 text-center">✅ Faktura byla úspěšně odeslána!</p>
+                  </div>
+                )}
+                
+                {sendStatus === 'error' && errorMessage && (
+                  <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                    <p className="text-red-400 text-center">❌ {errorMessage}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

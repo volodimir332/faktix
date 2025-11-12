@@ -69,10 +69,13 @@ export function NewClientModal({ isOpen, onClose, onSave }: NewClientModalProps)
         }
 
         // Автоматично заповнюємо всі поля включаючи тип живності
+        // Формуємо повну адресу з номером будинку
+        const fullStreet = `${response.data.adresa.ulice} ${response.data.adresa.cisloOrientacni || response.data.adresa.cisloEvidencni || ''}`.trim();
+        
         const newFormData = {
           ...formData,
           name: response.data.obchodniJmeno,
-          street: response.data.adresa.ulice,
+          street: fullStreet,
           city: response.data.adresa.mesto,
           postalCode: response.data.adresa.psc,
           country: 'Česká republika',
@@ -156,10 +159,13 @@ export function NewClientModal({ isOpen, onClose, onSave }: NewClientModalProps)
           }
 
           // Автоматично заповнюємо всі поля включаючи тип живності
+          // Формуємо повну адресу з номером будинку
+          const fullStreet = `${response.data.adresa.ulice} ${response.data.adresa.cisloOrientacni || response.data.adresa.cisloEvidencni || ''}`.trim();
+          
           const newFormData = {
             ...formData,
             name: response.data.obchodniJmeno,
-            street: response.data.adresa.ulice,
+            street: fullStreet,
             city: response.data.adresa.mesto,
             postalCode: response.data.adresa.psc,
             country: 'Česká republika',
@@ -204,10 +210,16 @@ export function NewClientModal({ isOpen, onClose, onSave }: NewClientModalProps)
       // Продовжуємо без типу живності
     }
 
+    console.log('🔄 NewClientModal: handleSelectCompany called with company:', company);
+    console.log('🔄 NewClientModal: typZivnosti determined:', typZivnosti);
+    
+    // Формуємо повну адресу з номером будинку
+    const fullStreet = `${company.adresa.ulice} ${company.adresa.cisloOrientacni || company.adresa.cisloEvidencni || ''}`.trim();
+    
     setFormData({
       ...formData,
       name: company.obchodniJmeno,
-      street: company.adresa.ulice,
+      street: fullStreet,
       city: company.adresa.mesto,
       postalCode: company.adresa.psc,
       country: 'Česká republika',
@@ -225,10 +237,15 @@ export function NewClientModal({ isOpen, onClose, onSave }: NewClientModalProps)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Додаємо клієнта до контексту
-    addClient(formData);
+    console.log('🔄 NewClientModal: handleSubmit called with formData:', formData);
     
-    // Викликаємо оригінальну функцію onSave
+    // Перевіряємо, чи заповнена назва клієнта
+    if (!formData.name.trim()) {
+      alert('Prosím vyplňte název odběratele');
+      return;
+    }
+    
+    // Викликаємо оригінальну функцію onSave (додавання клієнта тепер обробляється в NewInvoiceModal)
     onSave(formData);
     
     setFormData({
@@ -376,10 +393,11 @@ export function NewClientModal({ isOpen, onClose, onSave }: NewClientModalProps)
             {/* Street */}
             <div>
               <label className="block text-sm font-medium text-money-dark mb-2">
-                Ulice
+                Ulice a číslo popisné
               </label>
               <input
                 type="text"
+                placeholder="Petřvaldská 1193/1"
                 className="w-full bg-gray-800/60 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-money/50 transition-colors"
                 value={formData.street}
                 onChange={(e) => setFormData({...formData, street: e.target.value})}
