@@ -82,10 +82,10 @@ export default function LandingPage() {
               <LanguageGlobe />
               
               {/* Auth Buttons */}
-              <Link href="/login" className="hidden sm:block text-gray-300 hover:text-white transition-colors">
+              <Link href="/prihlaseni" className="hidden sm:block text-gray-300 hover:text-white transition-colors">
                 {t('nav.login')}
               </Link>
-              <Link href="/register" className="bg-black text-white border-2 border-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-white hover:text-black transition-all duration-300 text-sm sm:text-base">
+              <Link href="/registrace" className="bg-black text-white border-2 border-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-white hover:text-black transition-all duration-300 text-sm sm:text-base">
                 <span className="hidden sm:inline">{t('nav.signup')}</span>
                 <span className="sm:hidden">{t('nav.signup').split(' ')[0]}</span>
               </Link>
