@@ -30,6 +30,13 @@ export const metadata: Metadata = {
   publisher: "faktix",
   robots: "index, follow",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/favicon.svg',
+    shortcut: '/favicon.svg',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
