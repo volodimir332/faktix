@@ -139,12 +139,12 @@ export default function LandingPage() {
               {t('hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-[10%]">
-              <Link href="/registrace" className="bg-money text-black px-10 py-5 rounded-lg font-semibold text-lg hover:bg-money-dark transition-all duration-300 flex items-center gap-3">
+              <Link href="/registrace" className="bg-money text-black px-5 py-2.5 rounded-xl font-semibold text-base hover:bg-money-dark transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105">
                 <span>{t('hero.cta.start')}</span>
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
               </Link>
-              <button className="flex items-center gap-3 text-white bg-black border-2 border-gray-600 px-8 py-5 rounded-lg hover:bg-gray-800 transition-all duration-300 text-lg">
-                <Play className="w-5 h-5" />
+              <button className="flex items-center gap-2 text-white bg-black border-2 border-gray-600 px-5 py-2.5 rounded-xl hover:bg-gray-800 transition-all duration-300 text-base hover:scale-105">
+                <Play className="w-4 h-4" />
                 {t('hero.cta.demo')}
               </button>
             </div>
@@ -348,10 +348,10 @@ export default function LandingPage() {
             </div>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 flex-1">
-              <Link href="/registrace" className="bg-money text-black px-4 py-2 rounded-full font-semibold text-sm hover:bg-money-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
+              <Link href="/registrace" className="bg-money text-black px-5 py-2.5 rounded-xl font-semibold text-base hover:bg-money-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
                 Začít zdarma
               </Link>
-              <Link href="/prihlaseni" className="border-2 border-gray-600 text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-gray-800 transition-all duration-300 hover:scale-105">
+              <Link href="/prihlaseni" className="border-2 border-gray-600 text-white px-5 py-2.5 rounded-xl font-semibold text-base hover:bg-gray-800 transition-all duration-300 hover:scale-105">
                 Přihlásit se
               </Link>
             </div>
