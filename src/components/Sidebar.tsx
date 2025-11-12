@@ -141,13 +141,32 @@ export default function Sidebar() {
         }
       `}</style>
 
+      {/* Mobile Menu Button - Fixed in top left - Показуємо на мобільних і планшетах */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-full bg-money text-black shadow-lg hover:bg-money-dark transition-all duration-300 hover:scale-110"
+        aria-label={isMobileMenuOpen ? "Закрити меню" : "Відкрити меню"}
+      >
+        {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+      </button>
+
+      {/* Overlay для закриття меню при кліку поза ним */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className={`sidebar-container fixed inset-y-0 left-0 z-40 ${isCompactMode ? 'w-16' : 'w-56'} border-r border-gray-700/50 bg-black/60 backdrop-blur-sm flex flex-col translate-x-0 overflow-y-auto group`}>
+      <div className={`sidebar-container fixed inset-y-0 left-0 z-40 border-r border-gray-700/50 bg-black/95 backdrop-blur-md flex flex-col overflow-y-auto transition-all duration-300
+        ${isMobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}
+        lg:w-16 lg:group lg:hover:w-56`}>
         {/* Header */}
         <div className="p-2 border-b border-gray-700/50">
           <div className="flex items-center justify-center lg:group-hover:justify-start lg:group-hover:space-x-2 transition-all duration-300">
             <FaktixIcon size="sm" />
-            <div className="hidden lg:group-hover:block opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
+            <div className={`lg:group-hover:block opacity-100 lg:group-hover:opacity-100 transition-opacity duration-300 ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
               <div className="font-medium text-white whitespace-nowrap text-sm">faktix</div>
               <div className="text-xs text-gray-400 whitespace-nowrap">
                 {getCurrentPageLabel()}
@@ -267,14 +286,15 @@ export default function Sidebar() {
                   <div key={item.page} className="relative">
                     <Link
                       href={item.href}
-                      className={`flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg ${
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center px-2 py-2 justify-start text-sm rounded-lg ${
                         isActive 
                           ? 'text-money' 
                           : 'text-gray-300 hover:bg-money/10 hover:text-money'
                       }`}
                     >
                       <Icon className="w-5 h-5 flex-shrink-0" />
-                      <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">{item.label}</span>
+                      <span className={`ml-2 whitespace-nowrap transition-opacity duration-300 ${isMobileMenuOpen ? 'inline opacity-100' : 'hidden lg:group-hover:inline opacity-0 lg:group-hover:opacity-100'}`}>{item.label}</span>
                     </Link>
                   </div>
                 );
@@ -295,15 +315,16 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Bottom Section - Home Button */}
+          {/* Bottom Section - Home Button */}
         <div className="p-2 border-t border-gray-700/50">
           <div className="relative">
             <Link
               href="/"
-              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center px-2 py-2 justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money"
             >
               <Home className="w-5 h-5 flex-shrink-0" />
-              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">{t('nav.home')}</span>
+              <span className={`ml-2 whitespace-nowrap transition-opacity duration-300 ${isMobileMenuOpen ? 'inline opacity-100' : 'hidden lg:group-hover:inline opacity-0 lg:group-hover:opacity-100'}`}>{t('nav.home')}</span>
             </Link>
           </div>
           

@@ -257,17 +257,17 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top Bar */}
-        <div className="border-b border-gray-700 p-3 md:p-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0">
+        {/* Top Bar - Компактніший для мобільних */}
+        <div className="border-b border-gray-700 p-2 md:p-6 pl-14 lg:pl-3">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-0">
             <div>
-              <h1 className="text-xl md:text-2xl font-semibold">{t('dashboard.title')}</h1>
-              <p className="text-xs md:text-sm text-gray-400 mt-1">{t('dashboard.subtitle')}</p>
+              <h1 className="text-lg md:text-2xl font-semibold">{t('dashboard.title')}</h1>
+              <p className="text-[10px] md:text-sm text-gray-400 mt-0.5 md:mt-1">{t('dashboard.subtitle')}</p>
             </div>
             <div className="flex items-center space-x-2 md:space-x-4 w-full md:w-auto">
               
-              {/* Search */}
-              <div className="relative flex-1 md:flex-initial">
+              {/* Search - Ховаємо на маленьких екранах */}
+              <div className="relative flex-1 md:flex-initial hidden sm:block">
                 <input
                   type="text"
                   placeholder={t('dashboard.search')}
@@ -287,11 +287,11 @@ export default function DashboardPage() {
         {/* Content */}
         <div className="flex-1 p-3 md:p-6">
           {/* Period Toggle Buttons */}
-          <div className="flex items-center space-x-2 md:space-x-3 mb-4 md:mb-6 overflow-x-auto">
+          <div className="flex items-center space-x-1.5 md:space-x-3 mb-3 md:mb-6 overflow-x-auto">
             <button
               onClick={() => setActivePeriod('week')}
               style={{
-                padding: '6px 12px',
+                padding: '4px 10px',
                 borderRadius: '8px',
                 border: activePeriod === 'week' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
@@ -305,7 +305,7 @@ export default function DashboardPage() {
             <button
               onClick={() => setActivePeriod('month')}
               style={{
-                padding: '6px 12px',
+                padding: '4px 10px',
                 borderRadius: '8px',
                 border: activePeriod === 'month' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
@@ -319,7 +319,7 @@ export default function DashboardPage() {
             <button
               onClick={() => setActivePeriod('quarter')}
               style={{
-                padding: '6px 12px',
+                padding: '4px 10px',
                 borderRadius: '8px',
                 border: activePeriod === 'quarter' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
@@ -333,7 +333,7 @@ export default function DashboardPage() {
             <button
               onClick={() => setActivePeriod('year')}
               style={{
-                padding: '6px 12px',
+                padding: '4px 10px',
                 borderRadius: '8px',
                 border: activePeriod === 'year' ? '2px solid #4ade80' : '2px solid #4b5563',
                 backgroundColor: 'black',
@@ -346,46 +346,46 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+          {/* Summary Cards - Супер компактні для мобільних */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5 md:gap-4 mb-3 md:mb-6">
             {/* Move GREEN card to the first position */}
-            <div className="bg-gradient-to-br from-money/20 to-money/10 backdrop-blur-sm border-money-thick rounded-xl p-4 md:p-6">
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-base md:text-xl text-white">{t('dashboard.monthlyIncome')}</div>
-                <DollarSign className="w-6 h-6 md:w-8 md:h-8 text-money transition-all duration-200" style={{ strokeWidth: 1 }} />
+            <div className="bg-gradient-to-br from-money/20 to-money/10 backdrop-blur-sm border-money-thick rounded-lg md:rounded-xl p-1.5 md:p-4">
+              <div className="flex items-center justify-between mb-0.5">
+                <div className="text-[10px] md:text-base text-white truncate">{t('dashboard.monthlyIncome')}</div>
+                <DollarSign className="w-3 h-3 md:w-6 md:h-6 text-money flex-shrink-0" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-2xl md:text-4xl font-bold text-white">{currentData.income}</div>
-              <div className="text-xs md:text-sm text-money mt-1 font-medium">{currentData.incomeChange}</div>
+              <div className="text-base md:text-3xl font-bold text-white truncate">{currentData.income}</div>
+              <div className="text-[8px] md:text-xs text-money mt-0 font-medium truncate">{currentData.incomeChange}</div>
             </div>
 
             {/* Unpaid invoices card now second */}
-            <div className="bg-gradient-to-br from-pink-300/30 to-rose-200/20 backdrop-blur-sm border border-pink-300 rounded-xl p-4 md:p-6 hover:border-pink-200 transition-all">
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-base md:text-xl text-white">{t('dashboard.unpaidAmount')}</div>
-                <FileText className="w-6 h-6 md:w-8 md:h-8 text-pink-300 transition-all duration-200" style={{ strokeWidth: 1 }} />
+            <div className="bg-gradient-to-br from-pink-300/30 to-rose-200/20 backdrop-blur-sm border border-pink-300 rounded-lg md:rounded-xl p-1.5 md:p-4">
+              <div className="flex items-center justify-between mb-0.5">
+                <div className="text-[10px] md:text-base text-white truncate">Nezaplaceno</div>
+                <FileText className="w-3 h-3 md:w-6 md:h-6 text-pink-300 flex-shrink-0" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-2xl md:text-4xl font-bold text-white">{currentData.unpaidInvoices}</div>
-              <div className="text-xs md:text-sm text-gray-300 mt-1 font-medium">{t('dashboard.total')} {currentData.unpaidAmount}</div>
+              <div className="text-base md:text-3xl font-bold text-white">{currentData.unpaidInvoices}</div>
+              <div className="text-[8px] md:text-xs text-gray-300 mt-0 font-medium truncate">{currentData.unpaidAmount}</div>
             </div>
 
             {/* Pending invoices (before due date) */}
-            <div className="bg-gradient-to-br from-sky-300/30 to-sky-200/20 backdrop-blur-sm rounded-xl p-4 md:p-6 transition-all">
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-base md:text-xl text-white">Čekající na úhradu</div>
-                <Clock className="w-6 h-6 md:w-8 md:h-8 text-sky-300 transition-all duration-200" style={{ strokeWidth: 1 }} />
+            <div className="bg-gradient-to-br from-sky-300/30 to-sky-200/20 backdrop-blur-sm rounded-lg md:rounded-xl p-1.5 md:p-4">
+              <div className="flex items-center justify-between mb-0.5">
+                <div className="text-[10px] md:text-base text-white truncate">Čekající</div>
+                <Clock className="w-3 h-3 md:w-6 md:h-6 text-sky-300 flex-shrink-0" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-2xl md:text-4xl font-bold text-white">{pendingInvoices}</div>
-              <div className="text-xs md:text-sm text-gray-300 mt-1 font-medium">Před splatností</div>
+              <div className="text-base md:text-3xl font-bold text-white">{pendingInvoices}</div>
+              <div className="text-[8px] md:text-xs text-gray-300 mt-0 font-medium truncate">Před splatností</div>
             </div>
 
             {/* Total invoices */}
-            <div className="bg-gradient-to-br from-blue-400/20 to-blue-400/10 backdrop-blur-sm border border-blue-400 rounded-xl p-4 md:p-6 hover:border-blue-300 transition-all">
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-base md:text-xl text-white">{t('dashboard.totalInvoicesNumber')}</div>
-                <FileText className="w-6 h-6 md:w-8 md:h-8 text-blue-400 transition-all duration-200" style={{ strokeWidth: 1 }} />
+            <div className="bg-gradient-to-br from-blue-400/20 to-blue-400/10 backdrop-blur-sm border border-blue-400 rounded-lg md:rounded-xl p-1.5 md:p-4">
+              <div className="flex items-center justify-between mb-0.5">
+                <div className="text-[10px] md:text-base text-white truncate">Celkem</div>
+                <FileText className="w-3 h-3 md:w-6 md:h-6 text-blue-400 flex-shrink-0" style={{ strokeWidth: 1 }} />
               </div>
-              <div className="text-2xl md:text-4xl font-bold text-white">{formattedTotalInvoices}</div>
-              <div className="text-xs md:text-sm text-gray-300 mt-1 font-medium">{t('dashboard.allTime')}</div>
+              <div className="text-base md:text-3xl font-bold text-white">{formattedTotalInvoices}</div>
+              <div className="text-[8px] md:text-xs text-gray-300 mt-0 font-medium truncate">{t('dashboard.allTime')}</div>
             </div>
           </div>
 
