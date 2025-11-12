@@ -348,10 +348,10 @@ export default function LandingPage() {
             </div>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 flex-1">
-              <Link href="/registrace" className="bg-money text-black px-5 py-2.5 rounded-2xl font-semibold text-base hover:bg-money-dark transition-colors shadow-lg hover:shadow-xl">
+              <Link href="/registrace" className="bg-money text-black px-4 py-2 rounded-full font-semibold text-sm hover:bg-money-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
                 Začít zdarma
               </Link>
-              <Link href="/prihlaseni" className="border-2 border-gray-600 text-white px-5 py-2.5 rounded-2xl font-semibold text-base hover:bg-gray-800 transition-colors">
+              <Link href="/prihlaseni" className="border-2 border-gray-600 text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-gray-800 transition-all duration-300 hover:scale-105">
                 Přihlásit se
               </Link>
             </div>
