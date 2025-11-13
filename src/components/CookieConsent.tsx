@@ -88,90 +88,47 @@ export default function CookieConsent() {
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/50 z-[9998]" />
 
-      {/* Main Banner */}
+      {/* Minimalist Banner */}
       {!showSettings && (
-        <div className="fixed bottom-0 left-0 right-0 z-[9999] p-4 sm:p-6 animate-slide-up">
-          <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
-            <div className="p-6 sm:p-8">
-              {/* Header */}
-              <div className="flex items-start gap-4 mb-4">
-                <div className="p-3 bg-orange-100 rounded-xl flex-shrink-0">
-                  <Cookie className="w-6 h-6 text-orange-600" />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-slate-800 mb-2">
-                    🍪 Cookies a ochrana soukromí
-                  </h2>
-                  <p className="text-slate-700 leading-relaxed">
-                    Používáme cookies pro zajištění fungování platformy, analýzu návštěvnosti 
-                    a zlepšování vašeho zážitku. Některé cookies jsou nezbytné a nelze je vypnout, 
-                    jiné můžete přizpůsobit podle svých preferencí.
-                  </p>
-                </div>
-              </div>
-
-              {/* Quick info */}
-              <div className="grid sm:grid-cols-3 gap-3 mb-6">
-                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Check className="w-4 h-4 text-emerald-600" />
-                    <span className="font-semibold text-sm text-slate-800">Nezbytné</span>
+        <div className="fixed bottom-6 left-6 right-6 z-[9999] animate-slide-up">
+          <div className="max-w-4xl mx-auto bg-black/95 backdrop-blur-md rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
+            <div className="p-4">
+              {/* Content */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                {/* Icon & Text */}
+                <div className="flex items-start gap-3 flex-1">
+                  <Cookie className="w-5 h-5 text-money flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-white text-sm font-medium mb-1">
+                      Používáme cookies
+                    </p>
+                    <p className="text-gray-400 text-xs">
+                      Pro fungování platformy a vylepšování služeb.
+                    </p>
                   </div>
-                  <p className="text-xs text-slate-600">Nutné pro fungování</p>
                 </div>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-blue-600 font-bold text-sm">?</span>
-                    <span className="font-semibold text-sm text-slate-800">Analytické</span>
-                  </div>
-                  <p className="text-xs text-slate-600">Vylepšování služeb</p>
-                </div>
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-orange-600 font-bold text-sm">?</span>
-                    <span className="font-semibold text-sm text-slate-800">Marketing</span>
-                  </div>
-                  <p className="text-xs text-slate-600">Cílená reklama</p>
-                </div>
-              </div>
 
-              {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={acceptAll}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  <Check className="w-5 h-5" />
-                  Přijmout vše
-                </button>
-                <button
-                  onClick={acceptNecessary}
-                  className="flex-1 bg-slate-600 hover:bg-slate-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                >
-                  Pouze nezbytné
-                </button>
-                <button
-                  onClick={() => setShowSettings(true)}
-                  className="flex-1 border-2 border-slate-300 hover:border-slate-400 text-slate-700 font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  <Settings className="w-5 h-5" />
-                  Přizpůsobit
-                </button>
-              </div>
-
-              {/* Links */}
-              <div className="mt-4 pt-4 border-t border-slate-200 flex flex-wrap justify-center gap-4 text-sm">
-                <a href="/legal/ochrana-udaju" className="text-emerald-600 hover:underline font-semibold">
-                  Ochrana osobních údajů
-                </a>
-                <span className="text-slate-400">•</span>
-                <a href="/legal/cookies" className="text-emerald-600 hover:underline font-semibold">
-                  Podrobnosti o cookies
-                </a>
-                <span className="text-slate-400">•</span>
-                <a href="/legal/obchodni-podminky" className="text-emerald-600 hover:underline font-semibold">
-                  Obchodní podmínky
-                </a>
+                {/* Actions */}
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <button
+                    onClick={acceptAll}
+                    className="bg-money hover:bg-money-dark text-black font-semibold px-5 py-2 rounded-lg transition-all hover:scale-105 text-sm whitespace-nowrap"
+                  >
+                    Přijmout vše
+                  </button>
+                  <button
+                    onClick={acceptNecessary}
+                    className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors text-sm whitespace-nowrap border border-gray-700"
+                  >
+                    Pouze nezbytné
+                  </button>
+                  <button
+                    onClick={() => setShowSettings(true)}
+                    className="text-gray-400 hover:text-white transition-colors text-xs underline"
+                  >
+                    Nastavení
+                  </button>
+                </div>
               </div>
             </div>
           </div>
