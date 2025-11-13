@@ -4,35 +4,24 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { 
   ArrowLeft,
-  Save,
   Edit3,
   User,
-  Mail,
-  Phone,
-  MapPin,
   Building,
   CreditCard,
   Check,
   X,
-  BarChart3,
   FileText,
   Users,
-  Euro,
   Activity,
-  Tags,
-  Newspaper,
-  Calculator,
   Settings,
   Search,
   Loader2,
-  Shield,
-  Calendar,
-  Hash
+  Euro
 } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/hooks/useAuth";
-import { searchByICO, getZivnostType, determineZivnostType, determineBusinessType } from "@/lib/ares-api";
+import { searchByICO, determineBusinessType } from "@/lib/ares-api";
 
 interface ProfileData {
   personal: {

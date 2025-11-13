@@ -5,7 +5,6 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ClientProvider } from "@/contexts/ClientContext";
 import { InvoiceProvider } from "@/contexts/InvoiceContext";
 import { CalculationProvider } from "@/contexts/CalculationContext";
-import { AuthGuard } from "@/components/AuthGuard";
 import { AuthInitializer } from "@/components/AuthInitializer";
 import { ColorFixer } from "@/components/ColorFixer";
 import CookieConsent from "@/components/CookieConsent";

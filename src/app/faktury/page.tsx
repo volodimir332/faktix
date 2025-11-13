@@ -2,18 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { 
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
-  DollarSign,
-  Users,
   FileText,
-  Calendar,
   CheckCircle,
   Plus,
   Search,
   Bell,
-
   Copy,
   MoreHorizontal,
   ChevronDown,
@@ -23,9 +16,7 @@ import {
   Eye,
   Edit,
   Clock,
-
-  Check,
-  X
+  Check
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";

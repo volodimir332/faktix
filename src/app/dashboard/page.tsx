@@ -5,33 +5,21 @@ import {
   BarChart3,
   Users,
   FileText,
-  Settings,
-  User,
-  Euro,
-  Tags,
-
-  Activity,
   Clock,
-  Plus,
   Search,
   Bell,
-  Calendar,
   CheckCircle,
-  LogOut,
-  AlertCircle,
   DollarSign
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import WelcomeModal from "@/components/WelcomeModal";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useInvoices } from "@/contexts/InvoiceContext";
 
 export default function DashboardPage() {
-  const router = useRouter();
   const [activePeriod, setActivePeriod] = useState('year');
   const [mounted, setMounted] = useState(false);
-  const { invoices, isLoading } = useInvoices();
+  const { invoices } = useInvoices();
 
   const { t } = useLanguage();
   
@@ -182,25 +170,6 @@ export default function DashboardPage() {
   
   const currentData = periodData[activePeriod];
   
-  // Pre-calculate chart values to avoid hydration issues
-  const chartValues = mounted ? {
-    maxIncome: Math.max(...currentData.chartData.map(d => d.income)),
-    maxUnpaid: Math.max(...currentData.chartData.map(d => d.unpaid)),
-    maxNew: Math.max(...currentData.chartData.map(d => d.new)),
-    maxTotal: Math.max(...currentData.chartData.map(d => d.total)),
-    maxValue: Math.max(
-      Math.max(...currentData.chartData.map(d => d.income)),
-      Math.max(...currentData.chartData.map(d => d.unpaid)),
-      Math.max(...currentData.chartData.map(d => d.new)),
-      Math.max(...currentData.chartData.map(d => d.total))
-    )
-  } : {
-    maxIncome: 0,
-    maxUnpaid: 0,
-    maxNew: 0,
-    maxTotal: 0,
-    maxValue: 0
-  };
   
   // Format total invoices consistently
   const formattedTotalInvoices = mounted ? currentData.totalInvoices.toLocaleString() : '0';

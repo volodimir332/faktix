@@ -6,7 +6,7 @@ import SimplePriceCalculator from '@/components/SimplePriceCalculator';
 import AIConversation, { ConversationMessage } from '@/components/AIConversation';
 import { getCalculatorIcon } from '@/components/CalculatorIcons';
 import { getCzechConstructionKnowledge } from '@/lib/czech-construction-data';
-import { Sparkles, Loader2, Send, Calculator, Tag, X, Clock, Trash2, FileText } from 'lucide-react';
+import { Loader2, Send, Calculator, Tag, X, Clock, Trash2, FileText } from 'lucide-react';
 import { SimpleCalculatorTemplate } from '@/lib/calculator-templates';
 import { useInvoices } from '@/contexts/InvoiceContext';
 import { useRouter } from 'next/navigation';

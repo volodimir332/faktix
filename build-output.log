@@ -1,0 +1,383 @@
+
+> faktix@0.1.0 build
+> next build
+
+   ▲ Next.js 15.4.4
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: /Users/volodymyrkrutskyi/Desktop/fakrury/faktury/node_modules/next-pwa/register.js
+> [PWA] Service worker: /Users/volodymyrkrutskyi/Desktop/fakrury/faktury/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+ ✓ Compiled successfully in 69s
+   Linting and checking validity of types ...
+
+./src/app/api/kb/scrape/route.ts
+7:10  Warning: 'scrapeAllSources' is defined but never used.  @typescript-eslint/no-unused-vars
+7:28  Warning: 'scrapeSingleSource' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/page.tsx
+8:3  Warning: 'Settings' is defined but never used.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'User' is defined but never used.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'Euro' is defined but never used.  @typescript-eslint/no-unused-vars
+11:3  Warning: 'Tags' is defined but never used.  @typescript-eslint/no-unused-vars
+13:3  Warning: 'Activity' is defined but never used.  @typescript-eslint/no-unused-vars
+15:3  Warning: 'Plus' is defined but never used.  @typescript-eslint/no-unused-vars
+18:3  Warning: 'Calendar' is defined but never used.  @typescript-eslint/no-unused-vars
+20:3  Warning: 'LogOut' is defined but never used.  @typescript-eslint/no-unused-vars
+21:3  Warning: 'AlertCircle' is defined but never used.  @typescript-eslint/no-unused-vars
+31:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+34:21  Warning: 'isLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+186:9  Warning: 'chartValues' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/faktury/[id]/page.tsx
+248:13  Warning: 'pageHeight' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+294:13  Warning: 'iban' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+298:13  Warning: 'paymentMethod' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+450:9  Warning: 'handleSend' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+481:9  Warning: 'handleAddNote' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+1036:31  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/faktury/page.tsx
+5:3  Warning: 'BarChart3' is defined but never used.  @typescript-eslint/no-unused-vars
+6:3  Warning: 'TrendingUp' is defined but never used.  @typescript-eslint/no-unused-vars
+7:3  Warning: 'TrendingDown' is defined but never used.  @typescript-eslint/no-unused-vars
+8:3  Warning: 'DollarSign' is defined but never used.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'Users' is defined but never used.  @typescript-eslint/no-unused-vars
+11:3  Warning: 'Calendar' is defined but never used.  @typescript-eslint/no-unused-vars
+28:3  Warning: 'X' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/kalkulace/page.tsx
+9:10  Warning: 'Sparkles' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/layout.tsx
+8:10  Warning: 'AuthGuard' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/page.tsx
+11:3  Warning: 'MapPin' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/pricing/page.tsx
+13:11  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/profil/page.tsx
+7:3  Warning: 'Save' is defined but never used.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'Mail' is defined but never used.  @typescript-eslint/no-unused-vars
+11:3  Warning: 'Phone' is defined but never used.  @typescript-eslint/no-unused-vars
+12:3  Warning: 'MapPin' is defined but never used.  @typescript-eslint/no-unused-vars
+17:3  Warning: 'BarChart3' is defined but never used.  @typescript-eslint/no-unused-vars
+22:3  Warning: 'Tags' is defined but never used.  @typescript-eslint/no-unused-vars
+23:3  Warning: 'Newspaper' is defined but never used.  @typescript-eslint/no-unused-vars
+24:3  Warning: 'Calculator' is defined but never used.  @typescript-eslint/no-unused-vars
+28:3  Warning: 'Shield' is defined but never used.  @typescript-eslint/no-unused-vars
+29:3  Warning: 'Calendar' is defined but never used.  @typescript-eslint/no-unused-vars
+30:3  Warning: 'Hash' is defined but never used.  @typescript-eslint/no-unused-vars
+35:23  Warning: 'getZivnostType' is defined but never used.  @typescript-eslint/no-unused-vars
+35:39  Warning: 'determineZivnostType' is defined but never used.  @typescript-eslint/no-unused-vars
+77:11  Warning: 't' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+199:23  Warning: 'section' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/ucetnictvi/page.tsx
+17:3  Warning: 'Euro' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/AIAccountantChat.tsx
+56:6  Warning: React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/AuthGuard.tsx
+3:21  Warning: 'useState' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/CookieConsent.tsx
+4:31  Warning: 'Check' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/EmailVerificationGuard.tsx
+19:3  Warning: 'fallback' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/FaktixLogo.tsx
+1:10  Warning: 'cn' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/InterfaceShowcase.tsx
+103:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/InvoicePreviewModal.tsx
+151:13  Warning: 'pageHeight' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+193:13  Warning: 'iban' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+197:13  Warning: 'paymentMethod' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+652:54  Warning: 'index' is defined but never used.  @typescript-eslint/no-unused-vars
+903:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/NewClientModal.tsx
+16:11  Warning: 'addClient' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/NewInvoiceModal.tsx
+11:10  Warning: 'formatDate' is defined but never used.  @typescript-eslint/no-unused-vars
+32:38  Warning: 'getInvoiceById' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+134:14  Warning: '_' is defined but never used.  @typescript-eslint/no-unused-vars
+885:35  Warning: 'index' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/PricingToggle.tsx
+3:23  Warning: 'Zap' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/ProfileWarningModal.tsx
+3:10  Warning: 'useState' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/SendTemplateModal.tsx
+6:10  Warning: 'fixClonedDocument' is defined but never used.  @typescript-eslint/no-unused-vars
+35:3  Warning: 'onSend' is defined but never used.  @typescript-eslint/no-unused-vars
+131:13  Warning: 'emailHtml' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+337:13  Warning: 'pageHeight' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/Sidebar.tsx
+36:10  Warning: 'isCompactMode' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+44:19  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/SimplePriceCalculator.tsx
+4:10  Warning: 'Calculator' is defined but never used.  @typescript-eslint/no-unused-vars
+64:3  Warning: 'onSend' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/SmartAIAssistant.tsx
+5:3  Warning: 'MessageCircle' is defined but never used.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'Sparkles' is defined but never used.  @typescript-eslint/no-unused-vars
+13:3  Warning: 'HelpCircle' is defined but never used.  @typescript-eslint/no-unused-vars
+15:3  Warning: 'AlertTriangle' is defined but never used.  @typescript-eslint/no-unused-vars
+19:3  Warning: 'CreditCard' is defined but never used.  @typescript-eslint/no-unused-vars
+21:3  Warning: 'BarChart3' is defined but never used.  @typescript-eslint/no-unused-vars
+25:3  Warning: 'Zap' is defined but never used.  @typescript-eslint/no-unused-vars
+31:61  Warning: 'searchCompanyByName' is defined but never used.  @typescript-eslint/no-unused-vars
+31:120  Warning: 'validateICO' is defined but never used.  @typescript-eslint/no-unused-vars
+77:11  Warning: 'clients' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+81:11  Warning: 'totalTurnover' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+165:6  Warning: React Hook useEffect has a missing dependency: 'analyzeUserProfile'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+190:6  Warning: React Hook useEffect has a missing dependency: 'analyzeUserProfile'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+563:6  Warning: React Hook useEffect has missing dependencies: 'analyzeUserProfile' and 'generateProfileAnalysis'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/StripePaymentForm.tsx
+86:6  Warning: React Hook useEffect has a missing dependency: 'effectiveCurrency'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/contexts/ClientContext.tsx
+59:6  Warning: React Hook useEffect has a missing dependency: 'setupRealtimeSubscription'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/contexts/InvoiceContext.tsx
+58:6  Warning: React Hook useEffect has a missing dependency: 'setupRealtimeSubscription'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/lib/color-fix.ts
+583:14  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+605:24  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+618:16  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+622:12  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/emailTemplate.ts
+17:3  Warning: 'senderName' is defined but never used.  @typescript-eslint/no-unused-vars
+156:3  Warning: 'senderName' is defined but never used.  @typescript-eslint/no-unused-vars
+161:3  Warning: 'companySite' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/firebase-firestore.ts
+5:3  Warning: 'getDoc' is defined but never used.  @typescript-eslint/no-unused-vars
+12:3  Warning: 'limit' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/firebase.ts
+2:19  Warning: 'connectAuthEmulator' is defined but never used.  @typescript-eslint/no-unused-vars
+2:46  Warning: 'browserLocalPersistence' is defined but never used.  @typescript-eslint/no-unused-vars
+2:71  Warning: 'browserSessionPersistence' is defined but never used.  @typescript-eslint/no-unused-vars
+4:3  Warning: 'getFirestore' is defined but never used.  @typescript-eslint/no-unused-vars
+5:3  Warning: 'connectFirestoreEmulator' is defined but never used.  @typescript-eslint/no-unused-vars
+7:3  Warning: 'enableIndexedDbPersistence' is defined but never used.  @typescript-eslint/no-unused-vars
+8:3  Warning: 'enableMultiTabIndexedDbPersistence' is defined but never used.  @typescript-eslint/no-unused-vars
+23:13  Warning: 'originalIndexedDB' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+134:14  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/firestore-service.ts
+13:3  Warning: 'limit' is defined but never used.  @typescript-eslint/no-unused-vars
+511:1  Warning: Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+./src/lib/kb/chunker.ts
+45:9  Warning: 'chunks' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/kb/firestore-client.ts
+10:3  Warning: 'getDoc' is defined but never used.  @typescript-eslint/no-unused-vars
+12:3  Warning: 'query' is defined but never used.  @typescript-eslint/no-unused-vars
+13:3  Warning: 'where' is defined but never used.  @typescript-eslint/no-unused-vars
+14:3  Warning: 'orderBy' is defined but never used.  @typescript-eslint/no-unused-vars
+18:22  Warning: 'KBChunk' is defined but never used.  @typescript-eslint/no-unused-vars
+18:31  Warning: 'KBCategory' is defined but never used.  @typescript-eslint/no-unused-vars
+18:43  Warning: 'KBSource' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/kb/firestore.ts
+15:3  Warning: 'limit' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/kb/manual-seed.ts
+6:22  Warning: 'KBChunk' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/kb/rag.ts
+66:37  Warning: 'similarity' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/kb/scraper.ts
+40:44  Warning: 'config' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/tax_calculator.ts
+87:42  Warning: 'userProfile' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/universal-tax-calculator.ts
+80:32  Warning: 'userProfile' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/40) ...
+   Generating static pages (10/40) 
+🔧 Firebase config check: {
+  hasApiKey: true,
+  hasAuthDomain: true,
+  hasProjectId: true,
+  hasAppId: true,
+  apiKeyLength: 39,
+  authDomain: 'faktix-8d2cc.firebaseapp.com',
+  projectId: 'faktix-8d2cc',
+  isBrowser: false,
+  nodeEnv: 'production'
+}
+🌍 Environment check: {
+  isBrowser: false,
+  isDevelopment: false,
+  nodeEnv: 'production',
+  userAgent: 'Server'
+}
+✅ Firebase app initialized successfully
+📱 Firebase app name: [DEFAULT]
+🔧 Firebase app options: {
+  apiKey: 'AIzaSyBxf55ui7ZwGAFRJg_14BBefWAHLCZ9sMw',
+  authDomain: 'faktix-8d2cc.firebaseapp.com',
+  projectId: 'faktix-8d2cc',
+  storageBucket: 'faktix-8d2cc.firebasestorage.app',
+  messagingSenderId: '685408432041',
+  appId: '1:685408432041:web:bbbc88c0a5e97bd3ab1eb8',
+  measurementId: 'G-NLPRJCP9C6'
+}
+✅ Firebase Auth initialized
+🔐 Auth config: {
+  app: '[DEFAULT]',
+  config: {
+    apiKey: 'AIzaSyBxf55ui7ZwGAFRJg_14BBefWAHLCZ9sMw',
+    authDomain: 'faktix-8d2cc.firebaseapp.com',
+    clientPlatform: 'Node',
+    apiHost: 'identitytoolkit.googleapis.com',
+    tokenApiHost: 'securetoken.googleapis.com',
+    apiScheme: 'https',
+    sdkClientVersion: 'Node/JsCore/12.1.0/FirebaseCore-web'
+  },
+  persistence: 'local'
+}
+🌐 Non-Safari browser - Using persistent cache with IndexedDB
+✅ Firestore initialized
+🗄️ Firestore config: {
+  app: '[DEFAULT]',
+  type: 'firestore',
+  cacheType: 'persistent (IndexedDB)'
+}
+🔧 Firebase config check: {
+  hasApiKey: true,
+  hasAuthDomain: true,
+  hasProjectId: true,
+  hasAppId: true,
+  apiKeyLength: 39,
+  authDomain: 'faktix-8d2cc.firebaseapp.com',
+  projectId: 'faktix-8d2cc',
+  isBrowser: false,
+  nodeEnv: 'production'
+}
+🌍 Environment check: {
+  isBrowser: false,
+  isDevelopment: false,
+  nodeEnv: 'production',
+  userAgent: 'Server'
+}
+✅ Firebase app initialized successfully
+📱 Firebase app name: [DEFAULT]
+🔧 Firebase app options: {
+  apiKey: 'AIzaSyBxf55ui7ZwGAFRJg_14BBefWAHLCZ9sMw',
+  authDomain: 'faktix-8d2cc.firebaseapp.com',
+  projectId: 'faktix-8d2cc',
+  storageBucket: 'faktix-8d2cc.firebasestorage.app',
+  messagingSenderId: '685408432041',
+  appId: '1:685408432041:web:bbbc88c0a5e97bd3ab1eb8',
+  measurementId: 'G-NLPRJCP9C6'
+}
+✅ Firebase Auth initialized
+🔐 Auth config: {
+  app: '[DEFAULT]',
+  config: {
+    apiKey: 'AIzaSyBxf55ui7ZwGAFRJg_14BBefWAHLCZ9sMw',
+    authDomain: 'faktix-8d2cc.firebaseapp.com',
+    clientPlatform: 'Node',
+    apiHost: 'identitytoolkit.googleapis.com',
+    tokenApiHost: 'securetoken.googleapis.com',
+    apiScheme: 'https',
+    sdkClientVersion: 'Node/JsCore/12.1.0/FirebaseCore-web'
+  },
+  persistence: 'local'
+}
+🌐 Non-Safari browser - Using persistent cache with IndexedDB
+✅ Firestore initialized
+🗄️ Firestore config: {
+  app: '[DEFAULT]',
+  type: 'firestore',
+  cacheType: 'persistent (IndexedDB)'
+}
+   Generating static pages (20/40) 
+   Generating static pages (30/40) 
+ ✓ Generating static pages (40/40)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    23.4 kB         135 kB
+├ ○ /_not-found                            999 B         101 kB
+├ ○ /analytiky                           2.01 kB         477 kB
+├ ƒ /api/ai-accountant                     149 B         100 kB
+├ ƒ /api/create-payment-intent             149 B         100 kB
+├ ƒ /api/kb/scrape                         149 B         100 kB
+├ ƒ /api/kb/seed                           149 B         100 kB
+├ ƒ /api/kb/stats                          149 B         100 kB
+├ ƒ /api/send-email                        149 B         100 kB
+├ ○ /dashboard                           6.28 kB         480 kB
+├ ○ /debug-data                          2.39 kB         476 kB
+├ ○ /email-verification                  2.68 kB         103 kB
+├ ○ /faktury                             4.67 kB         478 kB
+├ ƒ /faktury/[id]                        11.3 kB         485 kB
+├ ƒ /faktury/[id]/odeslat                2.59 kB         476 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ○ /kalkulace                           16.8 kB         490 kB
+├ ○ /legal/cookies                       6.36 kB         110 kB
+├ ○ /legal/obchodni-podminky             7.21 kB         110 kB
+├ ○ /legal/ochrana-udaju                 6.28 kB         110 kB
+├ ○ /login                                 559 B         100 kB
+├ ○ /onboarding                          3.19 kB         248 kB
+├ ○ /payment-success                     1.64 kB         475 kB
+├ ○ /potvrdit-email                      3.95 kB         252 kB
+├ ○ /pricing                             6.56 kB         255 kB
+├ ○ /prihlaseni                          2.51 kB         263 kB
+├ ○ /profil                              3.85 kB         477 kB
+├ ○ /register                              552 B         100 kB
+├ ○ /registrace                           2.3 kB         262 kB
+├ ○ /sitemap.xml                           149 B         100 kB
+├ ○ /test-ares                           3.51 kB         103 kB
+├ ○ /test-firebase                       1.66 kB         254 kB
+├ ○ /test-firebase-config                2.73 kB         244 kB
+├ ○ /test-firebase-fix                   2.91 kB         244 kB
+├ ○ /test-firebase-simple                2.64 kB         243 kB
+├ ○ /test-simple                         1.24 kB         105 kB
+├ ○ /test-zivnost                        4.08 kB         104 kB
+├ ○ /ucetnictvi                          6.35 kB         482 kB
+└ ○ /zapomenute-heslo                    4.55 kB         260 kB
++ First Load JS shared by all            99.9 kB
+  ├ chunks/4bd1b696-9909f507f95988b8.js  54.1 kB
+  ├ chunks/5964-051b61df2111a0cd.js      43.7 kB
+  └ other shared chunks (total)          2.07 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -1,5 +1,3 @@
-import { cn } from "@/lib/utils";
-
 interface FaktixLogoProps {
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;

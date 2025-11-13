@@ -10,7 +10,7 @@ import { CloudBackground } from '@/components/CloudBackground';
 
 export default function PricingPage() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
   const handleSubscribe = async (planId: string, stripePriceId: string) => {

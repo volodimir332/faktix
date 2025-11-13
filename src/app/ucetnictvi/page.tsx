@@ -14,7 +14,6 @@ import {
   Clock,
   CheckCircle,
   AlertTriangle,
-  Euro,
   Calendar,
   Sparkles
 } from "lucide-react";

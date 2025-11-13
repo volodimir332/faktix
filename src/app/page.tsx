@@ -7,8 +7,7 @@ import {
   Star,
   Play,
   Mail,
-  Phone,
-  MapPin
+  Phone
 } from "lucide-react";
 import Link from "next/link";
 
