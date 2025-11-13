@@ -159,14 +159,14 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-      <div className={`sidebar-container fixed inset-y-0 left-0 z-40 border-r border-gray-700/50 bg-black/95 backdrop-blur-md flex flex-col overflow-y-auto transition-all duration-300
+      <div className={`sidebar-container group fixed inset-y-0 left-0 z-40 border-r border-gray-700/50 bg-black/95 backdrop-blur-md flex flex-col overflow-y-auto transition-all duration-300
         ${isMobileMenuOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}
-        lg:w-16 lg:group lg:hover:w-56`}>
+        lg:w-16 lg:hover:w-56`}>
         {/* Header */}
-        <div className="p-2 border-b border-gray-700/50">
-          <div className="flex items-center justify-center lg:group-hover:justify-start lg:group-hover:space-x-2 transition-all duration-300">
-            <FaktixIcon size="sm" />
-            <div className={`lg:group-hover:block opacity-100 lg:group-hover:opacity-100 transition-opacity duration-300 ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
+        <div className="p-3 border-b border-gray-700/50">
+          <div className="flex items-center space-x-3">
+            <FaktixIcon size="sm" className="flex-shrink-0" />
+            <div className={`overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
               <div className="font-medium text-white whitespace-nowrap text-sm">faktix</div>
               <div className="text-xs text-gray-400 whitespace-nowrap">
                 {getCurrentPageLabel()}
@@ -182,20 +182,14 @@ export default function Sidebar() {
             <div className="relative">
               <button 
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="bg-money text-black px-3 py-2 text-sm flex items-center justify-center lg:group-hover:justify-start rounded-lg font-medium hover:bg-money-dark money-glow w-full"
+                className="bg-money text-black px-3 py-2 text-sm flex items-center rounded-lg font-medium hover:bg-money-dark money-glow w-full transition-all duration-300"
               >
                 <Plus className="w-4 h-4 flex-shrink-0" />
-                <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">
+                <span className={`ml-2 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
                   {t('dropdown.new')}
                 </span>
-                <ChevronDown className={`w-3 h-3 ml-2 transition-transform hidden lg:group-hover:inline opacity-0 lg:group-hover:opacity-100 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3 h-3 ml-auto transition-all duration-300 ${isDropdownOpen ? 'rotate-180' : ''} ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`} />
               </button>
-              
-              {/* Tooltip for compact mode */}
-              <div className="lg:group-hover:hidden absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap top-1/2 transform -translate-y-1/2">
-                {t('dropdown.new')}
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-900"></div>
-              </div>
             </div>
             
             {/* Dropdown Menu */}
@@ -287,14 +281,16 @@ export default function Sidebar() {
                     <Link
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center px-2 py-2 justify-start text-sm rounded-lg ${
+                      className={`flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
                         isActive 
-                          ? 'text-money' 
+                          ? 'text-money bg-money/10' 
                           : 'text-gray-300 hover:bg-money/10 hover:text-money'
                       }`}
                     >
                       <Icon className="w-5 h-5 flex-shrink-0" />
-                      <span className={`ml-2 whitespace-nowrap transition-opacity duration-300 ${isMobileMenuOpen ? 'inline opacity-100' : 'hidden lg:group-hover:inline opacity-0 lg:group-hover:opacity-100'}`}>{item.label}</span>
+                      <span className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
+                        {item.label}
+                      </span>
                     </Link>
                   </div>
                 );
@@ -306,9 +302,11 @@ export default function Sidebar() {
           <div className="border-t border-gray-700/50 pt-2">
             <nav className="space-y-1">
               <div className="relative">
-                <a href="#" className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money">
+                <a href="#" className="flex items-center px-3 py-2 text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money transition-all duration-300">
                   <Bell className="w-5 h-5 flex-shrink-0" />
-                  <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Notifikace</span>
+                  <span className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
+                    Notifikace
+                  </span>
                 </a>
               </div>
             </nav>
@@ -316,56 +314,66 @@ export default function Sidebar() {
         </div>
 
           {/* Bottom Section - Home Button */}
-        <div className="p-2 border-t border-gray-700/50">
+        <div className="p-2 border-t border-gray-700/50 space-y-1">
           <div className="relative">
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center px-2 py-2 justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money"
+              className="flex items-center px-3 py-2 text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money transition-all duration-300"
             >
               <Home className="w-5 h-5 flex-shrink-0" />
-              <span className={`ml-2 whitespace-nowrap transition-opacity duration-300 ${isMobileMenuOpen ? 'inline opacity-100' : 'hidden lg:group-hover:inline opacity-0 lg:group-hover:opacity-100'}`}>{t('nav.home')}</span>
+              <span className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
+                {t('nav.home')}
+              </span>
             </Link>
           </div>
           
           {/* Settings Button */}
-          <div className="relative mt-1">
-            <button className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money w-full">
+          <div className="relative">
+            <button className="flex items-center px-3 py-2 text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money w-full transition-all duration-300">
               <Settings className="w-5 h-5 flex-shrink-0" />
-              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Nastavení</span>
+              <span className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
+                Nastavení
+              </span>
             </button>
           </div>
           
           {/* Language Switcher */}
-          <div className="relative mt-1">
+          <div className="relative">
             <button
               onClick={toggleLanguage}
-              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money w-full"
+              className="flex items-center px-3 py-2 text-sm rounded-lg text-gray-300 hover:bg-money/10 hover:text-money w-full transition-all duration-300"
             >
               <Globe className="w-5 h-5 flex-shrink-0" />
-              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">{language === 'cs' ? 'CS' : 'UA'}</span>
+              <span className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
+                {language === 'cs' ? 'CS' : 'UA'}
+              </span>
             </button>
           </div>
 
           {/* Logout Button */}
-          <div className="relative mt-1">
+          <div className="relative">
             <button
               onClick={() => setIsLogoutModalOpen(true)}
-              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full"
+              className="flex items-center px-3 py-2 text-sm rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full transition-all duration-300"
             >
               <LogOut className="w-5 h-5 flex-shrink-0" />
-              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Вийти</span>
+              <span className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
+                Вийти
+              </span>
             </button>
           </div>
 
           {/* Manage Subscription Button */}
-          <div className="relative mt-1">
+          <div className="relative">
             <button
               onClick={handleManageSubscription}
-              className="flex items-center px-2 py-2 justify-center lg:group-hover:justify-start text-sm rounded-lg text-money hover:bg-money/10 hover:text-money-light w-full"
+              className="flex items-center px-3 py-2 text-sm rounded-lg text-money hover:bg-money/10 hover:text-money-light w-full transition-all duration-300"
             >
               <CreditCard className="w-5 h-5 flex-shrink-0" />
-              <span className="hidden lg:group-hover:inline ml-2 whitespace-nowrap opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300">Підписка</span>
+              <span className={`ml-3 whitespace-nowrap overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-w-full opacity-100' : 'max-w-0 opacity-0 lg:group-hover:max-w-full lg:group-hover:opacity-100'}`}>
+                Підписка
+              </span>
             </button>
           </div>
         </div>

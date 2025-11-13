@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import { FileText, CheckCircle, XCircle, AlertTriangle, CreditCard, Shield, Mail } from 'lucide-react';
 
 export default function ObchodniPodminkyPage() {
@@ -25,7 +26,7 @@ export default function ObchodniPodminkyPage() {
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
             <p className="text-slate-700 leading-relaxed">
               Tyto obchodní podmínky upravují vztahy mezi poskytovatelem služby <strong>Faktix</strong> 
-              (dále jen "poskytovatel" nebo "my") a uživatelem služby (dále jen "uživatel" nebo "vy") 
+              (dále jen &ldquo;poskytovatel&rdquo; nebo &ldquo;my&rdquo;) a uživatelem služby (dále jen &ldquo;uživatel&rdquo; nebo &ldquo;vy&rdquo;) 
               při využívání platformy Faktix.
             </p>
           </div>
@@ -345,7 +346,7 @@ export default function ObchodniPodminkyPage() {
                   ⚖️ Rozsah odpovědnosti:
                 </h3>
                 <p className="text-slate-700 mb-3">
-                  Poskytujeme službu Faktix "tak jak je" (as-is) s maximální péčí, 
+                  Poskytujeme službu Faktix &ldquo;tak jak je&rdquo; (as-is) s maximální péčí, 
                   ale neručíme za:
                 </p>
                 <ul className="space-y-2 text-slate-700 ml-6">
@@ -398,7 +399,7 @@ export default function ObchodniPodminkyPage() {
                   Můžete kdykoli zrušit předplatné bez udání důvodu:
                 </p>
                 <ul className="space-y-2 text-slate-700 ml-6">
-                  <li>• V nastavení účtu klikněte na "Zrušit předplatné"</li>
+                  <li>• V nastavení účtu klikněte na &ldquo;Zrušit předplatné&rdquo;</li>
                   <li>• Nebo napište na info@faktix.cz</li>
                   <li>• Přístup k placeným funkcím trvá do konce zaplaceného období</li>
                   <li>• Poté bude účet převeden na FREE plán</li>
@@ -575,12 +576,12 @@ export default function ObchodniPodminkyPage() {
               Cookie Policy
             </a>
             <span className="text-slate-400">|</span>
-            <a 
+            <Link 
               href="/" 
               className="text-blue-600 hover:underline text-sm font-semibold"
             >
               Zpět na Faktix
-            </a>
+            </Link>
           </div>
         </div>
       </div>

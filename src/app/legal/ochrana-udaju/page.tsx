@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import { Shield, Lock, Database, Eye, FileText, Mail, Calendar } from 'lucide-react';
 
 export default function OchranaUdajuPage() {
@@ -24,7 +25,7 @@ export default function OchranaUdajuPage() {
           
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
             <p className="text-slate-700 leading-relaxed">
-              Společnost <strong>Faktix</strong> (dále jen "my", "naše" nebo "poskytovatel služeb") 
+              Společnost <strong>Faktix</strong> (dále jen &ldquo;my&rdquo;, &ldquo;naše&rdquo; nebo &ldquo;poskytovatel služeb&rdquo;) 
               se zavazuje chránit vaše osobní údaje v souladu s nařízením Evropského parlamentu 
               a Rady (EU) 2016/679 o ochraně fyzických osob v souvislosti se zpracováním osobních 
               údajů a o volném pohybu těchto údajů (GDPR).
@@ -560,12 +561,12 @@ export default function OchranaUdajuPage() {
               Cookie Policy
             </a>
             <span className="text-slate-400">|</span>
-            <a 
+            <Link 
               href="/" 
               className="text-emerald-600 hover:underline text-sm font-semibold"
             >
               Zpět na Faktix
-            </a>
+            </Link>
           </div>
         </div>
       </div>

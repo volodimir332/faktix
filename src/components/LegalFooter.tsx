@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import { Shield, FileText, Cookie, Mail, ExternalLink } from 'lucide-react';
 
 export default function LegalFooter() {
@@ -35,14 +36,14 @@ export default function LegalFooter() {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="/faktury" className="text-slate-400 hover:text-emerald-400 transition-colors">
+                <Link href="/faktury" className="text-slate-400 hover:text-emerald-400 transition-colors">
                   Faktury
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/klienti" className="text-slate-400 hover:text-emerald-400 transition-colors">
+                <Link href="/klienti" className="text-slate-400 hover:text-emerald-400 transition-colors">
                   Klienti
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="/kalkulace" className="text-slate-400 hover:text-emerald-400 transition-colors">

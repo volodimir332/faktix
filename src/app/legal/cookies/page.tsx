@@ -1,6 +1,7 @@
 "use client";
 
-import { Cookie, Shield, Eye, BarChart3, Target, Settings, Trash2 } from 'lucide-react';
+import { Cookie, Shield, Eye, BarChart3, Target, Settings, Trash2, FileText, Mail } from 'lucide-react';
+import Link from 'next/link';
 
 export default function CookiesPage() {
   return (
@@ -273,7 +274,7 @@ export default function CookiesPage() {
                 </p>
                 <ol className="space-y-2 text-slate-700 ml-6 list-decimal">
                   <li>Přejděte do <strong>Nastavení</strong> → <strong>Soukromí</strong></li>
-                  <li>Klikněte na <strong>"Nastavení cookies"</strong></li>
+                  <li>Klikněte na <strong>&ldquo;Nastavení cookies&rdquo;</strong></li>
                   <li>Zapněte/vypněte jednotlivé kategorie</li>
                   <li>Uložte změny</li>
                 </ol>
@@ -379,7 +380,7 @@ export default function CookiesPage() {
             
             <div className="bg-purple-50 border border-purple-200 rounded-xl p-5">
               <p className="text-slate-700 mb-3">
-                Některé prohlížeče nabízejí funkci "Do Not Track" (Nesledovat). 
+                Některé prohlížeče nabízejí funkci &ldquo;Do Not Track&rdquo; (Nesledovat). 
               </p>
               <p className="text-slate-700 mb-3">
                 <strong>Naše politika:</strong> Respektujeme DNT signál a automaticky 
@@ -390,9 +391,9 @@ export default function CookiesPage() {
                   <strong>Jak zapnout DNT:</strong>
                 </p>
                 <ul className="text-sm text-slate-600 ml-6 space-y-1">
-                  <li>• <strong>Chrome:</strong> Nastavení → Soukromí → "Nesledovat"</li>
-                  <li>• <strong>Firefox:</strong> Nastavení → Soukromí → "Říci webům, aby nesledovaly"</li>
-                  <li>• <strong>Safari:</strong> Předvolby → Soukromí → "Zabránit sledování mezi weby"</li>
+                  <li>• <strong>Chrome:</strong> Nastavení → Soukromí → &ldquo;Nesledovat&rdquo;</li>
+                  <li>• <strong>Firefox:</strong> Nastavení → Soukromí → &ldquo;Říci webům, aby nesledovaly&rdquo;</li>
+                  <li>• <strong>Safari:</strong> Předvolby → Soukromí → &ldquo;Zabránit sledování mezi weby&rdquo;</li>
                 </ul>
               </div>
             </div>
@@ -520,12 +521,12 @@ export default function CookiesPage() {
               Obchodní podmínky
             </a>
             <span className="text-slate-400">|</span>
-            <a 
+            <Link 
               href="/" 
               className="text-orange-600 hover:underline text-sm font-semibold"
             >
               Zpět na Faktix
-            </a>
+            </Link>
           </div>
         </div>
       </div>
