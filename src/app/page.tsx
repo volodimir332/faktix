@@ -28,7 +28,6 @@ import InterfaceShowcase from "@/components/InterfaceShowcase";
 import { AnimatedStats } from "@/components/AnimatedStats";
 import { AnimatedCloudStats } from "@/components/AnimatedCloudStats";
 import { ScreenshotShowcase } from "@/components/ScreenshotShowcase";
-import WorkflowDemo from "@/components/WorkflowDemo";
 
 // Вимикаємо static generation для цієї сторінки
 export const dynamic = 'force-dynamic';
@@ -162,9 +161,6 @@ export default function LandingPage() {
 
       {/* Screenshot Showcase Section */}
       <ScreenshotShowcase />
-
-      {/* Workflow Demo - Animated Process */}
-      <WorkflowDemo />
 
       {/* Interface Showcase Section */}
       <InterfaceShowcase />
