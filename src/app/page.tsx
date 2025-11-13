@@ -128,7 +128,7 @@ export default function LandingPage() {
               <div className="text-white flex items-baseline justify-center gap-2 md:gap-3 lg:gap-4 flex-nowrap">
                 <span className="flex-shrink-0">{t('hero.title.fast')}</span>
                   <AnimatedIconBox />
-                <span className="flex-shrink-0">fakturace</span>
+                <span className="flex-shrink-0">{t('hero.title.and')}</span>
               </div>
               <div className="text-money mt-2">
                 {t('hero.title.for')}

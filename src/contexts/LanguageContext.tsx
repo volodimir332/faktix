@@ -44,9 +44,10 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.signup': 'Registrovat se',
     
     // Hero section
-    'hero.title.fast': 'Rychlá',
+    'hero.title.fast': 'Faktury, kalkulace',
+    'hero.title.and': 'a nabídky',
     'hero.title.for': 'pro moderní podnikatele',
-    'hero.subtitle': 'Vytvořte profesionální fakturu za méně než minutu. Jednoduché, rychlé a spolehlivé.',
+    'hero.subtitle': 'Vytvořte faktury, kalkulace a cenové nabídky za méně než minutu. Jednoduché, rychlé a spolehlivé.',
     'hero.cta.start': 'Začít zdarma',
     'hero.cta.demo': 'Ukázka',
     
@@ -276,9 +277,10 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.signup': 'Зареєструватися',
     
     // Hero section
-    'hero.title.fast': 'Швидке',
+    'hero.title.fast': 'Рахунки, калькуляції',
+    'hero.title.and': 'та пропозиції',
     'hero.title.for': 'для сучасних підприємців',
-    'hero.subtitle': 'Створіть професійний рахунок менше ніж за хвилину. Просто, швидко та надійно.',
+    'hero.subtitle': 'Створіть рахунки, калькуляції та цінові пропозиції менше ніж за хвилину. Просто, швидко та надійно.',
     'hero.cta.start': 'Почати безкоштовно',
     'hero.cta.demo': 'Демо',
     
