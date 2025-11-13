@@ -135,138 +135,120 @@ export default function CookieConsent() {
         </div>
       )}
 
-      {/* Settings Panel */}
+      {/* Minimalist Settings Panel */}
       {showSettings && (
         <div className="fixed bottom-0 left-0 right-0 z-[9999] p-4 sm:p-6 animate-slide-up max-h-[90vh] overflow-y-auto">
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
-            <div className="p-6 sm:p-8">
+          <div className="max-w-3xl mx-auto bg-black/95 backdrop-blur-md rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
+            <div className="p-5">
               {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Settings className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-slate-800">
+              <div className="flex items-center justify-between mb-5 pb-4 border-b border-gray-800">
+                <div className="flex items-center gap-2">
+                  <Settings className="w-5 h-5 text-money" />
+                  <h2 className="text-lg font-semibold text-white">
                     Nastavení cookies
                   </h2>
                 </div>
                 <button
                   onClick={() => setShowSettings(false)}
-                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-gray-800 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5 text-slate-600" />
+                  <X className="w-4 h-4 text-gray-400" />
                 </button>
               </div>
 
               {/* Cookie Categories */}
-              <div className="space-y-4">
+              <div className="space-y-3 mb-5">
                 {/* Necessary */}
-                <div className="border border-slate-200 rounded-xl p-5 bg-slate-50">
+                <div className="border border-gray-800 rounded-lg p-4 bg-gray-900/50">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg text-slate-800">
-                          🔒 Nezbytné cookies
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <h3 className="font-semibold text-sm text-white">
+                          Nezbytné
                         </h3>
-                        <span className="bg-emerald-100 text-emerald-700 text-xs font-semibold px-2 py-1 rounded">
+                        <span className="bg-money/20 text-money text-xs font-medium px-2 py-0.5 rounded">
                           Vždy aktivní
                         </span>
                       </div>
-                      <p className="text-slate-700 text-sm mb-3">
-                        Tyto cookies jsou nutné pro základní fungování platformy (přihlášení, 
-                        bezpečnost, ukládání nastavení). Nelze je vypnout.
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        Příklady: auth_token, session_id, csrf_token, cookie_consent
+                      <p className="text-gray-400 text-xs">
+                        Nutné pro fungování platformy
                       </p>
                     </div>
                     <div className="flex-shrink-0">
-                      <div className="w-12 h-6 bg-emerald-500 rounded-full flex items-center justify-end px-1">
-                        <div className="w-4 h-4 bg-white rounded-full" />
+                      <div className="w-10 h-5 bg-money rounded-full flex items-center justify-end px-0.5">
+                        <div className="w-4 h-4 bg-black rounded-full" />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Analytics */}
-                <div className="border border-slate-200 rounded-xl p-5">
+                <div className="border border-gray-800 rounded-lg p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-slate-800 mb-2">
-                        📊 Analytické cookies
+                      <h3 className="font-semibold text-sm text-white mb-1.5">
+                        Analytické
                       </h3>
-                      <p className="text-slate-700 text-sm mb-3">
-                        Pomáhají nám pochopit, jak používáte platformu, abychom ji mohli vylepšovat. 
-                        Měří návštěvnost, chování uživatelů a výkon stránek.
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        Používáme: Google Analytics, Firebase Analytics
+                      <p className="text-gray-400 text-xs">
+                        Vylepšování služeb
                       </p>
                     </div>
                     <div className="flex-shrink-0">
                       <button
                         onClick={() => setPreferences(prev => ({ ...prev, analytics: !prev.analytics }))}
-                        className={`w-12 h-6 rounded-full transition-colors flex items-center ${
-                          preferences.analytics ? 'bg-emerald-500 justify-end' : 'bg-slate-300 justify-start'
-                        } px-1`}
+                        className={`w-10 h-5 rounded-full transition-colors flex items-center ${
+                          preferences.analytics ? 'bg-money justify-end' : 'bg-gray-700 justify-start'
+                        } px-0.5`}
                       >
-                        <div className="w-4 h-4 bg-white rounded-full" />
+                        <div className="w-4 h-4 bg-black rounded-full" />
                       </button>
                     </div>
                   </div>
                 </div>
 
                 {/* Functional */}
-                <div className="border border-slate-200 rounded-xl p-5">
+                <div className="border border-gray-800 rounded-lg p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-slate-800 mb-2">
-                        🔧 Funkční cookies
+                      <h3 className="font-semibold text-sm text-white mb-1.5">
+                        Funkční
                       </h3>
-                      <p className="text-slate-700 text-sm mb-3">
-                        Zlepšují uživatelský zážitek zapamatováním vašich preferencí 
-                        (téma, jazyk, měna, nedávno zobrazené položky).
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        Příklady: theme, sidebar_collapsed, currency, date_format
+                      <p className="text-gray-400 text-xs">
+                        Zapamatování preferencí
                       </p>
                     </div>
                     <div className="flex-shrink-0">
                       <button
                         onClick={() => setPreferences(prev => ({ ...prev, functional: !prev.functional }))}
-                        className={`w-12 h-6 rounded-full transition-colors flex items-center ${
-                          preferences.functional ? 'bg-emerald-500 justify-end' : 'bg-slate-300 justify-start'
-                        } px-1`}
+                        className={`w-10 h-5 rounded-full transition-colors flex items-center ${
+                          preferences.functional ? 'bg-money justify-end' : 'bg-gray-700 justify-start'
+                        } px-0.5`}
                       >
-                        <div className="w-4 h-4 bg-white rounded-full" />
+                        <div className="w-4 h-4 bg-black rounded-full" />
                       </button>
                     </div>
                   </div>
                 </div>
 
                 {/* Marketing */}
-                <div className="border border-slate-200 rounded-xl p-5">
+                <div className="border border-gray-800 rounded-lg p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-slate-800 mb-2">
-                        🎯 Marketingové cookies
+                      <h3 className="font-semibold text-sm text-white mb-1.5">
+                        Marketing
                       </h3>
-                      <p className="text-slate-700 text-sm mb-3">
-                        Používají se pro cílené reklamy a remarketing. Mohou sdílet informace 
-                        s třetími stranami (Google Ads, Facebook Pixel).
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        Používáme: Google Ads, Meta Pixel (Facebook/Instagram)
+                      <p className="text-gray-400 text-xs">
+                        Cílená reklama
                       </p>
                     </div>
                     <div className="flex-shrink-0">
                       <button
                         onClick={() => setPreferences(prev => ({ ...prev, marketing: !prev.marketing }))}
-                        className={`w-12 h-6 rounded-full transition-colors flex items-center ${
-                          preferences.marketing ? 'bg-emerald-500 justify-end' : 'bg-slate-300 justify-start'
-                        } px-1`}
+                        className={`w-10 h-5 rounded-full transition-colors flex items-center ${
+                          preferences.marketing ? 'bg-money justify-end' : 'bg-gray-700 justify-start'
+                        } px-0.5`}
                       >
-                        <div className="w-4 h-4 bg-white rounded-full" />
+                        <div className="w-4 h-4 bg-black rounded-full" />
                       </button>
                     </div>
                   </div>
@@ -274,32 +256,31 @@ export default function CookieConsent() {
               </div>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t border-slate-200">
+              <div className="flex flex-col sm:flex-row gap-2 pt-4 border-t border-gray-800">
                 <button
                   onClick={saveCustom}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 bg-money hover:bg-money-dark text-black font-semibold py-2.5 px-5 rounded-lg transition-all hover:scale-105 text-sm"
                 >
-                  <Check className="w-5 h-5" />
                   Uložit nastavení
                 </button>
                 <button
                   onClick={acceptAll}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-medium py-2.5 px-5 rounded-lg transition-colors text-sm border border-gray-700"
                 >
                   Přijmout vše
                 </button>
                 <button
                   onClick={() => setShowSettings(false)}
-                  className="flex-1 border-2 border-slate-300 hover:border-slate-400 text-slate-700 font-semibold py-3 px-6 rounded-lg transition-colors"
+                  className="flex-1 text-gray-400 hover:text-white font-medium py-2.5 px-5 rounded-lg transition-colors text-sm"
                 >
                   Zpět
                 </button>
               </div>
 
               {/* Info */}
-              <div className="mt-4 text-center text-sm text-slate-600">
-                Více informací najdete v naší{' '}
-                <a href="/legal/cookies" className="text-emerald-600 hover:underline font-semibold">
+              <div className="mt-3 text-center text-xs text-gray-500">
+                Více v{' '}
+                <a href="/legal/cookies" className="text-money hover:underline">
                   Cookie Policy
                 </a>
               </div>
