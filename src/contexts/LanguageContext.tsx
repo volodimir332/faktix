@@ -54,6 +54,17 @@ const translations: Record<Language, Record<string, string>> = {
     'interface.cta.text': 'Připraveni začít? Vytvořte si účet zdarma',
     'interface.cta.button': 'Začít zdarma',
     
+    // Workflow demo
+    'workflow.title': 'Od kalkulace k faktuře',
+    'workflow.subtitle': 'za pár sekund',
+    'workflow.description': 'Zjednodušený workflow, který ti ušetří hodiny práce',
+    'workflow.step1.title': 'Vytvoř kalkulaci',
+    'workflow.step1.desc': 'Rychle spočítej náklady a zisky projektu',
+    'workflow.step2.title': 'Převeď na nabídku',
+    'workflow.step2.desc': 'Jedním kliknutím vytvoř profesionální nabídku',
+    'workflow.step3.title': 'Vytvoř fakturu',
+    'workflow.step3.desc': 'Po schválení nabídky automaticky vygeneruj fakturu',
+    
     // Social proof
     'social.title.before': 'Důvěřuje nám již',
     'social.count': '1000',
@@ -285,6 +296,17 @@ const translations: Record<Language, Record<string, string>> = {
     // Interface showcase
     'interface.cta.text': 'Готові почати? Створіть безкоштовний аккаунт',
     'interface.cta.button': 'Почати безкоштовно',
+    
+    // Workflow demo
+    'workflow.title': 'Від калькуляції до рахунку',
+    'workflow.subtitle': 'за кілька секунд',
+    'workflow.description': 'Спрощений workflow, який заощадить години роботи',
+    'workflow.step1.title': 'Створи калькуляцію',
+    'workflow.step1.desc': 'Швидко порахуй витрати та прибутки проекту',
+    'workflow.step2.title': 'Перетвори на пропозицію',
+    'workflow.step2.desc': 'Одним кліком створи професійну пропозицію',
+    'workflow.step3.title': 'Створи рахунок',
+    'workflow.step3.desc': 'Після схвалення пропозиції автоматично згенеруй рахунок',
     
     // Social proof
     'social.title.before': 'Нам довіряють вже',
