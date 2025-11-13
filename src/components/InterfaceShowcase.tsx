@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const InterfaceShowcase = () => {
@@ -123,9 +124,9 @@ const InterfaceShowcase = () => {
           <p className="text-gray-400 mb-6">
             {t('interface.cta.text')}
           </p>
-          <button className="bg-money text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-money-dark transition-colors money-glow">
+          <Link href="/registrace" className="inline-block bg-money text-black px-5 py-2.5 rounded-xl font-semibold text-base hover:bg-money-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
             {t('interface.cta.button')}
-          </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -50,6 +50,10 @@ const translations: Record<Language, Record<string, string>> = {
     'hero.cta.start': 'Začít zdarma',
     'hero.cta.demo': 'Ukázka',
     
+    // Interface showcase
+    'interface.cta.text': 'Připraveni začít? Vytvořte si účet zdarma',
+    'interface.cta.button': 'Začít zdarma',
+    
     // Social proof
     'social.title.before': 'Důvěřuje nám již',
     'social.count': '1000',
@@ -277,6 +281,10 @@ const translations: Record<Language, Record<string, string>> = {
     'hero.subtitle': 'Створіть професійний рахунок менше ніж за хвилину. Просто, швидко та надійно.',
     'hero.cta.start': 'Почати безкоштовно',
     'hero.cta.demo': 'Демо',
+    
+    // Interface showcase
+    'interface.cta.text': 'Готові почати? Створіть безкоштовний аккаунт',
+    'interface.cta.button': 'Почати безкоштовно',
     
     // Social proof
     'social.title.before': 'Нам довіряють вже',
