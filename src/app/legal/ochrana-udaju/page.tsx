@@ -25,7 +25,7 @@ export default function OchranaUdajuPage() {
           
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
             <p className="text-slate-700 leading-relaxed">
-              Společnost <strong>Faktix</strong> (dále jen &ldquo;my&rdquo;, &ldquo;naše&rdquo; nebo &ldquo;poskytovatel služeb&rdquo;) 
+              Společnost <strong>Faktix</strong> (dále jen &quot;my&quot;, &quot;naše&quot; nebo &quot;poskytovatel služeb&quot;) 
               se zavazuje chránit vaše osobní údaje v souladu s nařízením Evropského parlamentu 
               a Rady (EU) 2016/679 o ochraně fyzických osob v souvislosti se zpracováním osobních 
               údajů a o volném pohybu těchto údajů (GDPR).

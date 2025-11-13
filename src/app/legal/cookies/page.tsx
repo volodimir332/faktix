@@ -274,7 +274,7 @@ export default function CookiesPage() {
                 </p>
                 <ol className="space-y-2 text-slate-700 ml-6 list-decimal">
                   <li>Přejděte do <strong>Nastavení</strong> → <strong>Soukromí</strong></li>
-                  <li>Klikněte na <strong>&ldquo;Nastavení cookies&rdquo;</strong></li>
+                  <li>Klikněte na <strong>&quot;Nastavení cookies&quot;</strong></li>
                   <li>Zapněte/vypněte jednotlivé kategorie</li>
                   <li>Uložte změny</li>
                 </ol>
@@ -380,7 +380,7 @@ export default function CookiesPage() {
             
             <div className="bg-purple-50 border border-purple-200 rounded-xl p-5">
               <p className="text-slate-700 mb-3">
-                Některé prohlížeče nabízejí funkci &ldquo;Do Not Track&rdquo; (Nesledovat). 
+                Některé prohlížeče nabízejí funkci &quot;Do Not Track&quot; (Nesledovat). 
               </p>
               <p className="text-slate-700 mb-3">
                 <strong>Naše politika:</strong> Respektujeme DNT signál a automaticky 
@@ -391,9 +391,9 @@ export default function CookiesPage() {
                   <strong>Jak zapnout DNT:</strong>
                 </p>
                 <ul className="text-sm text-slate-600 ml-6 space-y-1">
-                  <li>• <strong>Chrome:</strong> Nastavení → Soukromí → &ldquo;Nesledovat&rdquo;</li>
-                  <li>• <strong>Firefox:</strong> Nastavení → Soukromí → &ldquo;Říci webům, aby nesledovaly&rdquo;</li>
-                  <li>• <strong>Safari:</strong> Předvolby → Soukromí → &ldquo;Zabránit sledování mezi weby&rdquo;</li>
+                  <li>• <strong>Chrome:</strong> Nastavení → Soukromí → &quot;Nesledovat&quot;</li>
+                  <li>• <strong>Firefox:</strong> Nastavení → Soukromí → &quot;Říci webům, aby nesledovaly&quot;</li>
+                  <li>• <strong>Safari:</strong> Předvolby → Soukromí → &quot;Zabránit sledování mezi weby&quot;</li>
                 </ul>
               </div>
             </div>
