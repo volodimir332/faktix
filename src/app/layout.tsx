@@ -8,6 +8,7 @@ import { CalculationProvider } from "@/contexts/CalculationContext";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AuthInitializer } from "@/components/AuthInitializer";
 import { ColorFixer } from "@/components/ColorFixer";
+import CookieConsent from "@/components/CookieConsent";
 
 // ⚡ ОПТИМІЗАЦІЯ: Font optimization з preload та fallback
 const inter = Inter({
@@ -154,6 +155,9 @@ export default function RootLayout({
                 {/* <AuthGuard> */}
                 {children}
                 {/* </AuthGuard> */}
+                
+                {/* Cookie Consent Banner */}
+                <CookieConsent />
               </CalculationProvider>
             </InvoiceProvider>
           </ClientProvider>

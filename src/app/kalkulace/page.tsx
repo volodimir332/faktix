@@ -6,7 +6,7 @@ import SimplePriceCalculator from '@/components/SimplePriceCalculator';
 import AIConversation, { ConversationMessage } from '@/components/AIConversation';
 import { getCalculatorIcon } from '@/components/CalculatorIcons';
 import { getCzechConstructionKnowledge } from '@/lib/czech-construction-data';
-import { Sparkles, Loader2, Send, Calculator, Tag, X } from 'lucide-react';
+import { Sparkles, Loader2, Send, Calculator, Tag, X, Clock, Trash2, FileText } from 'lucide-react';
 import { SimpleCalculatorTemplate } from '@/lib/calculator-templates';
 import { useInvoices } from '@/contexts/InvoiceContext';
 import { useRouter } from 'next/navigation';
@@ -38,6 +38,7 @@ export default function RozpocetPage() {
   const [savedTemplates, setSavedTemplates] = useState<SavedTemplate[]>([]);
   const [conversation, setConversation] = useState<ConversationMessage[]>([]);
   const [isInConversation, setIsInConversation] = useState(false);
+  const [showHistory, setShowHistory] = useState(true);
   
   const { addInvoice } = useInvoices();
   const router = useRouter();
@@ -640,6 +641,90 @@ Vždy odpovídáš pouze validním JSON s přesnými českými termíny a realis
           </div>
         </div>
         </div>
+
+        {/* History Sidebar - Right Side */}
+        {showHistory && (
+          <div className="w-80 flex-shrink-0 border-l border-gray-800 bg-gray-900/50 flex flex-col">
+            {/* History Header */}
+            <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-money" />
+                <h3 className="font-semibold text-white">Historie</h3>
+              </div>
+              <button
+                onClick={() => setShowHistory(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* History List */}
+            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+              {savedTemplates.length > 0 ? (
+                savedTemplates.map((saved) => (
+                  <div
+                    key={saved.id}
+                    className="group bg-gray-800/50 hover:bg-gray-800 border border-gray-700 hover:border-money/50 rounded-lg p-3 transition-all cursor-pointer"
+                    onClick={() => loadSavedTemplate(saved)}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2 flex-1">
+                        <FileText className="w-4 h-4 text-money flex-shrink-0" />
+                        <div className="font-medium text-white text-sm truncate group-hover:text-money transition-colors">
+                          {saved.name}
+                        </div>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteSavedTemplate(saved.id);
+                        }}
+                        className="text-gray-500 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <div className="text-xs text-gray-400 mb-1">
+                      {saved.items.length} položek
+                    </div>
+                    <div className="text-sm font-semibold text-money">
+                      {saved.total.toLocaleString()} Kč
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {new Date(saved.createdAt).toLocaleDateString('cs-CZ', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-center p-6">
+                  <Clock className="w-12 h-12 text-gray-600 mb-3" />
+                  <p className="text-gray-500 text-sm">
+                    Zatím nemáte žádnou historii
+                  </p>
+                  <p className="text-gray-600 text-xs mt-1">
+                    Uložené kalkulace se zobrazí zde
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Show History Button (when hidden) */}
+        {!showHistory && (
+          <button
+            onClick={() => setShowHistory(true)}
+            className="fixed right-4 top-20 bg-money text-black px-3 py-2 rounded-lg shadow-lg hover:bg-money-dark transition-all flex items-center gap-2 font-medium text-sm z-20"
+          >
+            <Clock className="w-4 h-4" />
+            Historie
+          </button>
+        )}
       </div>
       </div>
     </>
