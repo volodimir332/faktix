@@ -1,17 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Background -->
-  <rect width="100" height="100" rx="20" fill="#000000"/>
+  <rect width="32" height="32" rx="7" fill="#000000"/>
   
-  <!-- Document icon in green -->
-  <rect x="25" y="15" width="50" height="70" rx="5" stroke="#00ff88" stroke-width="3" fill="none"/>
-  
-  <!-- Lines in document -->
-  <line x1="35" y1="30" x2="65" y2="30" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/>
-  <line x1="35" y1="42" x2="65" y2="42" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/>
-  <line x1="35" y1="54" x2="55" y2="54" stroke="#00ff88" stroke-width="2" stroke-linecap="round"/>
-  
-  <!-- Folded corner -->
-  <path d="M 65 15 L 65 25 L 75 25" stroke="#00ff88" stroke-width="3" fill="none"/>
+  <!-- Document shape -->
+  <g transform="translate(6, 5)">
+    <!-- Main document body -->
+    <rect x="0" y="0" width="19.5" height="22" rx="2.5" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+    
+    <!-- Folded corner -->
+    <path d="M 17 0 L 19.5 2.5 L 19.5 0 L 17 0 Z" fill="none" stroke="#00ff88" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="17" y1="0" x2="17" y2="2.5" stroke="#00ff88" stroke-width="1.5"/>
+    <line x1="17" y1="2.5" x2="19.5" y2="2.5" stroke="#00ff88" stroke-width="1.5"/>
+    
+    <!-- Wave line 1 -->
+    <path d="M 4 7.5 Q 6 6.5, 8 7.5 T 15 7.5" stroke="#00ff88" stroke-width="1" fill="none" stroke-linecap="round"/>
+    
+    <!-- Wave line 2 -->
+    <path d="M 4 12.5 Q 6 11.5, 8 12.5 T 15 12.5" stroke="#00ff88" stroke-width="1" fill="none" stroke-linecap="round"/>
+    
+    <!-- Wave line 3 -->
+    <path d="M 4 17.5 Q 6 16.5, 8 17.5 T 15 17.5" stroke="#00ff88" stroke-width="1" fill="none" stroke-linecap="round"/>
+  </g>
 </svg>
-
-
